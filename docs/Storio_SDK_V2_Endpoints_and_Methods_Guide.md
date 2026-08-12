@@ -263,366 +263,367 @@ export default async function NoticeSection() {
     "important_links": [
       { "label": "Education Board", "url": "https://example.com/board" }
     ]
-  271: ### Section 2: Hero Carousel Banners
-272: 
-273: #### 6. `storio.getHeroSlides(tenantHostOrOptions?)`
-274: - **Endpoint:** `GET /api/v2/template/hero-slides/`
-275: - **Description:** Homepage top banner slider images with overlay headings, subtitles, ordering, and call-to-action buttons.
-276: - **Data Payload Obtained (Array):**
-277:   ```json
-278:   [
-279:     {
-280:       "id": 1,
-281:       "title": "Welcome to Our Institution",
-282:       "subtitle": "Inspiring Minds, Shaping Futures",
-283:       "image_url": "https://example.com/hero1.jpg",
-284:       "button_text": "Apply Now",
-285:       "button_url": "/admission",
-286:       "order": 1
-287:     },
-288:     {
-289:       "id": 2,
-290:       "title": "State of the Art Facilities",
-291:       "subtitle": "Discover practical knowledge and innovation.",
-292:       "image_url": "https://example.com/hero2.jpg",
-293:       "button_text": "Explore Facilities",
-294:       "button_url": "/facilities",
-295:       "order": 2
-296:     }
-297:   ]
-298:   ```
-299: 
-300: ---
-301: 
-302: ### Section 3: Public Notice Board & Announcements
-303: 
-304: #### 7. `storio.getNotices(tenantHostOrOptions?)`
-305: - **Endpoint:** `GET /api/v2/template/notices/`
-306: - **Description:** Fetches list of public notice board announcements.
-307: - **Data Payload Obtained (Array):**
-308:   ```json
-309:   [
-310:     {
-311:       "id": 101,
-312:       "title": "Annual Event Schedule & Guidelines",
-313:       "slug": "annual-event-schedule",
-314:       "published_date": "2026-02-10",
-315:       "is_urgent": true,
-316:       "attachment_url": "https://example.com/notice.pdf"
-317:     }
-318:   ]
-319:   ```
-320: 
-321: #### 8. `storio.getNoticeDetail(id, tenantHostOrOptions?)`
-322: - **Endpoint:** `GET /api/v2/template/notices/${id}/`
-323: - **Description:** Single notice detail view containing complete HTML/markdown content.
-324: - **Data Payload Obtained:**
-325:   ```json
-326:   {
-327:     "id": 101,
-328:     "title": "Annual Event Schedule & Guidelines",
-329:     "content": "<p>All students and guardians are hereby notified that...</p>",
-330:     "published_date": "2026-02-10",
-331:     "is_urgent": true,
-332:     "attachment_url": "https://example.com/notice.pdf"
-333:   }
-334:   ```
-335: 
-336: ---
-337: 
-338: ### Section 4: Blogs & News Articles
-339: 
-340: #### 9. `storio.getBlogs(tenantHostOrOptions?)`
-341: - **Endpoint:** `GET /api/v2/template/blogs/`
-342: - **Description:** List of published blog articles and news stories.
-343: - **Data Payload Obtained (Array):**
-344:   ```json
-345:   [
-346:     {
-347:       "id": 12,
-348:       "title": "Modern Approaches in Education",
-349:       "slug": "modern-approaches-in-education",
-350:       "summary": "Exploring interactive learning techniques.",
-351:       "featured_image_url": "https://example.com/blog.jpg",
-352:       "category_name": "Education",
-353:       "published_at": "2026-01-15T10:00:00Z"
-354:     }
-355:   ]
-356:   ```
-357: 
-358: #### 10. `storio.getBlogDetail(slug, tenantHostOrOptions?)`
-359: - **Endpoint:** `GET /api/v2/template/blogs/${slug}/`
-360: - **Description:** Full article details by slug for single blog post pages.
-361: - **Data Payload Obtained:**
-362:   ```json
-363:   {
-364:     "id": 12,
-365:     "title": "Modern Approaches in Education",
-366:     "slug": "modern-approaches-in-education",
-367:     "summary": "Exploring interactive learning techniques.",
-368:     "content": "<p>Educational practices are rapidly evolving...</p>",
-369:     "featured_image_url": "https://example.com/blog.jpg",
-370:     "category_name": "Education",
-371:     "published_at": "2026-01-15T10:00:00Z"
-372:   }
-373:   ```
-374: 
-375: ---
-376: 
-377: ### Section 5: Faculty, Staff & Board Directory
-378: 
-379: #### 11. `storio.getStaff(tenantHostOrOptions?)`
-380: - **Endpoint:** `GET /api/v2/template/staff/`
-381: - **Description:** Teachers and administrative staff directory.
-382: - **Data Payload Obtained (Array):**
-383:   ```json
-384:   [
-385:     {
-386:       "id": 5,
-387:       "name": "Jane Doe",
-388:       "designation": "Head of Science Department",
-389:       "department": "Science",
-390:       "photo_url": "https://example.com/staff.jpg",
-391:       "email": "staff@example.com",
-392:       "phone_number": "+000 0000-000000",
-393:       "bio": "Educator with extensive academic experience."
-394:     }
-395:   ]
-396:   ```
-397: 
-398: #### 12. `storio.getTeam(tenantHostOrOptions?)`
-399: - **Endpoint:** `GET /api/v2/template/team/`
-400: - **Description:** Managing committee, governing body, and board of directors profiles.
-401: - **Data Payload Obtained (Array):** Same schema as `StorioStaffMember[]`.
-402: 
-403: ---
-404: 
-405: ### Section 6: Media Gallery & Photo Albums
-406: 
-407: #### 13. `storio.getGallery(tenantHostOrOptions?)`
-408: - **Endpoint:** `GET /api/v2/template/gallery/`
-409: - **Description:** Individual campus photos grid.
-410: - **Data Payload Obtained (Array):**
-411:   ```json
-412:   [
-413:     {
-414:       "id": 88,
-415:       "title": "Annual Exhibition",
-416:       "image_url": "https://example.com/gallery.jpg",
-417:       "caption": "Students displaying projects."
-418:     }
-419:   ]
-420:   ```
-421: 
-422: #### 14. `storio.getAlbums(tenantHostOrOptions?)`
-423: - **Endpoint:** `GET /api/v2/template/albums/`
-424: - **Description:** Photo albums with cover image and nested array of photos.
-425: - **Data Payload Obtained (Array):**
-426:   ```json
-427:   [
-428:     {
-429:       "id": 10,
-430:       "title": "Campus Celebration",
-431:       "cover_image_url": "https://example.com/album-cover.jpg",
-432:       "images": [
-433:         { "id": 101, "image_url": "https://example.com/img1.jpg", "title": "Event Highlight" }
-434:       ]
-435:     }
-436:   ]
-437:   ```
-438: 
-439: ---
-440: 
-441: ### Section 7: School Activities & Events
-442: 
-443: #### 15. `storio.getActivities(tenantHostOrOptions?)`
-444: - **Endpoint:** `GET /api/v2/template/activities/`
-445: - **Description:** List of co-curricular activities, workshops, and student clubs.
-446: 
-447: #### 16. `storio.getActivityDetail(slug, tenantHostOrOptions?)`
-448: - **Endpoint:** `GET /api/v2/template/activities/${slug}/`
-449: - **Description:** Single activity detail page content.
-450: 
-451: #### 17. `storio.getEvents(tenantHostOrOptions?)` & `storio.getEventDetail(slugOrId, tenantHostOrOptions?)`
-452: - **Endpoint:** `GET /api/events/` & `GET /api/events/${slugOrId}/`
-453: - **Description:** Institutional events with dates, map location, categories, and event status.
-454: - **Data Payload Obtained:**
-455:   ```json
-456:   [
-457:     {
-458:       "id": 4,
-459:       "title": "Annual Competition",
-460:       "slug": "annual-competition",
-461:       "content": "Event competition schedule...",
-462:       "location": "Main Auditorium",
-463:       "start_date": "2026-03-01T09:00:00Z",
-464:       "end_date": "2026-03-02T17:00:00Z",
-465:       "status": "Upcoming",
-466:       "is_featured": true,
-467:       "featured_image": "https://example.com/event.jpg"
-468:     }
-469:   ]
-470:   ```
-471: 
-472: ---
-473: 
-474: ### Section 8: Dynamic CMS Custom Builder Pages
-475: 
-476: #### 18. `storio.getPageBySlug(slug, tenantHostOrOptions?)`
-477: - **Endpoint:** `GET /api/v2/template/pages/by-slug/${slug}/`
-478: - **Description:** Fetches custom dynamic pages constructed via CMS page builder.
-479: - **Data Payload Obtained:**
-480:   ```json
-481:   {
-482:     "id": 45,
-483:     "title": "About Us",
-484:     "slug": "about-us",
-485:     "content": "<div className=\"custom-page\">Institution overview content...</div>",
-486:     "meta_title": "About Us",
-487:     "meta_description": "Learn about our institution.",
-488:     "featured_image": "https://example.com/about.jpg"
-489:   }
-490:   ```
-491: 
-492: ---
-493: 
-494: ### Section 9: Social Proof, Leadership & Promotions
-495: 
-496: #### 19. `storio.getTestimonials(tenantHostOrOptions?)`
-497: - **Endpoint:** `GET /api/v2/template/testimonials/`
-498: - **Description:** Array of parent, student, and alumni testimonials.
-499: 
-500: #### 20. `storio.getLeadershipMessages(tenantHostOrOptions?)`
-501: - **Endpoint:** `GET /api/v2/template/leadership-messages/`
-502: - **Description:** Formal welcome messages from leadership.
-503: 
-504: #### 21. `storio.getPromotions(tenantHostOrOptions?)`
-505: - **Endpoint:** `GET /api/v2/template/promotions/`
-506: - **Description:** Promotional banners, badge text, cards, and action links.
-507: - **Data Payload Obtained (Array):**
-508:   ```json
-509:   [
-510:     {
-511:       "id": 3,
-512:       "title": "Admissions Open",
-513:       "subtitle": "Scholarship Opportunities Available",
-514:       "badge_text": "Admissions",
-515:       "image": "https://example.com/promo.jpg",
-516:       "cta_label": "Apply Online",
-517:       "cta_url": "/admission",
-518:       "cta_is_external": false
-519:     }
-520:   ]
-521:   ```
-522: 
-523: ---
-524: 
-525: ### Section 10: Quick Links, FAQs, Videos & Exam Results
-526: 
-527: #### 22. `storio.getImportantLinks(tenantHostOrOptions?)`
-528: - **Endpoint:** `GET /api/v2/template/important-links/`
-529: - **Description:** External portal links.
-530: 
-531: #### 23. `storio.getFaqs(tenantHostOrOptions?)`
-532: - **Endpoint:** `GET /api/v2/template/faqs/`
-533: - **Description:** Accordion list of frequently asked questions and answers.
-534: 
-535: #### 24. `storio.getVideos(tenantHostOrOptions?)`
-536: - **Endpoint:** `GET /api/v2/template/reels/`
-537: - **Description:** Embedded video reels with likes and view counts.
-538: 
-539: #### 25. `storio.getCalendarEvents(tenantHostOrOptions?)`
-540: - **Endpoint:** `GET /api/v2/template/calendar/`
-541: - **Description:** Academic term calendar events and public holidays.
-542: 
-543: #### 26. `storio.getExamResults(tenantHostOrOptions?)`
-544: - **Endpoint:** `GET /api/v2/template/exam-results/`
-545: - **Description:** National board exam pass rates and downloadable PDF result sheets.
-546: - **Data Payload Obtained (Array):**
-547:   ```json
-548:   [
-549:     {
-550:       "id": 7,
-551:       "exam_name": "Board Examination",
-552:       "class_name": "Class 10",
-553:       "year": 2025,
-554:       "total_examinees": 200,
-555:       "passed": 198,
-556:       "failed": 2,
-557:       "pass_rate": "99.0%",
-558:       "exam_type": "Board Exam",
-559:       "file_url": "https://example.com/result.pdf"
-560:     }
-561:   ]
-562:   ```
-563: 
-564: ---
-565: 
-566: ### Section 11: Careers & Recruitment
-567: 
-568: #### 27. `storio.getCareers(tenantHostOrOptions?)` & `storio.getJobDetail(slug, tenantHostOrOptions?)`
-569: - **Endpoint:** `GET /api/v2/template/careers/jobs/` & `/api/v2/template/careers/jobs/${slug}/`
-570: - **Description:** Active teacher/staff job openings, requirements, and deadlines.
-571: 
-572: ---
-573: 
-574: ### Section 12: National Education Board Notice Sync
-575: 
-576: #### 28. `storio.getBoardNotices(tenantHostOrOptions?)`
-577: - **Endpoint:** `GET /api/v2/template/board-notices/`
-578: - **Description:** Auto-synced notices from national education boards.
-579: - **Data Payload Obtained (Array):**
-580:   ```json
-581:   [
-582:     {
-583:       "id": 15,
-584:       "title": "Board Exam Routine Update",
-585:       "publish_date": "2026-02-05",
-586:       "url": "https://example.com/notice/15",
-587:       "board": "Education Board"
-588:     }
-589:   ]
-590:   ```
-591: 
-592: ---
-593: 
-594: ### Section 13: Online Admission Portal & Interactive Forms
-595: 
-596: #### 29. `storio.getAdmissionFormConfig(tenantHostOrOptions?)`
-597: - **Endpoint:** `GET /api/v2/template/admission/form-config/current/`
-598: - **Description:** Schema configuration for generating dynamic admission forms.
-599: - **Data Payload Obtained:**
-600:   ```json
-601:   {
-602:     "id": 1,
-603:     "is_active": true,
-604:     "fields": [
-605:       { "id": "student_name", "label": "Applicant Full Name", "type": "text", "required": true },
-606:       { "id": "applied_class", "label": "Target Class", "type": "select", "options": ["Class 6", "Class 7", "Class 8", "Class 9", "Class 11"], "required": true },
-607:       { "id": "guardian_phone", "label": "Guardian Phone Number", "type": "tel", "required": true }
-608:     ]
-609:   }
-610:   ```
-611: 
-612: #### 30. `storio.sendAdmissionOTP(email, tenantHostOrOptions?)`
-613: - **Endpoint:** `POST /api/v2/template/admission/send-otp/`
-614: - **Payload Sent:** `{ "email": "applicant@example.com" }`
-615: - **Data Returned:** `{ "success": true, "message": "OTP verification code sent to your email." }`
-616: 
-617: #### 31. `storio.verifyAdmissionOTP(email, otpCode, tenantHostOrOptions?)`
-618: - **Endpoint:** `POST /api/v2/template/admission/verify-otp/`
-619: - **Payload Sent:** `{ "email": "applicant@example.com", "otp_code": "123456" }`
-620: - **Data Returned:** `{ "success": true, "message": "OTP verified successfully." }`
-621: 
-622: #### 32. `storio.submitAdmissionApplication(formData, otpCode, tenantHostOrOptions?)`
-623: - **Endpoint:** `POST /api/v2/template/admission/applications/`
-624: - **Payload Sent:** `{ "form_data": { ... }, "otp_code": "123456" }`
-625: - **Data Returned:** `{ "success": true, "application_number": "APP-2026-00001", "message": "Application submitted successfully!" }`
-626: 
-627: #### 33. `storio.submitContactMessage(formData, tenantHostOrOptions?)`
-628: - **Endpoint:** `POST /api/v2/template/contact/`
-629: - **Payload Sent:** `{ "name": "John Doe", "email": "visitor@example.com", "message": "Hello" }`
-630: - **Data Returned:** `{ "success": true, "message": "Your message has been sent." }`
+  }
+### Section 2: Hero Carousel Banners
+
+#### 6. `storio.getHeroSlides(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/hero-slides/`
+- **Description:** Homepage top banner slider images with overlay headings, subtitles, ordering, and call-to-action buttons.
+- **Data Payload Obtained (Array):**
+  ```json
+  [
+    {
+      "id": 1,
+      "title": "Welcome to Our Institution",
+      "subtitle": "Inspiring Minds, Shaping Futures",
+      "image_url": "https://example.com/hero1.jpg",
+      "button_text": "Apply Now",
+      "button_url": "/admission",
+      "order": 1
+    },
+    {
+      "id": 2,
+      "title": "State of the Art Facilities",
+      "subtitle": "Discover practical knowledge and innovation.",
+      "image_url": "https://example.com/hero2.jpg",
+      "button_text": "Explore Facilities",
+      "button_url": "/facilities",
+      "order": 2
+    }
+  ]
+  ```
+
+---
+
+### Section 3: Public Notice Board & Announcements
+
+#### 7. `storio.getNotices(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/notices/`
+- **Description:** Fetches list of public notice board announcements.
+- **Data Payload Obtained (Array):**
+  ```json
+  [
+    {
+      "id": 101,
+      "title": "Annual Event Schedule & Guidelines",
+      "slug": "annual-event-schedule",
+      "published_date": "2026-02-10",
+      "is_urgent": true,
+      "attachment_url": "https://example.com/notice.pdf"
+    }
+  ]
+  ```
+
+#### 8. `storio.getNoticeDetail(id, tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/notices/${id}/`
+- **Description:** Single notice detail view containing complete HTML/markdown content.
+- **Data Payload Obtained:**
+  ```json
+  {
+    "id": 101,
+    "title": "Annual Event Schedule & Guidelines",
+    "content": "<p>All students and guardians are hereby notified that...</p>",
+    "published_date": "2026-02-10",
+    "is_urgent": true,
+    "attachment_url": "https://example.com/notice.pdf"
+  }
+  ```
+
+---
+
+### Section 4: Blogs & News Articles
+
+#### 9. `storio.getBlogs(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/blogs/`
+- **Description:** List of published blog articles and news stories.
+- **Data Payload Obtained (Array):**
+  ```json
+  [
+    {
+      "id": 12,
+      "title": "Modern Approaches in Education",
+      "slug": "modern-approaches-in-education",
+      "summary": "Exploring interactive learning techniques.",
+      "featured_image_url": "https://example.com/blog.jpg",
+      "category_name": "Education",
+      "published_at": "2026-01-15T10:00:00Z"
+    }
+  ]
+  ```
+
+#### 10. `storio.getBlogDetail(slug, tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/blogs/${slug}/`
+- **Description:** Full article details by slug for single blog post pages.
+- **Data Payload Obtained:**
+  ```json
+  {
+    "id": 12,
+    "title": "Modern Approaches in Education",
+    "slug": "modern-approaches-in-education",
+    "summary": "Exploring interactive learning techniques.",
+    "content": "<p>Educational practices are rapidly evolving...</p>",
+    "featured_image_url": "https://example.com/blog.jpg",
+    "category_name": "Education",
+    "published_at": "2026-01-15T10:00:00Z"
+  }
+  ```
+
+---
+
+### Section 5: Faculty, Staff & Board Directory
+
+#### 11. `storio.getStaff(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/staff/`
+- **Description:** Teachers and administrative staff directory.
+- **Data Payload Obtained (Array):**
+  ```json
+  [
+    {
+      "id": 5,
+      "name": "Jane Doe",
+      "designation": "Head of Science Department",
+      "department": "Science",
+      "photo_url": "https://example.com/staff.jpg",
+      "email": "staff@example.com",
+      "phone_number": "+000 0000-000000",
+      "bio": "Educator with extensive academic experience."
+    }
+  ]
+  ```
+
+#### 12. `storio.getTeam(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/team/`
+- **Description:** Managing committee, governing body, and board of directors profiles.
+- **Data Payload Obtained (Array):** Same schema as `StorioStaffMember[]`.
+
+---
+
+### Section 6: Media Gallery & Photo Albums
+
+#### 13. `storio.getGallery(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/gallery/`
+- **Description:** Individual campus photos grid.
+- **Data Payload Obtained (Array):**
+  ```json
+  [
+    {
+      "id": 88,
+      "title": "Annual Exhibition",
+      "image_url": "https://example.com/gallery.jpg",
+      "caption": "Students displaying projects."
+    }
+  ]
+  ```
+
+#### 14. `storio.getAlbums(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/albums/`
+- **Description:** Photo albums with cover image and nested array of photos.
+- **Data Payload Obtained (Array):**
+  ```json
+  [
+    {
+      "id": 10,
+      "title": "Campus Celebration",
+      "cover_image_url": "https://example.com/album-cover.jpg",
+      "images": [
+        { "id": 101, "image_url": "https://example.com/img1.jpg", "title": "Event Highlight" }
+      ]
+    }
+  ]
+  ```
+
+---
+
+### Section 7: School Activities & Events
+
+#### 15. `storio.getActivities(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/activities/`
+- **Description:** List of co-curricular activities, workshops, and student clubs.
+
+#### 16. `storio.getActivityDetail(slug, tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/activities/${slug}/`
+- **Description:** Single activity detail page content.
+
+#### 17. `storio.getEvents(tenantHostOrOptions?)` & `storio.getEventDetail(slugOrId, tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/events/` & `GET /api/events/${slugOrId}/`
+- **Description:** Institutional events with dates, map location, categories, and event status.
+- **Data Payload Obtained:**
+  ```json
+  [
+    {
+      "id": 4,
+      "title": "Annual Competition",
+      "slug": "annual-competition",
+      "content": "Event competition schedule...",
+      "location": "Main Auditorium",
+      "start_date": "2026-03-01T09:00:00Z",
+      "end_date": "2026-03-02T17:00:00Z",
+      "status": "Upcoming",
+      "is_featured": true,
+      "featured_image": "https://example.com/event.jpg"
+    }
+  ]
+  ```
+
+---
+
+### Section 8: Dynamic CMS Custom Builder Pages
+
+#### 18. `storio.getPageBySlug(slug, tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/pages/by-slug/${slug}/`
+- **Description:** Fetches custom dynamic pages constructed via CMS page builder.
+- **Data Payload Obtained:**
+  ```json
+  {
+    "id": 45,
+    "title": "About Us",
+    "slug": "about-us",
+    "content": "<div className=\"custom-page\">Institution overview content...</div>",
+    "meta_title": "About Us",
+    "meta_description": "Learn about our institution.",
+    "featured_image": "https://example.com/about.jpg"
+  }
+  ```
+
+---
+
+### Section 9: Social Proof, Leadership & Promotions
+
+#### 19. `storio.getTestimonials(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/testimonials/`
+- **Description:** Array of parent, student, and alumni testimonials.
+
+#### 20. `storio.getLeadershipMessages(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/leadership-messages/`
+- **Description:** Formal welcome messages from leadership.
+
+#### 21. `storio.getPromotions(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/promotions/`
+- **Description:** Promotional banners, badge text, cards, and action links.
+- **Data Payload Obtained (Array):**
+  ```json
+  [
+    {
+      "id": 3,
+      "title": "Admissions Open",
+      "subtitle": "Scholarship Opportunities Available",
+      "badge_text": "Admissions",
+      "image": "https://example.com/promo.jpg",
+      "cta_label": "Apply Online",
+      "cta_url": "/admission",
+      "cta_is_external": false
+    }
+  ]
+  ```
+
+---
+
+### Section 10: Quick Links, FAQs, Videos & Exam Results
+
+#### 22. `storio.getImportantLinks(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/important-links/`
+- **Description:** External portal links.
+
+#### 23. `storio.getFaqs(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/faqs/`
+- **Description:** Accordion list of frequently asked questions and answers.
+
+#### 24. `storio.getVideos(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/reels/`
+- **Description:** Embedded video reels with likes and view counts.
+
+#### 25. `storio.getCalendarEvents(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/calendar/`
+- **Description:** Academic term calendar events and public holidays.
+
+#### 26. `storio.getExamResults(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/exam-results/`
+- **Description:** National board exam pass rates and downloadable PDF result sheets.
+- **Data Payload Obtained (Array):**
+  ```json
+  [
+    {
+      "id": 7,
+      "exam_name": "Board Examination",
+      "class_name": "Class 10",
+      "year": 2025,
+      "total_examinees": 200,
+      "passed": 198,
+      "failed": 2,
+      "pass_rate": "99.0%",
+      "exam_type": "Board Exam",
+      "file_url": "https://example.com/result.pdf"
+    }
+  ]
+  ```
+
+---
+
+### Section 11: Careers & Recruitment
+
+#### 27. `storio.getCareers(tenantHostOrOptions?)` & `storio.getJobDetail(slug, tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/careers/jobs/` & `/api/v2/template/careers/jobs/${slug}/`
+- **Description:** Active teacher/staff job openings, requirements, and deadlines.
+
+---
+
+### Section 12: National Education Board Notice Sync
+
+#### 28. `storio.getBoardNotices(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/board-notices/`
+- **Description:** Auto-synced notices from national education boards.
+- **Data Payload Obtained (Array):**
+  ```json
+  [
+    {
+      "id": 15,
+      "title": "Board Exam Routine Update",
+      "publish_date": "2026-02-05",
+      "url": "https://example.com/notice/15",
+      "board": "Education Board"
+    }
+  ]
+  ```
+
+---
+
+### Section 13: Online Admission Portal & Interactive Forms
+
+#### 29. `storio.getAdmissionFormConfig(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/admission/form-config/current/`
+- **Description:** Schema configuration for generating dynamic admission forms.
+- **Data Payload Obtained:**
+  ```json
+  {
+    "id": 1,
+    "is_active": true,
+    "fields": [
+      { "id": "student_name", "label": "Applicant Full Name", "type": "text", "required": true },
+      { "id": "applied_class", "label": "Target Class", "type": "select", "options": ["Class 6", "Class 7", "Class 8", "Class 9", "Class 11"], "required": true },
+      { "id": "guardian_phone", "label": "Guardian Phone Number", "type": "tel", "required": true }
+    ]
+  }
+  ```
+
+#### 30. `storio.sendAdmissionOTP(email, tenantHostOrOptions?)`
+- **Endpoint:** `POST /api/v2/template/admission/send-otp/`
+- **Payload Sent:** `{ "email": "applicant@example.com" }`
+- **Data Returned:** `{ "success": true, "message": "OTP verification code sent to your email." }`
+
+#### 31. `storio.verifyAdmissionOTP(email, otpCode, tenantHostOrOptions?)`
+- **Endpoint:** `POST /api/v2/template/admission/verify-otp/`
+- **Payload Sent:** `{ "email": "applicant@example.com", "otp_code": "123456" }`
+- **Data Returned:** `{ "success": true, "message": "OTP verified successfully." }`
+
+#### 32. `storio.submitAdmissionApplication(formData, otpCode, tenantHostOrOptions?)`
+- **Endpoint:** `POST /api/v2/template/admission/applications/`
+- **Payload Sent:** `{ "form_data": { ... }, "otp_code": "123456" }`
+- **Data Returned:** `{ "success": true, "application_number": "APP-2026-00001", "message": "Application submitted successfully!" }`
+
+#### 33. `storio.submitContactMessage(formData, tenantHostOrOptions?)`
+- **Endpoint:** `POST /api/v2/template/contact/`
+- **Payload Sent:** `{ "name": "John Doe", "email": "visitor@example.com", "message": "Hello" }`
+- **Data Returned:** `{ "success": true, "message": "Your message has been sent." }`
 
 ---
 
@@ -1186,7 +1187,7 @@ export default function ContactForm() {
           className="mt-1 w-full border p-2 rounded focus:ring-emerald-500 focus:border-emerald-500" 
         />
       </div>
-
+`
       <button 
         type="submit" 
         disabled={isSubmitting}
