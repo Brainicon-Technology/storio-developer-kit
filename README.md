@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Storio Starter Kit
+
+Welcome to the Storio Developer Starter Kit! This template is built with [Next.js](https://nextjs.org) and is pre-configured with the `@storio/template-sdk` to help you rapidly develop and test 3rd-party themes for the Storio CMS platform.
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies and run the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# or yarn / pnpm / bun equivalents
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## IMPORTANT: Read the Documentation First!
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Before you start building your template, you **MUST** strictly follow the official documentation provided in the `docs/` folder. Failure to adhere to these guidelines will result in your template being rejected during the deployment review process.
 
-## Learn More
+1. **[Storio SDK V2 Guide](./docs/Storio_SDK_V2_Endpoints_and_Methods_Guide.md)**
+   This is the complete API and Data Payload reference manual. It contains every SDK method, endpoint path, parameter, and JSON structure you need to fetch data for your template.
+   
+   **Mandatory Rules to Follow:**
+   - **Rule 1 (Mock Data):** While testing locally, you are running in "Standalone Preview" mode. You must use mock data (as described in the SDK guide) since the live Storio CMS backend is not connected to your local environment.
+   - **Rule 2 (Strict Typing):** You must strictly type your data payloads using the TypeScript interfaces provided in the SDK. The use of `any` types is strictly prohibited.
 
-To learn more about Next.js, take a look at the following resources:
+2. **[Storio Template Manifest Guide](./docs/Storio_Template_Manifest_Guide.md)**
+   This guide explains the purpose, structure, and configuration of the `storio.template.json` file. 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Storio Manifest Configuration
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Before deploying your template to the Storio platform, you **MUST** properly configure the `public/storio.template.json` file. 
 
-## Deploy on Vercel
+- This file serves as the communication bridge between your Next.js template and the Storio CMS backend.
+- You currently have a minimal boilerplate file with placeholders. You must update `CHANGE_ME_TO_YOUR_TEMPLATE_ID` and `CHANGE_ME_TO_YOUR_TEMPLATE_NAME` with your actual information.
+- You must expand the supported features and customization schema to match exactly what your template supports.
+- See the [Manifest Guide](./docs/Storio_Template_Manifest_Guide.md) to understand how to fully populate this file.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**If left unconfigured or improperly configured, your template will fail validation upon deployment.**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+
+Once you have completed your template, rigorously tested it locally using mock data, and accurately configured your `storio.template.json` file, you can submit your repository to the Storio platform for review and integration.

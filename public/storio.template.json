@@ -1,9 +1,7 @@
 {
-  "id": "template-X-starter",
-  "name": "Storio Starter Theme",
+  "id": "CHANGE_ME_TO_YOUR_TEMPLATE_ID",
+  "name": "CHANGE_ME_TO_YOUR_TEMPLATE_NAME",
   "version": "1.0.0",
-  "framework": "nextjs",
-  "sdkVersion": "1.0.1",
   "customization": {
       "colors": [
           {
