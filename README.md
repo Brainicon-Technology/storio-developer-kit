@@ -4,7 +4,24 @@ Welcome to the Storio Developer Starter Kit! This template is built with [Next.j
 
 ## Getting Started
 
-First, install dependencies and run the development server:
+### 1. Create a New Project via CLI (Recommended)
+
+You can bootstrap a new Storio app using the `@brainicon/create-storio-app` CLI:
+
+```bash
+npx @brainicon/create-storio-app my-storio-app
+```
+
+Then navigate to your project directory and start the local development server:
+
+```bash
+cd my-storio-app
+npm run dev
+```
+
+### 2. Manual Setup (Cloned Repository)
+
+If you cloned this repository directly, install the dependencies and start the development server:
 
 ```bash
 npm install
