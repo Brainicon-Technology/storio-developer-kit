@@ -1,5 +1,7 @@
 # Storio Template SDK (v2) — Comprehensive Developer API & Data Reference Manual
 
+> **Last Updated:** August 17, 2026 | **SDK Version:** `@storio/template-sdk@1.0.1` | **Platform:** Storio CMS v2
+
 Welcome 3rd-party template developers! 
 
 This is the **complete, official API and Data Payload reference manual** for `@storio/template-sdk` (bundled in your starter template under `packages/storio-template-sdk-1.0.1.tgz`).
@@ -11,6 +13,9 @@ Every single SDK method, backend V2 endpoint path, method signature, parameter, 
 ## Table of Contents
 
 1. [Quick Start & Setup](#1-quick-start--setup)
+   - [Importing the SDK](#importing-the-sdk)
+   - [Key SDK Capabilities](#key-sdk-capabilities)
+   - [Fetching Live Database Data with Storio CLI](#fetching-live-database-data-with-storio-cli)
 2. [Mandatory Rules for Template Developers](#mandatory-rules-for-template-developers)
    - [Rule 1: Tenant DB vs. Standalone Preview Mock Data Rule](#rule-1-tenant-db-vs-standalone-preview-mock-data-rule)
    - [Rule 2: Strict Typing Rule (No any Types Allowed)](#rule-2-strict-typing-rule-no-any-types-allowed)
@@ -49,6 +54,39 @@ import { storio } from '@storio/template-sdk';
 - **Built-in Next.js Caching:** All GET requests automatically leverage Next.js caching (`revalidate: 60` seconds).
 - **100% Strongly Typed:** Every method returns a typed Promise (`Promise<T | null>`).
 
+### Fetching Live Database Data with Storio CLI
+
+By default, running `npm run dev` operates in **Standalone Preview Mode** (using `DEFAULT_DEMO_DATA`). To connect your Next.js template to a real backend database and fetch live tenant records, use the official **Storio CLI**:
+
+#### 1. Authenticate with Storio
+```bash
+storio login
+# Or connect to local backend:
+storio login --local
+```
+
+#### 2. Link Template to a Tenant Database
+```bash
+storio link
+# Or select from local backend tenants:
+storio link --local
+```
+*(Prompts you with an interactive menu of tenants and writes `NEXT_PUBLIC_STORIO_TENANT_HOST=<tenant>` to `.env.local`.)*
+
+#### 3. Launch Development Server with Live Database Data
+```bash
+storio dev
+# Or with local backend:
+storio dev --local
+```
+The SDK will automatically query the backend with `x-tenant-host: <tenant>`, fetching real database records (notices, blogs, staff, events, settings) directly into your template!
+
+#### 4. Disconnect & Return to Mock Data
+```bash
+storio unlink
+```
+Removes the tenant link from `.env.local` and switches the project back to Standalone Preview Mode so you can design with mock data.
+
 ---
 
 ## Mandatory Rules for Template Developers
@@ -71,25 +109,32 @@ import { headers } from 'next/headers';
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 
 export default async function NoticeSection() {
-  // 1. Resolve Host & Tenant
+  // 1. Resolve Host from incoming request
   const headersList = await headers();
   const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host = rawHost.split(':')[0];
+  const host = rawHost.split(':')[0]; // Remove port number if present
 
-  // 2. Determine Standalone Mode
-  const isStandalone = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const tenantHost = isStandalone ? 'demo.storio.cloud' : host;
+  // 2. Check for Linked Tenant (via storio link CLI) vs Standalone Mode
+  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
+  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
+  
+  // Standalone Preview mode is active ONLY on localhost without a linked tenant
+  const isStandalone = isLocalHost && !linkedTenant;
+  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
 
   // 3. Fetch Real Tenant Data via SDK
   const notices: StorioNotice[] | null = await storio.getNotices(tenantHost);
 
-  // 4. Apply Tenant DB vs Standalone Mock Data Rule
+  // 4. Apply Rule 1 (Tenant DB vs Standalone Mock Data Rule)
+  // - Has real DB data? Use `notices`.
+  // - Standalone Preview (unlinked localhost) & DB empty? Fallback to `DEFAULT_DEMO_DATA.notices`.
+  // - Tenant Gateway / Live Domain & DB empty? Use `[]` (empty state, NEVER leak mock data).
   const finalNotices: StorioNotice[] = (Array.isArray(notices) && notices.length > 0)
     ? notices
     : (isStandalone ? DEFAULT_DEMO_DATA.notices : []);
 
   if (!finalNotices || finalNotices.length === 0) {
-    return <div className="p-4 text-center text-gray-500">No notices posted.</div>;
+    return <div className="p-4 text-center text-gray-500">No public notices available.</div>;
   }
 
   return (
@@ -946,14 +991,16 @@ import { headers } from 'next/headers';
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 
 export default async function HomePage() {
-  // 1. RESOLVE HOST & TENANT DOMAIN
+  // 1. RESOLVE HOST FROM REQUEST HEADERS
   const headersList = await headers();
   const rawHost: string = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host: string = rawHost.split(':')[0];
+  const host: string = rawHost.split(':')[0]; // Remove port if present
 
-  // 2. DETERMINE STANDALONE MODE
-  const isStandalone: boolean = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const tenantHost: string = isStandalone ? 'demo.storio.cloud' : host;
+  // 2. CHECK FOR LINKED TENANT (CLI) VS STANDALONE MODE
+  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
+  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
+  const isStandalone = isLocalHost && !linkedTenant;
+  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
 
   // 3. FETCH REAL TENANT DATA VIA SDK
   const [rawLayout, rawHeroSlides, rawNotices] = await Promise.all([
@@ -964,7 +1011,7 @@ export default async function HomePage() {
 
   // 4. APPLY THE GOLDEN RULE (Standalone Demo Data vs Tenant DB Real Data)
   // If real tenant data exists -> use real DB data.
-  // If database has 0 items -> use DEFAULT_DEMO_DATA ONLY IF isStandalone is true; else return empty state.
+  // If database has 0 items -> use DEFAULT_DEMO_DATA ONLY IF isStandalone is true; else return clean empty state.
   const layout: StorioLayoutResponse | null = rawLayout || (isStandalone ? DEFAULT_DEMO_DATA.layout : null);
 
   const heroSlides: StorioHeroSlide[] = (Array.isArray(rawHeroSlides) && rawHeroSlides.length > 0)
@@ -1069,14 +1116,16 @@ interface BlogPageProps {
 export default async function BlogDetailPage({ params }: BlogPageProps) {
   const { slug } = await params;
 
-  // 1. Resolve Host & Tenant Domain
+  // 1. Resolve Host from Request Headers
   const headersList = await headers();
   const rawHost: string = headersList.get('x-tenant-host') || headersList.get('host') || '';
   const host: string = rawHost.split(':')[0];
 
-  // 2. Determine Standalone Mode
-  const isStandalone: boolean = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const tenantHost: string = isStandalone ? 'demo.storio.cloud' : host;
+  // 2. Check for Linked Tenant (CLI) vs Standalone Mode
+  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
+  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
+  const isStandalone = isLocalHost && !linkedTenant;
+  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
 
   // 3. Fetch Real Tenant Article via SDK
   const rawArticle: StorioBlogPost | null = await storio.getBlogDetail(slug, tenantHost);
