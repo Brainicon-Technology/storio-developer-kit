@@ -26,11 +26,20 @@ export default async function DemoNoticeSection() {
   const host = rawHost.split(':')[0]; // Remove port number if present (e.g. "localhost:3000" -> "localhost")
 
   // --------------------------------------------------------------------------
-  // STEP 2: Check if running in Standalone Preview Mode (localhost).
-  // If standalone, use a default host like 'demo.storio.cloud' for the SDK fetch call.
+  // STEP 2: Determine Tenant Host and Standalone Preview vs Tenant Gateway Mode
+  // - Linked Tenant Mode (via storio link / NEXT_PUBLIC_STORIO_TENANT_HOST):
+  //   Uses the linked tenant host for local development. Treats as Tenant Gateway (Rule 1).
+  // - Standalone Preview Mode (localhost with NO linked tenant):
+  //   Uses mock data fallback so developers can preview and style unlinked components.
+  // - Live Tenant Domain (production / gateway domain):
+  //   Uses incoming request host. Real DB data only, 0-item empty state on empty DB.
   // --------------------------------------------------------------------------
-  const isStandalone = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const tenantHost = isStandalone ? 'demo.storio.cloud' : host;
+  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
+  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
+  
+  // Standalone mode is active ONLY if on localhost AND no tenant is linked via CLI
+  const isStandalone = isLocalHost && !linkedTenant;
+  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
 
   // --------------------------------------------------------------------------
   // STEP 3: Fetch notices from the Storio SDK.
@@ -41,8 +50,8 @@ export default async function DemoNoticeSection() {
   // --------------------------------------------------------------------------
   // STEP 4: Apply the Tenant DB vs Standalone Mock Data Rule (Rule 1).
   // - Has DB Data? Use `notices`.
-  // - Is Standalone (localhost) & DB empty? Fallback to `DEFAULT_DEMO_DATA.notices`.
-  // - Is Live Tenant Domain & DB empty? Use `[]` (empty array).
+  // - Is Standalone (unlinked localhost) & DB empty? Fallback to `DEFAULT_DEMO_DATA.notices`.
+  // - Is Tenant Gateway / Linked Tenant & DB empty? Use `[]` (empty array, NO mock data).
   // --------------------------------------------------------------------------
   const finalNotices: StorioNotice[] = (Array.isArray(notices) && notices.length > 0)
     ? notices
