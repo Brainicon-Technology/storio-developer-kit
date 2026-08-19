@@ -1,0 +1,41 @@
+# 1. Build outputs & package dependencies
+node_modules/
+.next/
+dist/
+build/
+.turbo/
+.cache/
+coverage/
+
+# 2. Secret environment files
+.env
+.env.*
+*.local
+
+# 3. Heavy design source files
+*.sketch
+*.figma
+*.psd
+*.ai
+/design-assets/
+
+# 4. Tests and mock specifications
+/tests/
+/__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# 5. Internal documentation
+/docs/
+INTERNAL_*.md
+TODO.md
+
+# 6. Operating system & IDE clutter
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+*.tmp
