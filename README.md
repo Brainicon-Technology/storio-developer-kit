@@ -2,6 +2,14 @@
 
 Welcome to the Storio Developer Starter Kit! This template is built with [Next.js](https://nextjs.org) and is pre-configured with the `@storio/template-sdk` to help you rapidly develop and test 3rd-party themes for the Storio CMS platform.
 
+## CLI Installation
+
+Install the official Storio CLI tool globally:
+
+```bash
+npm install -g @brainicon/storio-cli
+```
+
 ## Getting Started
 
 ### 1. Create a New Project via CLI (Recommended)
@@ -30,29 +38,20 @@ Storio templates support two distinct development workflows:
 
 The official **Storio CLI** (`storio`) lets you link templates to tenant databases and run the development server with live data.
 
-> [!NOTE]
-> Use the `--local` flag whenever targeting your local development backend (`http://127.0.0.1:8000`). Once the cloud service is published, commands will connect to production by default.
-
 #### Step 1: Authenticate
 ```bash
 storio login
-# Or connect to local backend:
-storio login --local
 ```
 
 #### Step 2: Link to a Tenant Database
 ```bash
 storio link
-# Or select from local backend tenants:
-storio link --local
 ```
 *(Select your target institution/tenant from the interactive menu. This saves the linked tenant into `.env.local`.)*
 
 #### Step 3: Run the Development Server
 ```bash
 storio dev
-# Or with local backend:
-storio dev --local
 ```
 Open [http://localhost:3000](http://localhost:3000) to view your template populated with live tenant database records.
 
@@ -82,6 +81,34 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 ---
 
+## Storio CLI Commands Reference
+
+Quick syntax and command reference for 3rd-party developers:
+
+### Getting Started & Authentication
+- `npm install -g @brainicon/storio-cli` - Install CLI globally
+- `storio login` - Authenticate with your developer credentials
+- `storio status` - View active session, logged-in email, and linked tenant sandbox
+- `storio logout` - Log out and delete local authentication session
+- `storio --help` - Show general help and list all available commands
+
+### Sandbox & Environment Linking
+- `storio link` - Connect template to the live DIU School sandbox (`diu.storio.cloud`)
+- `storio unlink` - Disconnect tenant sandbox to preview offline with mock data
+
+### Local Development
+- `storio dev` - Start local development server with tenant data
+- `storio dev -p 3004` - Start development server on a custom port
+
+### Validation & Security Inspection
+- `storio validate` - Pre-flight check: verify manifest schema, size limit, and security
+
+### Publishing to Marketplace
+- `storio publish` - Submit template to the Storio Marketplace review queue
+- `storio publish -m "Release v1.0.0"` - Submit template with release notes for reviewers
+
+---
+
 ## IMPORTANT: Read the Documentation First!
 
 Before you start building your template, you **MUST** strictly follow the official documentation provided in the `docs/` folder:
@@ -104,6 +131,7 @@ Before submitting or deploying your template to the Storio platform, you **MUST*
 
 - This file serves as the communication bridge between your Next.js template and the Storio CMS backend.
 - Update `CHANGE_ME_TO_YOUR_TEMPLATE_ID` and `CHANGE_ME_TO_YOUR_TEMPLATE_NAME` with your actual information.
+- The `id` field must strictly follow the format: `template-[id number]-[slug]` (e.g., `template-01-horizon` or `template-101-apex`).
 - Expand the supported features and customization schema to match exactly what your template supports.
 - See the [Manifest Guide](./docs/Storio_Template_Manifest_Guide.md) to understand how to fully populate this file.
 
@@ -113,4 +141,14 @@ Before submitting or deploying your template to the Storio platform, you **MUST*
 
 ## Deployment
 
-Once you have completed your template, tested both in Standalone Preview (mock data) and with a linked tenant, and configured your `storio.template.json` file, submit your repository to the Storio platform for review and store publication.
+Once you have completed your template, tested both in Standalone Preview (mock data) and with a linked tenant, and configured your `storio.template.json` file, submit your template to the Storio platform for review and store publication.
+
+Run the pre-flight validation and publish commands:
+
+```bash
+# 1. Run pre-flight check
+storio validate
+
+# 2. Submit template to Marketplace review queue
+storio publish -m "Release v1.0.0"
+```
