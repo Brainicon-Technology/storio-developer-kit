@@ -213,7 +213,7 @@ Every component, utility, and state hook must use the exported TypeScript interf
 | 35 | `storio.submitContactMessage(formData, host?)` | `POST` | `/api/v2/template/contact/` | Body: `{ name, email, subject, message }` | `Promise<StorioContactFormResponse \| null>` |
 | 36 | `storio.getClassRoutines(host?)` | `GET` | `/api/v2/template/academic/class-routines/` | `class_name`, `section`, `shift`, `year` | `Promise<StorioClassRoutine[] \| null>` |
 | 37 | `storio.getSyllabuses(host?)` | `GET` | `/api/v2/template/academic/syllabuses/` | `class_name`, `exam_type`, `year` | `Promise<StorioSyllabus[] \| null>` |
-| 38 | `storio.getStudentStats(host?)` | `GET` | `/api/v2/template/student-stats/` | `year` | `Promise<StorioStudentStatsResponse \| null>` |
+| 38 | `storio.getStudentStats(params?, host?)` | `GET` | `/api/v2/template/student-stats/` | `year`, `program` | `Promise<StorioStudentStatsResponse \| null>` |
 | 39 | `storio.getMpoInfo(host?)` | `GET` | `/api/v2/template/mpo-info/` | None | `Promise<StorioMpoInfo \| null>` |
 | 40 | `storio.getInformationService(host?)` | `GET` | `/api/v2/template/information-service/` | None | `Promise<StorioInformationService \| null>` |
 | 41 | `storio.getComplaintOfficer(host?)` | `GET` | `/api/v2/template/complaint-officer/` | None | `Promise<StorioComplaintOfficer \| null>` |
@@ -1313,33 +1313,50 @@ Every component, utility, and state hook must use the exported TypeScript interf
   ]
   ```
 
-#### 38. `storio.getStudentStats(tenantHostOrOptions?)`
+#### 38. `storio.getStudentStats(params?, tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/student-stats/`
-- **Method Signature:** `storio.getStudentStats(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioStudentStatsResponse | null>`
-- **Description:** Institutional student demographics, gender breakdown, group distributions (Science, Commerce, Arts), and grand enrollment totals for accreditation dashboards.
+- **Method Signature:** `storio.getStudentStats(params?: { year?: number | string; program?: string }, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioStudentStatsResponse | null>`
+- **Description:** Institutional student demographics, gender breakdown, group distributions (Science, Commerce, Arts), program categories (e.g., General, Vocational), and grand enrollment totals for accreditation dashboards.
 - **Query Parameters Supported:**
-  - `year` (`number`): Specific academic year. Defaults to latest present in database.
+  - `year` (`number` | `string`): Specific academic year (e.g., `2026`). Defaults to latest present in database.
+  - `program` (`string`): Filter by academic program name (e.g., `General`, `Vocational`).
 - **Data Payload Obtained:**
   ```json
   {
     "academic_year": 2026,
     "grand_total_male": 1280,
     "grand_total_female": 1340,
-    "grand_total_students": 2620,
+    "grand_total": 2620,
+    "total_sections": 18,
     "classes": [
       {
+        "id": 101,
+        "academic_year": 2026,
+        "year": 2026,
         "class_name": "Class 10",
+        "class_name_en": "Class Ten",
+        "program": "General",
+        "shift": "Morning",
+        "order": 1,
         "total_male": 140,
         "total_female": 150,
         "total_students": 290,
         "groups": [
-          { "group_name": "Science", "male": 90, "female": 95, "total": 185 },
-          { "group_name": "Commerce", "male": 30, "female": 35, "total": 65 },
-          { "group_name": "Humanities", "male": 20, "female": 20, "total": 40 }
+          { "group_name": "Science", "sections": ["A", "B"], "total_male": 90, "total_female": 95, "total_students": 185 },
+          { "group_name": "Commerce", "sections": ["C"], "total_male": 30, "total_female": 35, "total_students": 65 },
+          { "group_name": "Humanities", "sections": ["D"], "total_male": 20, "total_female": 20, "total_students": 40 }
         ]
       }
     ]
   }
+  ```
+- **Example Usage:**
+  ```typescript
+  // Fetch stats for default/current academic year
+  const stats = await storio.getStudentStats();
+
+  // Fetch stats filtered by year and program
+  const vocationalStats = await storio.getStudentStats({ year: 2026, program: 'Vocational' });
   ```
 
 ---
@@ -1797,24 +1814,35 @@ export interface StorioSyllabus {
 
 export interface StorioStudentGroupStat {
   group_name: string;
-  male: number;
-  female: number;
-  total: number;
+  sections?: string[];
+  total_male?: number;
+  total_female?: number;
+  total_students?: number;
 }
 
 export interface StorioStudentStat {
+  id: number;
+  academic_year: number;
+  year?: number;
   class_name: string;
-  total_male: number;
-  total_female: number;
-  total_students: number;
+  class_name_en?: string;
+  program?: string;
   groups?: StorioStudentGroupStat[];
+  total_male?: number;
+  total_female?: number;
+  total_students?: number;
+  shift?: string;
+  order?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface StorioStudentStatsResponse {
   academic_year: number;
   grand_total_male: number;
   grand_total_female: number;
-  grand_total_students: number;
+  grand_total: number;
+  total_sections: number;
   classes: StorioStudentStat[];
 }
 
