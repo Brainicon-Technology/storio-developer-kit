@@ -1,6 +1,6 @@
 # Storio Template SDK (v2) — Comprehensive Developer API & Data Reference Manual
 
-> **Last Updated:** September 29, 2026 | **SDK Version:** `@storio/template-sdk@1.0.1` | **Platform:** Storio CMS v2
+> **Last Updated:** November 9, 2026 | **SDK Version:** `@storio/template-sdk@1.0.1` | **Platform:** Storio CMS v2
 
 Welcome 3rd-party template developers! 
 
@@ -19,7 +19,7 @@ Every single SDK method, backend V2 endpoint path, method signature, parameter, 
   - [Mandatory Rules for Template Developers](#mandatory-rules-for-template-developers)
     - [Rule 1: Tenant DB vs. Standalone Preview Mock Data Rule](#rule-1-tenant-db-vs-standalone-preview-mock-data-rule)
     - [Rule 2: Strict Typing Rule (No any Types Allowed)](#rule-2-strict-typing-rule-no-any-types-allowed)
-- [2. Complete SDK Method & Endpoint Index (43 Methods)](#2-complete-sdk-method--endpoint-index-43-methods)
+- [2. Complete SDK Method & Endpoint Index (44 Methods)](#2-complete-sdk-method--endpoint-index-44-methods)
 - [3. Detailed Method & Data Payload Reference](#3-detailed-method--data-payload-reference)
   - [Section 1: Site Identity & Layout Configs (Methods 1–5)](#section-1-site-identity--layout-configs)
   - [Section 2: Hero Carousel Banners (Method 6)](#section-2-hero-carousel-banners)
@@ -34,10 +34,10 @@ Every single SDK method, backend V2 endpoint path, method signature, parameter, 
   - [Section 11: Careers & Recruitment (Methods 28–29)](#section-11-careers--recruitment)
   - [Section 12: National Education Board Notice Sync (Method 30)](#section-12-national-education-board-notice-sync)
   - [Section 13: Online Admission Portal & Interactive Forms (Methods 31–35)](#section-13-online-admission-portal--interactive-forms)
-  - [Section 14: Academics (Class Routines, Syllabuses, Student Stats) (Methods 36–38)](#section-14-academics)
-  - [Section 15: Citizen Charter & Institutional Compliance (Methods 39–42)](#section-15-citizen-charter--institutional-compliance)
-  - [Section 16: Core API Fetcher (Method 43)](#section-16-core-api-fetcher-apifetch)
-- [4. Complete TypeScript Type Interfaces (45 Interfaces)](#4-complete-typescript-type-interfaces)
+  - [Section 14: Academics (Class Routines, Syllabuses, Student Stats, Academic Programs) (Methods 36–39)](#section-14-academics)
+  - [Section 15: Citizen Charter & Institutional Compliance (Methods 40–43)](#section-15-citizen-charter--institutional-compliance)
+  - [Section 16: Core API Fetcher (Method 44)](#section-16-core-api-fetcher-apifetch)
+- [4. Complete TypeScript Type Interfaces (46 Interfaces)](#4-complete-typescript-type-interfaces)
 - [5. Architectural Best Practices & Error Handling](#5-architectural-best-practices--error-handling)
 - [6. Next.js App Router Implementation Guide & Examples](#6-nextjs-app-router-implementation-guide--examples)
   - [Example 1: Complete Server Homepage (`src/app/page.tsx`)](#example-1-complete-server-homepage-srcapppagetsx)
@@ -172,7 +172,7 @@ Every component, utility, and state hook must use the exported TypeScript interf
 
 ---
 
-## 2. Complete SDK Method & Endpoint Index (43 Methods)
+## 2. Complete SDK Method & Endpoint Index (44 Methods)
 
 | # | SDK Method Signature | HTTP | Endpoint Path | Query Parameters / Body | Return Type |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -210,15 +210,16 @@ Every component, utility, and state hook must use the exported TypeScript interf
 | 32 | `storio.sendAdmissionOTP(email, phone?, host?)` | `POST` | `/api/v2/template/admission/send-otp/` | Body: `{ email, phone? }` | `Promise<StorioAdmissionOTPResponse \| null>` |
 | 33 | `storio.verifyAdmissionOTP(email, otpCode, host?)` | `POST` | `/api/v2/template/admission/verify-otp/` | Body: `{ email, otp_code }` | `Promise<StorioAdmissionOTPResponse \| null>` |
 | 34 | `storio.submitAdmissionApplication(formData, otpCode, host?)` | `POST` | `/api/v2/template/admission/applications/` | Body: `{ form_data, otp_code }` | `Promise<StorioAdmissionApplicationResponse \| null>` |
-| 35 | `storio.submitContactMessage(formData, host?)` | `POST` | `/api/v2/template/contact/` | Body: `{ name, email, subject, message }` | `Promise<StorioContactFormResponse \| null>` |
+| 35 | `storio.submitContactMessage(formData, host?)` | `POST` | `/api/v2/template/contact/` | Body: `{ name, email, mobile, subject, message, recaptcha_token? }` | `Promise<StorioContactFormResponse \| null>` |
 | 36 | `storio.getClassRoutines(host?)` | `GET` | `/api/v2/template/academic/class-routines/` | `class_name`, `section`, `shift`, `year` | `Promise<StorioClassRoutine[] \| null>` |
 | 37 | `storio.getSyllabuses(host?)` | `GET` | `/api/v2/template/academic/syllabuses/` | `class_name`, `exam_type`, `year` | `Promise<StorioSyllabus[] \| null>` |
 | 38 | `storio.getStudentStats(params?, host?)` | `GET` | `/api/v2/template/student-stats/` | `year`, `program` | `Promise<StorioStudentStatsResponse \| null>` |
-| 39 | `storio.getMpoInfo(host?)` | `GET` | `/api/v2/template/mpo-info/` | None | `Promise<StorioMpoInfo \| null>` |
-| 40 | `storio.getInformationService(host?)` | `GET` | `/api/v2/template/information-service/` | None | `Promise<StorioInformationService \| null>` |
-| 41 | `storio.getComplaintOfficer(host?)` | `GET` | `/api/v2/template/complaint-officer/` | None | `Promise<StorioComplaintOfficer \| null>` |
-| 42 | `storio.getHotlines(host?)` | `GET` | `/api/v2/template/hotlines/` | None | `Promise<StorioHotline[] \| null>` |
-| 43 | `storio.apiFetch<T>(endpoint, options?)` | `GET/POST` | `*` | Custom Options | `Promise<T \| null>` |
+| 39 | `storio.getAcademicPrograms(host?)` | `GET` | `/api/v2/template/academic/programs/` | None | `Promise<StorioAcademicProgram[]>` |
+| 40 | `storio.getMpoInfo(host?)` | `GET` | `/api/v2/template/mpo-info/` | None | `Promise<StorioMpoInfo \| null>` |
+| 41 | `storio.getInformationService(host?)` | `GET` | `/api/v2/template/information-service/` | None | `Promise<StorioInformationService \| null>` |
+| 42 | `storio.getComplaintOfficer(host?)` | `GET` | `/api/v2/template/complaint-officer/` | None | `Promise<StorioComplaintOfficer \| null>` |
+| 43 | `storio.getHotlines(host?)` | `GET` | `/api/v2/template/hotlines/` | None | `Promise<StorioHotline[] \| null>` |
+| 44 | `storio.apiFetch<T>(endpoint, options?)` | `GET/POST` | `*` | Custom Options | `Promise<T \| null>` |
 
 ---
 
@@ -1233,25 +1234,74 @@ Every component, utility, and state hook must use the exported TypeScript interf
 
 #### 35. `storio.submitContactMessage(formData, tenantHostOrOptions?)`
 - **Endpoint:** `POST /api/v2/template/contact/`
+- **Headers Required:** `Content-Type: application/json`, `x-tenant-host: <tenant-domain>` (injected automatically by SDK)
 - **Method Signature:** `storio.submitContactMessage(formData: Record<string, unknown>, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioContactFormResponse | null>`
 - **Description:** Submits public contact messages and inquiry requests from the template contact page directly into the tenant admin mailbox.
 - **Payload Sent:**
   ```json
   {
     "name": "Mahmudul Hasan",
-    "email": "m.hasan@example.com",
-    "mobile": "+880 1711-333333",
-    "subject": "Inquiry regarding A-Level Chemistry Lab facilities",
-    "message": "Greetings, I would like to schedule a campus visit next Tuesday..."
+    "email": "student@example.com",
+    "mobile": "+8801700000000",
+    "subject": "Inquiry regarding lab facilities",
+    "message": "Testing contact message endpoint...",
+    "recaptcha_token": "10000000-aaaa-bbbb-cccc-000000000001"
   }
   ```
-- **Data Returned:**
+  > `recaptcha_token` is **optional**. Pass `null` or omit entirely if your template design does not implement captcha.
+- **Success Response (`201 Created` — Real Live Response):**
   ```json
   {
     "success": true,
-    "message": "Your message has been sent successfully. Our team will contact you shortly."
+    "message": "Thank you for contacting us! We will get back to you soon."
   }
   ```
+- **Validation Error Response (`400 Bad Request` — Real Live Response):**
+  ```json
+  {
+    "email": ["Enter a valid email address."]
+  }
+  ```
+
+#### hCaptcha Integration Instructions for 3rd-Party Template Developers
+
+> **Architecture Overview:** Bot protection on `/api/v2/template/contact/` uses hCaptcha.
+> - **Zero Secret Key Exposure:** Third-party developers never need or handle the secret key. Verification occurs server-to-server on the backend.
+> - **Dynamic Public Site Key:** Retrieve the site key dynamically from `storio.getSettings(tenantHost)` &rarr; `settings?.hcaptcha_site_key`.
+> - **Optional:** If your custom template omits captcha, simply send `recaptcha_token: null` or omit the field. The backend processes the message without blocking.
+
+**1. Install the hCaptcha React Component:**
+```bash
+npm install @hcaptcha/react-hcaptcha
+```
+
+**2. Local Development & Testing Bypass:**
+During local development (`localhost`), you do not need to solve interactive challenges:
+- **Test Site Key:** `10000000-ffff-ffff-ffff-000000000001`
+- **Auto-generated Test Token:** `10000000-aaaa-bbbb-cccc-000000000001` (backend automatically accepts this token on development/preview instances).
+
+**3. Resolve Site Key in Your Component / Page:**
+```typescript
+const settings = await storio.getSettings(tenantHost);
+const isLocal = typeof window !== 'undefined' && 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+const siteKey = settings?.hcaptcha_site_key || (isLocal ? '10000000-ffff-ffff-ffff-000000000001' : null);
+```
+
+**4. Form Submission Pattern:**
+```typescript
+const payload = {
+  name: formData.get('name'),
+  email: formData.get('email'),
+  mobile: formData.get('mobile'),
+  subject: formData.get('subject'),
+  message: formData.get('message'),
+  recaptcha_token: captchaToken || null, // from <HCaptcha onVerify={(token) => setCaptchaToken(token)} />
+};
+
+const res = await storio.submitContactMessage(payload, tenantHost);
+```
 
 ---
 
@@ -1359,11 +1409,61 @@ Every component, utility, and state hook must use the exported TypeScript interf
   const vocationalStats = await storio.getStudentStats({ year: 2026, program: 'Vocational' });
   ```
 
+#### 39. `storio.getAcademicPrograms(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/academic/programs/`
+- **Method Signature:** `storio.getAcademicPrograms(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioAcademicProgram[]>`
+- **Description:** Returns the list of academic programs configured for the institution, including both custom programs and standard curriculum programs. Each program includes the list of associated class names. Returns an empty array `[]` if no programs are configured.
+- **Query Parameters:** None.
+- **Data Payload Obtained (verified live response from `diu.storio.cloud`):**
+  ```json
+  [
+    {
+      "id": 8,
+      "name": "Testing",
+      "classes": ["12", "sdsdsa"],
+      "is_custom": true
+    },
+    {
+      "id": null,
+      "name": "Pre-Primary",
+      "classes": ["Play", "Nursery", "KG", "Pre-Primary", "Class 10"],
+      "is_custom": false
+    },
+    {
+      "id": null,
+      "name": "Madrasa",
+      "classes": [
+        "Ebtedayee 1", "Ebtedayee 2", "Ebtedayee 3", "Ebtedayee 4", "Ebtedayee 5",
+        "Dakhil 6", "Dakhil 7", "Dakhil 8", "Dakhil 9", "Dakhil 10",
+        "Alim 1st Year", "Alim 2nd Year"
+      ],
+      "is_custom": false
+    },
+    {
+      "id": null,
+      "name": "THOR",
+      "classes": ["10"],
+      "is_custom": false
+    }
+  ]
+  ```
+  > **Note:** `id` is `null` for standard (system-defined) programs and a positive integer for custom programs added by the tenant admin. `is_custom: true` programs are institution-specific overrides.
+- **Example Usage:**
+  ```typescript
+  const programs = await storio.getAcademicPrograms(tenantHost);
+  // Always returns an array — empty [] if none configured
+
+  programs.forEach((program) => {
+    console.log(program.name, program.classes);
+  });
+  ```
+- **TypeScript Interface:** `StorioAcademicProgram` (see Section 4).
+
 ---
 
 ### Section 15: Citizen Charter & Institutional Compliance
 
-#### 39. `storio.getMpoInfo(tenantHostOrOptions?)`
+#### 40. `storio.getMpoInfo(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/mpo-info/`
 - **Method Signature:** `storio.getMpoInfo(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioMpoInfo | null>`
 - **Description:** Official government Monthly Pay Order (MPO) compliance details, committee approval resolutions, and institutional gazette certificates.
@@ -1387,7 +1487,7 @@ Every component, utility, and state hook must use the exported TypeScript interf
   }
   ```
 
-#### 40. `storio.getInformationService(tenantHostOrOptions?)`
+#### 41. `storio.getInformationService(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/information-service/`
 - **Method Signature:** `storio.getInformationService(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioInformationService | null>`
 - **Description:** Right to Information (RTI) designated officer profiles, appeals authority contact details, and citizen service procedures.
@@ -1408,7 +1508,7 @@ Every component, utility, and state hook must use the exported TypeScript interf
   }
   ```
 
-#### 41. `storio.getComplaintOfficer(tenantHostOrOptions?)`
+#### 42. `storio.getComplaintOfficer(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/complaint-officer/`
 - **Method Signature:** `storio.getComplaintOfficer(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioComplaintOfficer | null>`
 - **Description:** Grievance Redress System (GRS) compliance officer profile, formal grievance escalation steps, and appeal workflows.
@@ -1429,7 +1529,7 @@ Every component, utility, and state hook must use the exported TypeScript interf
   }
   ```
 
-#### 42. `storio.getHotlines(tenantHostOrOptions?)`
+#### 43. `storio.getHotlines(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/hotlines/`
 - **Method Signature:** `storio.getHotlines(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioHotline[] | null>`
 - **Description:** Government, legal, and public safety emergency hotlines (e.g. 999 National Emergency, 1098 Child Helpline, 333 Government Services).
@@ -1467,7 +1567,7 @@ Every component, utility, and state hook must use the exported TypeScript interf
 
 ### Section 16: Core API Fetcher (`apiFetch`)
 
-#### 43. `storio.apiFetch<T>(endpoint, options?)`
+#### 44. `storio.apiFetch<T>(endpoint, options?)`
 - **Signature:** `apiFetch<T>(endpoint: string, options?: StorioFetchOptions): Promise<T | null>`
 - **Description:** Low-level, generic fetch wrapper used internally by all SDK methods. Use this if you need to fetch a custom endpoint or send specialized HTTP headers not covered by built-in methods.
 
@@ -1475,7 +1575,7 @@ Every component, utility, and state hook must use the exported TypeScript interf
 
 ## 4. Complete TypeScript Type Interfaces
 
-Here are all 45 TypeScript interfaces exported directly by `@storio/template-sdk`:
+Here are all 46 TypeScript interfaces exported directly by `@storio/template-sdk`:
 
 ```typescript
 export interface StorioFetchOptions extends RequestInit {
@@ -1846,6 +1946,13 @@ export interface StorioStudentStatsResponse {
   classes: StorioStudentStat[];
 }
 
+export interface StorioAcademicProgram {
+  id: number | null;
+  name: string;
+  classes: string[];
+  is_custom: boolean;
+}
+
 export interface StorioMpoDocument {
   id: number;
   title: string;
@@ -2111,17 +2218,27 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
 
 ### Example 3: Client Form Submission Component (`src/components/ContactForm.tsx`)
 
-Strict TypeScript implementation with zero `any` types:
+Strict TypeScript client component with hCaptcha integration, mobile + subject fields, and correct tenant host forwarding:
+
+> **Note:** Install hCaptcha React package first: `npm install @hcaptcha/react-hcaptcha`
 
 ```tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { storio, StorioContactFormResponse } from '@storio/template-sdk';
 
-export default function ContactForm() {
+interface ContactFormProps {
+  tenantHost: string;
+  hcaptchaSiteKey: string | null;
+}
+
+export default function ContactForm({ tenantHost, hcaptchaSiteKey }: ContactFormProps) {
   const [status, setStatus] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -2129,21 +2246,27 @@ export default function ContactForm() {
     setStatus(null);
 
     const formData = new FormData(e.currentTarget);
-    
-    // Strict typing using Record<string, unknown> instead of any
+
+    // Strict typing — no `any` types
     const payload: Record<string, unknown> = {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
+      name:    formData.get('name') as string,
+      email:   formData.get('email') as string,
+      mobile:  formData.get('mobile') as string,
+      subject: formData.get('subject') as string,
       message: formData.get('message') as string,
+      ...(captchaToken ? { recaptcha_token: captchaToken } : {}),
     };
 
-    const res: StorioContactFormResponse | null = await storio.submitContactMessage(payload);
-    
+    const res: StorioContactFormResponse | null =
+      await storio.submitContactMessage(payload, tenantHost);
+
     setIsSubmitting(false);
+    captchaRef.current?.resetCaptcha();
+    setCaptchaToken(null);
 
     if (res?.success) {
       setStatus('Message sent successfully!');
-      e.currentTarget.reset();
+      (e.target as HTMLFormElement).reset();
     } else {
       setStatus(res?.message || 'Failed to send message. Please try again.');
     }
@@ -2153,36 +2276,41 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto p-6 bg-white rounded shadow">
       <div>
         <label className="block text-sm font-medium text-gray-700">Name</label>
-        <input 
-          name="name" 
-          type="text" 
-          required 
-          className="mt-1 w-full border p-2 rounded focus:ring-emerald-500 focus:border-emerald-500" 
-        />
+        <input name="name" type="text" required className="mt-1 w-full border p-2 rounded" />
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Email</label>
-        <input 
-          name="email" 
-          type="email" 
-          required 
-          className="mt-1 w-full border p-2 rounded focus:ring-emerald-500 focus:border-emerald-500" 
-        />
+        <input name="email" type="email" required className="mt-1 w-full border p-2 rounded" />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Mobile</label>
+        <input name="mobile" type="tel" placeholder="+8801700000000" className="mt-1 w-full border p-2 rounded" />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Subject</label>
+        <input name="subject" type="text" required className="mt-1 w-full border p-2 rounded" />
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700">Message</label>
-        <textarea 
-          name="message" 
-          rows={4} 
-          required 
-          className="mt-1 w-full border p-2 rounded focus:ring-emerald-500 focus:border-emerald-500" 
-        />
+        <textarea name="message" rows={4} required className="mt-1 w-full border p-2 rounded" />
       </div>
 
-      <button 
-        type="submit" 
+      {/* hCaptcha widget — optional but recommended */}
+      {hcaptchaSiteKey && (
+        <HCaptcha
+          ref={captchaRef}
+          sitekey={hcaptchaSiteKey}
+          onVerify={(token) => setCaptchaToken(token)}
+          onExpire={() => setCaptchaToken(null)}
+        />
+      )}
+
+      <button
+        type="submit"
         disabled={isSubmitting}
         className="w-full bg-emerald-600 text-white font-medium py-2 rounded hover:bg-emerald-700 disabled:opacity-50"
       >
@@ -2195,6 +2323,37 @@ export default function ContactForm() {
         </p>
       )}
     </form>
+  );
+}
+```
+
+**Usage in a Server Page (passes `tenantHost` and `hcaptchaSiteKey` as props):**
+
+```tsx
+// src/app/contact/page.tsx  (Server Component)
+import { headers } from 'next/headers';
+import { storio } from '@storio/template-sdk';
+import ContactForm from '@/components/ContactForm';
+
+export default async function ContactPage() {
+  const headersList = await headers();
+  const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
+  const host = rawHost.split(':')[0];
+  const tenantHost = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST || host;
+
+  const settings = await storio.getSettings(tenantHost);
+
+  // On localhost dev, fall back to official hCaptcha test site key
+  const isLocal = host === 'localhost' || host === '127.0.0.1';
+  const hcaptchaSiteKey =
+    settings?.hcaptcha_site_key ??
+    (isLocal ? '10000000-ffff-ffff-ffff-000000000001' : null);
+
+  return (
+    <main>
+      <h1>Contact Us</h1>
+      <ContactForm tenantHost={tenantHost} hcaptchaSiteKey={hcaptchaSiteKey} />
+    </main>
   );
 }
 ```
