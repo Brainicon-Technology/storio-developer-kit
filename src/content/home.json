@@ -7,7 +7,7 @@
     "primaryHref": "/contact",
     "secondaryText": "Read notices",
     "secondaryHref": "/notices",
-    "heroImage": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200"
+    "heroImage": "/images/hero.svg"
   },
   "features": {
     "title": "Why families choose us",

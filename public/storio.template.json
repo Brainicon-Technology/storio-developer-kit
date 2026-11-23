@@ -124,7 +124,7 @@
             "primaryHref": "/contact",
             "secondaryText": "Read notices",
             "secondaryHref": "/notices",
-            "heroImage": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200"
+            "heroImage": "/images/hero.svg"
           },
           "features": {
             "title": "Why families choose us",
@@ -209,7 +209,7 @@
           "intro": {
             "title": "About our school",
             "text": "Founded in 1998, Storio Model Academy has helped thousands of students reach their goals.",
-            "image": "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1200"
+            "image": "/images/about.svg"
           },
           "values": {
             "title": "Our values",

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="School building illustration">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e6f4ee"/>
+      <stop offset="1" stop-color="#f8fafc"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#sky)"/>
+  <circle cx="980" cy="140" r="70" fill="#fcd34d" opacity="0.85"/>
+  <ellipse cx="260" cy="150" rx="110" ry="34" fill="#ffffff"/>
+  <ellipse cx="330" cy="130" rx="70" ry="30" fill="#ffffff"/>
+  <ellipse cx="760" cy="110" rx="90" ry="26" fill="#ffffff"/>
+  <rect y="540" width="1200" height="135" fill="#bfe3cf"/>
+  <rect y="600" width="1200" height="75" fill="#9fd4b7"/>
+  <!-- main building -->
+  <rect x="330" y="300" width="540" height="250" fill="#ffffff" stroke="#0e704b" stroke-width="6"/>
+  <polygon points="300,305 600,170 900,305" fill="#0e704b"/>
+  <rect x="560" y="210" width="80" height="60" fill="#ffffff" stroke="#0e704b" stroke-width="5"/>
+  <circle cx="600" cy="240" r="18" fill="none" stroke="#0e704b" stroke-width="4"/>
+  <line x1="600" y1="240" x2="600" y2="228" stroke="#0e704b" stroke-width="4" stroke-linecap="round"/>
+  <line x1="600" y1="240" x2="610" y2="246" stroke="#0e704b" stroke-width="4" stroke-linecap="round"/>
+  <!-- columns -->
+  <g fill="#e6f4ee" stroke="#0e704b" stroke-width="4">
+    <rect x="370" y="330" width="26" height="220"/>
+    <rect x="804" y="330" width="26" height="220"/>
+  </g>
+  <!-- windows -->
+  <g fill="#cfe9dc" stroke="#0e704b" stroke-width="4">
+    <rect x="420" y="340" width="70" height="60"/>
+    <rect x="420" y="430" width="70" height="60"/>
+    <rect x="710" y="340" width="70" height="60"/>
+    <rect x="710" y="430" width="70" height="60"/>
+  </g>
+  <!-- door -->
+  <rect x="550" y="420" width="100" height="130" rx="50" ry="50" fill="#d97706"/>
+  <rect x="550" y="470" width="100" height="80" fill="#d97706"/>
+  <circle cx="630" cy="490" r="5" fill="#ffffff"/>
+  <!-- flag -->
+  <line x1="600" y1="170" x2="600" y2="100" stroke="#1f2937" stroke-width="4"/>
+  <polygon points="600,100 650,115 600,130" fill="#d97706"/>
+  <!-- trees -->
+  <g>
+    <rect x="200" y="470" width="16" height="80" fill="#7c5a3c"/>
+    <circle cx="208" cy="450" r="50" fill="#22a06b"/>
+    <rect x="990" y="470" width="16" height="80" fill="#7c5a3c"/>
+    <circle cx="998" cy="450" r="50" fill="#22a06b"/>
+  </g>
+  <!-- path -->
+  <polygon points="570,550 630,550 700,675 500,675" fill="#f1e4c8"/>
+</svg>
