@@ -2,32 +2,408 @@
   "id": "CHANGE_ME_TO_YOUR_TEMPLATE_ID",
   "name": "CHANGE_ME_TO_YOUR_TEMPLATE_NAME",
   "version": "1.0.0",
-  "customization": {
-      "colors": [
-          {
-              "id": "primaryColor",
-              "label": "Primary Color",
-              "type": "color",
-              "default": "#000000"
-          }
-      ]
-  },
   "features": [
-      "blogs",
-      "gallery"
+    "notice",
+    "contact"
   ],
   "navigation": [
+    {
+      "id": "navbarLinks",
+      "label": "Navigation Links",
+      "type": "links",
+      "default": [
+        {
+          "id": "1",
+          "name": "Home",
+          "href": "/"
+        }
+      ]
+    }
+  ],
+  "sdkVersion": 2,
+  "editor": {
+    "library": "@brainicon/storio-elements-editor",
+    "pages": [
       {
-          "id": "navbarLinks",
-          "label": "Navigation Links",
-          "type": "links",
-          "default": [
+        "key": "site",
+        "title": "Site settings",
+        "route": "/",
+        "global": true,
+        "defaults": {
+          "header": {
+            "logoText": "Storio Model Academy",
+            "logo": "",
+            "links": [
               {
-                  "id": "1",
-                  "name": "Home",
-                  "href": "/"
+                "label": "Home",
+                "href": "/"
+              },
+              {
+                "label": "About",
+                "href": "/about"
+              },
+              {
+                "label": "Notices",
+                "href": "/notices"
+              },
+              {
+                "label": "Contact",
+                "href": "/contact"
               }
-          ]
+            ],
+            "ctaLabel": "Apply Now",
+            "ctaHref": "/contact"
+          },
+          "footer": {
+            "tagline": "Empowering future leaders through excellence.",
+            "copyright": "© 2026 Storio Model Academy. All rights reserved."
+          },
+          "contact": {
+            "email": "info@storiomodel.edu",
+            "phone": "+1 (555) 019-2834",
+            "address": "123 Education Boulevard, Knowledge City",
+            "socials": [
+              {
+                "label": "Facebook",
+                "href": "https://facebook.com"
+              },
+              {
+                "label": "YouTube",
+                "href": "https://youtube.com"
+              }
+            ]
+          },
+          "siteSeo": {
+            "siteName": "Storio Model Academy",
+            "titleTemplate": "%s | Storio Model Academy",
+            "description": "A Storio template built with the Storio Elements Editor.",
+            "ogImage": "",
+            "favicon": "/favicon.ico"
+          },
+          "theme": {
+            "primaryColor": "#0e704b",
+            "accentColor": "#d97706",
+            "textColor": "#1f2937",
+            "backgroundColor": "#ffffff",
+            "surfaceColor": "#f8fafc"
+          }
+        },
+        "sections": [
+          {
+            "key": "header",
+            "label": "Header"
+          },
+          {
+            "key": "footer",
+            "label": "Footer"
+          },
+          {
+            "key": "contact",
+            "label": "Contact & social"
+          },
+          {
+            "key": "siteSeo",
+            "label": "SEO defaults"
+          },
+          {
+            "key": "theme",
+            "label": "Theme"
+          }
+        ]
+      },
+      {
+        "key": "home",
+        "title": "Home",
+        "route": "/",
+        "defaults": {
+          "hero": {
+            "badge": "Admissions open for 2026-2027",
+            "title": "Welcome to Storio Model Academy",
+            "subtitle": "A caring school where every student learns, grows and leads.",
+            "primaryText": "Apply Now",
+            "primaryHref": "/contact",
+            "secondaryText": "Read notices",
+            "secondaryHref": "/notices",
+            "heroImage": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200"
+          },
+          "features": {
+            "title": "Why families choose us",
+            "items": [
+              {
+                "id": "f1",
+                "icon": "GraduationCap",
+                "title": "Strong academics",
+                "text": "A modern curriculum taught by experienced teachers."
+              },
+              {
+                "id": "f2",
+                "icon": "Users",
+                "title": "Small classes",
+                "text": "Every student gets attention and support."
+              },
+              {
+                "id": "f3",
+                "icon": "Trophy",
+                "title": "Sports and clubs",
+                "text": "Activities that build confidence and teamwork."
+              }
+            ]
+          },
+          "notices": {
+            "title": "Latest notices",
+            "linkText": "View all notices",
+            "emptyText": "No public notices available."
+          },
+          "faq": {
+            "title": "Frequently asked questions",
+            "items": [
+              {
+                "question": "When do admissions open?",
+                "answer": "Admissions open every year in January."
+              },
+              {
+                "question": "Do you offer transport?",
+                "answer": "Yes, school buses cover most of the city."
+              }
+            ]
+          },
+          "seo": {
+            "title": "Home",
+            "description": "Storio Model Academy: strong academics, small classes, and a caring community.",
+            "keywords": [
+              "school",
+              "admissions",
+              "education"
+            ],
+            "ogImage": ""
+          }
+        },
+        "sections": [
+          {
+            "key": "hero",
+            "label": "1. Hero"
+          },
+          {
+            "key": "features",
+            "label": "2. Features"
+          },
+          {
+            "key": "notices",
+            "label": "3. Latest notices"
+          },
+          {
+            "key": "faq",
+            "label": "4. FAQ"
+          },
+          {
+            "key": "seo",
+            "label": "SEO"
+          }
+        ]
+      },
+      {
+        "key": "about",
+        "title": "About",
+        "route": "/about",
+        "defaults": {
+          "intro": {
+            "title": "About our school",
+            "text": "Founded in 1998, Storio Model Academy has helped thousands of students reach their goals.",
+            "image": "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1200"
+          },
+          "values": {
+            "title": "Our values",
+            "items": [
+              {
+                "id": "v1",
+                "icon": "Heart",
+                "title": "Care",
+                "text": "We know every student by name."
+              },
+              {
+                "id": "v2",
+                "icon": "Lightbulb",
+                "title": "Curiosity",
+                "text": "We teach students to ask good questions."
+              },
+              {
+                "id": "v3",
+                "icon": "ShieldCheck",
+                "title": "Integrity",
+                "text": "We do the right thing, even when no one is watching."
+              }
+            ]
+          },
+          "seo": {
+            "title": "About",
+            "description": "Learn about the history and values of Storio Model Academy.",
+            "keywords": [
+              "about",
+              "school history"
+            ],
+            "ogImage": ""
+          }
+        },
+        "sections": [
+          {
+            "key": "intro",
+            "label": "1. Intro"
+          },
+          {
+            "key": "values",
+            "label": "2. Values"
+          },
+          {
+            "key": "seo",
+            "label": "SEO"
+          }
+        ]
+      },
+      {
+        "key": "contact",
+        "title": "Contact",
+        "route": "/contact",
+        "defaults": {
+          "intro": {
+            "title": "Contact us",
+            "text": "Questions about admissions or school life? Send us a message and we will reply within two working days."
+          },
+          "form": {
+            "nameLabel": "Your name",
+            "emailLabel": "Email",
+            "messageLabel": "Message",
+            "submitLabel": "Send message",
+            "successText": "Thank you! Your message has been sent.",
+            "errorText": "Sorry, the message could not be sent. Please try again."
+          },
+          "seo": {
+            "title": "Contact",
+            "description": "Contact Storio Model Academy by phone, email or the contact form.",
+            "keywords": [
+              "contact"
+            ],
+            "ogImage": ""
+          }
+        },
+        "sections": [
+          {
+            "key": "intro",
+            "label": "1. Intro"
+          },
+          {
+            "key": "form",
+            "label": "2. Form"
+          },
+          {
+            "key": "seo",
+            "label": "SEO"
+          }
+        ]
+      },
+      {
+        "key": "notices",
+        "title": "Notices",
+        "route": "/notices",
+        "defaults": {
+          "intro": {
+            "title": "Notice board",
+            "text": "Official announcements from the school office.",
+            "urgentLabel": "Urgent",
+            "readMoreText": "Read more",
+            "emptyText": "No public notices available."
+          },
+          "seo": {
+            "title": "Notices",
+            "description": "Latest notices and announcements from Storio Model Academy.",
+            "keywords": [
+              "notices",
+              "announcements"
+            ],
+            "ogImage": ""
+          }
+        },
+        "sections": [
+          {
+            "key": "intro",
+            "label": "1. Notice board"
+          },
+          {
+            "key": "seo",
+            "label": "SEO"
+          }
+        ]
+      },
+      {
+        "key": "notice-detail",
+        "title": "Notice",
+        "route": "/notices/[id]",
+        "collection": "notices",
+        "parent": "notices",
+        "defaults": {
+          "labels": {
+            "backText": "Back to all notices",
+            "publishedLabel": "Published",
+            "attachmentText": "Download attachment",
+            "notFoundText": "This notice could not be found."
+          }
+        },
+        "sections": [
+          {
+            "key": "labels",
+            "label": "Labels"
+          }
+        ]
       }
-  ]
+    ],
+    "icons": [
+      "GraduationCap",
+      "Users",
+      "Trophy",
+      "BookOpen",
+      "Heart",
+      "Lightbulb",
+      "ShieldCheck",
+      "Star",
+      "Calendar",
+      "Bell"
+    ],
+    "styles": {
+      "colors": {
+        "Primary": "var(--primary-color)",
+        "Accent": "var(--accent-color)",
+        "Text": "var(--text-color)",
+        "Background": "var(--background-color)",
+        "Surface": "var(--surface-color)"
+      },
+      "fontSizes": {
+        "S": "0.875rem",
+        "M": "1rem",
+        "L": "1.5rem",
+        "XL": "2.25rem",
+        "XXL": "3rem"
+      },
+      "spacing": {
+        "None": "0",
+        "Small": "0.5rem",
+        "Medium": "1rem",
+        "Large": "2rem"
+      },
+      "radii": {
+        "None": "0",
+        "Small": "0.375rem",
+        "Medium": "0.75rem",
+        "Round": "9999px"
+      }
+    },
+    "collectionLimits": {
+      "home.features.items": {
+        "max": 6,
+        "label": "Feature cards"
+      },
+      "about.values.items": {
+        "max": 6,
+        "label": "Values"
+      }
+    }
+  }
 }

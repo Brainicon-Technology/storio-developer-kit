@@ -1,0 +1,21 @@
+{
+  "intro": {
+    "title": "About our school",
+    "text": "Founded in 1998, Storio Model Academy has helped thousands of students reach their goals.",
+    "image": "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1200"
+  },
+  "values": {
+    "title": "Our values",
+    "items": [
+      { "id": "v1", "icon": "Heart", "title": "Care", "text": "We know every student by name." },
+      { "id": "v2", "icon": "Lightbulb", "title": "Curiosity", "text": "We teach students to ask good questions." },
+      { "id": "v3", "icon": "ShieldCheck", "title": "Integrity", "text": "We do the right thing, even when no one is watching." }
+    ]
+  },
+  "seo": {
+    "title": "About",
+    "description": "Learn about the history and values of Storio Model Academy.",
+    "keywords": ["about", "school history"],
+    "ogImage": ""
+  }
+}

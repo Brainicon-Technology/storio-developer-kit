@@ -1,0 +1,38 @@
+{
+  "hero": {
+    "badge": "Admissions open for 2026-2027",
+    "title": "Welcome to Storio Model Academy",
+    "subtitle": "A caring school where every student learns, grows and leads.",
+    "primaryText": "Apply Now",
+    "primaryHref": "/contact",
+    "secondaryText": "Read notices",
+    "secondaryHref": "/notices",
+    "heroImage": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200"
+  },
+  "features": {
+    "title": "Why families choose us",
+    "items": [
+      { "id": "f1", "icon": "GraduationCap", "title": "Strong academics", "text": "A modern curriculum taught by experienced teachers." },
+      { "id": "f2", "icon": "Users", "title": "Small classes", "text": "Every student gets attention and support." },
+      { "id": "f3", "icon": "Trophy", "title": "Sports and clubs", "text": "Activities that build confidence and teamwork." }
+    ]
+  },
+  "notices": {
+    "title": "Latest notices",
+    "linkText": "View all notices",
+    "emptyText": "No public notices available."
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "items": [
+      { "question": "When do admissions open?", "answer": "Admissions open every year in January." },
+      { "question": "Do you offer transport?", "answer": "Yes, school buses cover most of the city." }
+    ]
+  },
+  "seo": {
+    "title": "Home",
+    "description": "Storio Model Academy: strong academics, small classes, and a caring community.",
+    "keywords": ["school", "admissions", "education"],
+    "ogImage": ""
+  }
+}

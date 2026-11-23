@@ -1,0 +1,15 @@
+{
+  "intro": {
+    "title": "Notice board",
+    "text": "Official announcements from the school office.",
+    "urgentLabel": "Urgent",
+    "readMoreText": "Read more",
+    "emptyText": "No public notices available."
+  },
+  "seo": {
+    "title": "Notices",
+    "description": "Latest notices and announcements from Storio Model Academy.",
+    "keywords": ["notices", "announcements"],
+    "ogImage": ""
+  }
+}

@@ -1,6 +1,13 @@
 # Storio Starter Kit
 
-Welcome to the Storio Developer Starter Kit! This template is built with [Next.js](https://nextjs.org) and is pre-configured with the `@storio/template-sdk` to help you rapidly develop and test 3rd-party themes for the Storio CMS platform.
+Welcome to the Storio Developer Starter Kit! This template is built with [Next.js](https://nextjs.org) to help you rapidly develop and test 3rd-party themes for the Storio CMS platform. It comes pre-configured with:
+
+- **`@brainicon/storio-elements-editor`**: makes every text, image, icon, the header, footer, SEO and theme colours editable by the school from the Storio dashboard.
+- **`@storio/template-sdk`**: loads the school's database records (notices, blogs, staff, events and so on).
+
+It ships sample pages that are already editable: Home, About, Contact, and a notice board with a detail page. Use them as the pattern for your own pages.
+
+> Looking for the old starter kit (without the editor)? Scaffold it with `npx degit Brainicon-Technology/storio-developer-kit#v1-legacy my-template`.
 
 ## CLI Installation
 
@@ -79,6 +86,8 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser.
 
+Open [http://localhost:3000/admin/cms](http://localhost:3000/admin/cms) for the **local editor**. Hover any part of a page, click its pencil, and edit. It works only in Standalone Preview under `npm run dev`; real schools edit from the Storio dashboard.
+
 ---
 
 ## Storio CLI Commands Reference
@@ -113,14 +122,23 @@ Quick syntax and command reference for 3rd-party developers:
 
 Before you start building your template, you **MUST** strictly follow the official documentation provided in the `docs/` folder:
 
-1. **[Storio SDK V2 Guide](./docs/Storio_SDK_V2_Endpoints_and_Methods_Guide.md)**
+1. **[Storio Editor Template Guide](./docs/Storio_Editor_Template_Guide.md)**
+   How to structure pages so schools can edit them: content JSON, `<CmsSection>`/`<CmsField>`, site-wide content, theme colours, and database records. Start here.
+
+   **Mandatory Editor Rules:**
+   - **Rule 3 (Editable by default):** Every visible text, image and icon on a public page must be editable.
+   - **Rule 4 (Manifest in sync):** Run `npm run cms:manifest` after changing `src/cms/pages.ts` or `src/content/*.json`.
+
+2. **[Storio SDK V2 Guide](./docs/Storio_SDK_V2_Endpoints_and_Methods_Guide.md)**
    The complete API and Data Payload reference manual containing all 36 SDK methods, parameter signatures, and TypeScript interfaces.
    
    **Mandatory Platform Rules:**
    - **Rule 1 (Tenant DB vs. Standalone Preview Rule):** When running in Standalone Preview mode (unlinked), fallback to `DEFAULT_DEMO_DATA` if SDK data is empty. When connected to a live tenant domain or linked via CLI, ONLY show real DB data (render a 0-item empty state if empty — NEVER leak demo data on live sites).
    - **Rule 2 (Strict Typing):** Strictly type all data payloads using SDK interfaces. The use of `any` types is strictly prohibited.
 
-2. **[Storio Template Manifest Guide](./docs/Storio_Template_Manifest_Guide.md)**
+   Use `resolveTenant()` (`src/lib/tenant.ts`) and `withDemoFallback()` (`src/lib/data.ts`) for Rule 1. Do not copy the host-detection logic.
+
+3. **[Storio Template Manifest Guide](./docs/Storio_Template_Manifest_Guide.md)**
    Explains the purpose, structure, and configuration schema of `public/storio.template.json`.
 
 ---
@@ -132,7 +150,8 @@ Before submitting or deploying your template to the Storio platform, you **MUST*
 - This file serves as the communication bridge between your Next.js template and the Storio CMS backend.
 - Update `CHANGE_ME_TO_YOUR_TEMPLATE_ID` and `CHANGE_ME_TO_YOUR_TEMPLATE_NAME` with your actual information.
 - The `id` field must strictly follow the format: `template-[id number]-[slug]` (e.g., `template-01-horizon` or `template-101-apex`).
-- Expand the supported features and customization schema to match exactly what your template supports.
+- List the CMS modules your template supports in `features`.
+- Do not write the `editor` block by hand. Generate it with `npm run cms:manifest`, which also sets `"sdkVersion": 2`.
 - See the [Manifest Guide](./docs/Storio_Template_Manifest_Guide.md) to understand how to fully populate this file.
 
 **If left unconfigured or improperly configured, your template will fail validation upon deployment.**
@@ -146,9 +165,12 @@ Once you have completed your template, tested both in Standalone Preview (mock d
 Run the pre-flight validation and publish commands:
 
 ```bash
-# 1. Run pre-flight check
+# 1. Generate the editor block of the manifest
+npm run cms:manifest
+
+# 2. Run pre-flight check
 storio validate
 
-# 2. Submit template to Marketplace review queue
+# 3. Submit template to Marketplace review queue
 storio publish -m "Release v1.0.0"
 ```

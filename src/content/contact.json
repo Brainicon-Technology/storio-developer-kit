@@ -1,0 +1,20 @@
+{
+  "intro": {
+    "title": "Contact us",
+    "text": "Questions about admissions or school life? Send us a message and we will reply within two working days."
+  },
+  "form": {
+    "nameLabel": "Your name",
+    "emailLabel": "Email",
+    "messageLabel": "Message",
+    "submitLabel": "Send message",
+    "successText": "Thank you! Your message has been sent.",
+    "errorText": "Sorry, the message could not be sent. Please try again."
+  },
+  "seo": {
+    "title": "Contact",
+    "description": "Contact Storio Model Academy by phone, email or the contact form.",
+    "keywords": ["contact"],
+    "ogImage": ""
+  }
+}
