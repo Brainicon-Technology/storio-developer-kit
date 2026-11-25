@@ -1,177 +1,115 @@
 # Storio Starter Kit
 
-Welcome to the Storio Developer Starter Kit! This template is built with [Next.js](https://nextjs.org) to help you rapidly develop and test 3rd-party themes for the Storio CMS platform. It comes pre-configured with:
+The starting point for building a **Storio template**: a Next.js website that schools on the Storio platform install and edit from their dashboard.
 
-- **The Storio editor kit** (`src/lib/storio-editor/`, no library to install): makes every static text, image and icon, page SEO, theme colours and header/footer texts editable by the school from the Storio dashboard.
-- **`@storio/template-sdk`**: loads the school's own data (settings, notices, blogs, staff, events and so on).
+It comes ready to use:
 
-It ships sample pages that are already editable: Home, About, Contact, and a notice board with a detail page. Use them as the pattern for your own pages.
+- **School data connected** with `@storio/template-sdk`: settings, notices, blogs, staff, events and more.
+- **Editable from the Storio dashboard** with the Storio editor kit (`src/lib/storio-editor/`, no library to install): every static text, image and icon, page SEO, theme colours, the menu and the header/footer texts.
+- **Sample pages** that already follow every rule: Home, About, Contact, Notices and a notice detail page. Copy their pattern for your own pages.
 
-> Looking for the old starter kit (without the editor)? Scaffold it with `npx degit Brainicon-Technology/storio-developer-kit#v1-legacy my-template`.
+> Looking for the old starter kit (without the editor)? `npx degit Brainicon-Technology/storio-developer-kit#v1-legacy my-template`
 
-## CLI Installation
+---
 
-Install the official Storio CLI tool globally:
+## Quick start
 
 ```bash
+# 1. Install the Storio CLI (once)
 npm install -g @brainicon/storio-cli
-```
 
-## Getting Started
-
-### 1. Create a New Project via CLI (Recommended)
-
-You can bootstrap a brand-new Storio template using the `@brainicon/create-storio-app` generator:
-
-```bash
-npx @brainicon/create-storio-app my-storio-app
-cd my-storio-app
-```
-
----
-
-### 2. Development Modes
-
-Storio templates support two distinct development workflows:
-
-| Mode | Command | Data Source | Description |
-| :--- | :--- | :--- | :--- |
-| **Standalone Preview** | `npm run dev` or `storio unlink` | `DEFAULT_DEMO_DATA` | Visual UI designing and component styling with local mock data. No backend required. |
-| **Tenant Gateway** | `storio link` & `storio dev` | Live Tenant DB | Developing and testing with real database records from a connected Storio tenant. |
-
----
-
-### 3. Development Workflow with Storio CLI
-
-The official **Storio CLI** (`storio`) lets you link templates to tenant databases and run the development server with live data.
-
-#### Step 1: Authenticate
-```bash
-storio login
-```
-
-#### Step 2: Link to a Tenant Database
-```bash
-storio link
-```
-*(Select your target institution/tenant from the interactive menu. This saves the linked tenant into `.env.local`.)*
-
-#### Step 3: Run the Development Server
-```bash
-storio dev
-```
-Open [http://localhost:3000](http://localhost:3000) to view your template populated with live tenant database records.
-
-#### Step 4: Disconnect / Switch Back to Mock Data
-```bash
-storio unlink
-```
-*(Switches your project back to Standalone Preview Mode so you can work with mock data.)*
-
-#### Check Current Status
-```bash
-storio status
-```
-
----
-
-### 4. Manual Setup (Standalone Mode Only)
-
-If you only want to design components with mock data without connecting to a backend:
-
-```bash
+# 2. Create your template
+npx @brainicon/create-storio-app my-template
+cd my-template
 npm install
-npm run dev
+
+# 3. Set your template id (format: template-<number>-<name>)
+npm run template:id -- template-9-sunrise
+
+# 4. Start it
+npm run dev            # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser.
+Then:
 
-The editor itself lives in the Storio dashboard. To test pencils and saving, run the template behind a local Storio (see section 9 of the [Editor Template Guide](./docs/Storio_Editor_Template_Guide.md)).
-
----
-
-## Storio CLI Commands Reference
-
-Quick syntax and command reference for 3rd-party developers:
-
-### Getting Started & Authentication
-- `npm install -g @brainicon/storio-cli` - Install CLI globally
-- `storio login` - Authenticate with your developer credentials
-- `storio status` - View active session, logged-in email, and linked tenant sandbox
-- `storio logout` - Log out and delete local authentication session
-- `storio --help` - Show general help and list all available commands
-
-### Sandbox & Environment Linking
-- `storio link` - Connect template to the live DIU School sandbox (`diu.storio.cloud`)
-- `storio unlink` - Disconnect tenant sandbox to preview offline with mock data
-
-### Local Development
-- `storio dev` - Start local development server with tenant data
-- `storio dev -p 3004` - Start development server on a custom port
-
-### Validation & Security Inspection
-- `storio validate` - Pre-flight check: verify manifest schema, size limit, and security
-
-### Publishing to Marketplace
-- `storio publish` - Submit template to the Storio Marketplace review queue
-- `storio publish -m "Release v1.0.0"` - Submit template with release notes for reviewers
+1. Read the **[Editor Template Guide](./docs/Storio_Editor_Template_Guide.md)**: how pages are built so schools can edit them.
+2. Build your design, using the sample pages as the pattern.
+3. Set `name`, `features`, `customization` and `navigation` in `public/storio.template.json` ([Manifest Guide](./docs/Storio_Template_Manifest_Guide.md)).
+4. Check and publish (see [Publish](#publish)).
 
 ---
 
-## IMPORTANT: Read the Documentation First!
+## Documentation
 
-Before you start building your template, you **MUST** strictly follow the official documentation provided in the `docs/` folder:
+Read them in this order:
 
-1. **[Storio Editor Template Guide](./docs/Storio_Editor_Template_Guide.md)**
-   How to structure pages so schools can edit them: content JSON, `<CmsSection>`/`<CmsField>`, Theme settings, header/footer and records. Start here.
-
-   **Mandatory Editor Rules:**
-   - **Rule 3 (Editable by default):** Every visible static text, image and icon on a public page must be editable.
-   - **Rule 4 (Manifest in sync):** Run `npm run editor:sync` after changing `src/content/*.json`, `editorPages` or `editorIcons`.
-   - **Rule 5:** Never edit the editor kit (`src/lib/storio-editor/`).
-
-2. **[Storio SDK V2 Guide](./docs/Storio_SDK_V2_Endpoints_and_Methods_Guide.md)**
-   The complete API and Data Payload reference manual containing all 36 SDK methods, parameter signatures, and TypeScript interfaces.
-   
-   **Mandatory Platform Rules:**
-   - **Rule 1 (Tenant DB vs. Standalone Preview Rule):** When running in Standalone Preview mode (unlinked), fallback to `DEFAULT_DEMO_DATA` if SDK data is empty. When connected to a live tenant domain or linked via CLI, ONLY show real DB data (render a 0-item empty state if empty — NEVER leak demo data on live sites).
-   - **Rule 2 (Strict Typing):** Strictly type all data payloads using SDK interfaces. The use of `any` types is strictly prohibited.
-
-   Use `resolveTenant()` (`src/lib/tenant.ts`) and `withDemoFallback()` (`src/lib/data.ts`) for Rule 1. Do not copy the host-detection logic.
-
-3. **[Storio Template Manifest Guide](./docs/Storio_Template_Manifest_Guide.md)**
-   Explains the purpose, structure, and configuration schema of `public/storio.template.json`.
+| Guide | What it covers |
+| :--- | :--- |
+| **[Editor Template Guide](./docs/Storio_Editor_Template_Guide.md)** | **Start here.** How editing works, project structure, adding an editable page step by step, naming and markup rules, header/footer/Theme settings, records, testing. |
+| **[Template Manifest Guide](./docs/Storio_Template_Manifest_Guide.md)** | Every field of `public/storio.template.json`: id, features, Theme settings, menu, editor pages. |
+| **[SDK V2 Guide](./docs/Storio_SDK_V2_Endpoints_and_Methods_Guide.md)** | All 44 SDK methods, their data and TypeScript types, and how to load school data. |
 
 ---
 
-## Storio Manifest Configuration
+## The rules
 
-Before submitting or deploying your template to the Storio platform, you **MUST** properly configure the `public/storio.template.json` file. 
-
-- This file serves as the communication bridge between your Next.js template and the Storio CMS backend.
-- **Set your template id first:** `npm run template:id -- template-9-sunrise`. It must follow the format `template-[id number]-[slug]`. Every editor page key and content file name starts with it, so never change it by hand. Then set `name`.
-- List the CMS modules your template supports in `features`. Keep the base modules (`template_customization`, `generalSettings`, `accounts`, `auth`, `mediaFile`): a school gets only the modules listed here, and without `template_customization` its admins cannot open the editor.
-- `"editor": "storio-elements"` turns on the Storio editor. `editorPages` (your editable pages) gets its `defaults` from `src/content/*.json` with `npm run editor:sync`.
-- `customization` and `navigation` are the editor's Theme settings (colours, header/footer texts, menu).
-- See the [Manifest Guide](./docs/Storio_Template_Manifest_Guide.md) to understand how to fully populate this file.
-
-**If left unconfigured or improperly configured, your template will fail validation upon deployment.**
+1. **Demo data only in Standalone Preview.** On a real school, show only its own data (or an empty state). Use `resolveTenant()` (`src/lib/tenant.ts`) and `withDemoFallback()` (`src/lib/data.ts`); never copy the host-detection logic.
+2. **Strict typing.** Type school data with the SDK types. No `any`.
+3. **Editable by default.** Every visible static text, image and icon on a public page is editable (`<CmsSection>` / `<CmsField>`).
+4. **Manifest in sync.** Run `npm run editor:sync` after changing `src/content/*.json`, `editorPages` or `editorIcons`. `npm run build` checks it.
+5. **Never edit the editor kit** (`src/lib/storio-editor/`). Storio provides the editor, its API and logins: don't add an admin page or an `/api/cms` route.
 
 ---
 
-## Deployment
+## Development modes
 
-Once you have completed your template, tested both in Standalone Preview (mock data) and with a linked tenant, and configured your `storio.template.json` file, submit your template to the Storio platform for review and store publication.
+| Mode | How | Data |
+| :--- | :--- | :--- |
+| **Standalone Preview** | `npm run dev` (or after `storio unlink`) | Default page content + demo data (`src/data/defaultDemoData.ts`). No backend needed. |
+| **Linked school** | `storio login`, `storio link`, `storio dev` | A real school's data from Storio (the Storio demo school). |
 
-Run the pre-flight validation and publish commands:
+The visual editor itself runs in the Storio dashboard, where your template shows once a version is published and approved. Storio team members can test it on a local Storio (Editor Template Guide, section 9.2).
+
+---
+
+## npm scripts
+
+| Script | Does |
+| :--- | :--- |
+| `npm run dev` | Start the site (Standalone Preview) |
+| `npm run build` | Production build (checks the template id and the editor pages first) |
+| `npm run lint` / `npm run typecheck` | ESLint / TypeScript |
+| `npm run template:id -- <id>` | Set the template id everywhere (manifest, page keys, content file names) |
+| `npm run editor:sync` | Copy `src/content/*.json` into the manifest and regenerate the icon list |
+| `npm run editor:check` | Check the manifest, content and icons without changing anything |
+
+---
+
+## Storio CLI
+
+| Command | Does |
+| :--- | :--- |
+| `storio login` / `storio logout` | Sign in / out with your developer account |
+| `storio status` | Show your session and the linked school |
+| `storio link` / `storio unlink` | Link the project to the Storio demo school / back to Standalone Preview (writes `.env.local`) |
+| `storio dev [-p <port>]` | Start the dev server with the linked school's data |
+| `storio validate` | Pre-flight check: manifest, SDK dependency, security scan, `.storioignore` |
+| `storio publish -m "<notes>"` | Submit the template (this version) for review |
+| `storio collaborator list \| add <email> \| remove <email>` | Manage who may publish your template |
+| `storio deploy`, `storio rollback`, `storio fork` | Deploy to / roll back a linked school, or download a school's template |
+| `storio --help` | All commands and options |
+
+Add `--local` to a command to use a local Storio backend (`http://127.0.0.1:8000`) instead of Storio cloud; `storio link --local` lets you pick any local school.
+
+---
+
+## Publish
 
 ```bash
-# 1. Check the editor pages of the manifest (also runs before every build)
-npm run editor:check
-
-# 2. Run pre-flight check
-storio validate
-
-# 3. Submit template to Marketplace review queue
-storio publish -m "Release v1.0.0"
+npm run editor:check            # editor pages, content and icons in sync
+npm run build                   # the template builds
+storio validate                 # pre-flight check
+storio publish -m "Release 1.0.0"
 ```
+
+Before every publish, increase `"version"` in `public/storio.template.json`. Schools and the dashboard's editor get a new version (and any manifest change) only after it is approved.

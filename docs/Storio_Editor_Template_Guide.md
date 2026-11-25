@@ -261,20 +261,66 @@ Notices, blogs and events are the school's own records, loaded with the SDK. The
 
 ---
 
-## 9. Test locally
+## 9. Test
+
+### 9.1 Always: checks and the site itself
 
 ```bash
-npm run dev
+npm run dev            # http://localhost:3000: default content + demo records (Standalone Preview)
+npm run editor:check   # manifest, content files and icons in sync
+npm run typecheck
+npm run build          # also runs the checks above
 ```
 
-Open `http://localhost:3000`: the site with its default content and demo records (Standalone Preview). `storio link` + `storio dev` shows it with a real school's data.
+- Every page looks right with its default content.
+- `storio link` + `storio dev`: the same with a real school's data (no demo data, empty states where the school has nothing).
 
-The editor itself lives in the Storio dashboard, not in this repository. To test pencils, live preview and saving, run the template behind a local Storio (storio-cms):
+The visual editor (pencils, live preview, saving) lives in the Storio dashboard, not in this repository. It shows your template once a version is **published and approved**.
 
-1. Increase `"version"` in the manifest, run `storio publish --local`, and approve it in the local SaaS admin.
-2. Run the template as a **production build** on the port the local Storio gateway uses for it (`npm run build` then `npm start -- -p <port>`), with `NEXT_PUBLIC_API_URL` and `BACKEND_INTERNAL_URL` set to `http://localhost:8000` and `NEXT_PUBLIC_STORIO_TENANT_HOST` set to the test school's host. A dev server does not hydrate behind the gateway, so it shows no pencils.
-3. Make the template the test school's live design and open `http://<school>.localhost:3000/dashboard/settings/template-customization`.
-4. Check that every static text, image and icon shows a pencil; typing changes the preview live; Publish changes the live site; the Style tab works; Theme settings colours and texts follow live.
+### 9.2 Storio team: the editor on a local Storio
+
+With storio-cms running locally (backend on `:8000`, dashboard on `:3000`):
+
+1. **Sign in and link** to a local test school (this writes the local backend and the school to `.env.local`):
+
+   ```bash
+   storio login --local
+   storio link --local
+   ```
+
+2. **Publish:** increase `"version"` in the manifest, run `storio publish --local`, and approve the submission in the local SaaS admin. Repeat this after every manifest change.
+3. **Tell the gateway where the template runs:** in storio-cms `frontend-next/.env.local`, add `TEMPLATE_<ID>_INTERNAL_URL=http://localhost:<port>`, with your template id in capitals and `_` (for `template-9-sunrise`: `TEMPLATE_TEMPLATE_9_SUNRISE_INTERNAL_URL=http://localhost:3009`). Restart the dashboard.
+4. **Run the template as a production build** on that port (a dev server does not hydrate behind the gateway, so it shows no pencils):
+
+   ```bash
+   npm run build
+   npm start -- -p 3009
+   ```
+
+5. **Make it the school's live design** (dashboard > Settings > Templates), then open `http://<school>.localhost:3000/dashboard/settings/template-customization`.
+6. **Check:**
+   - the Storio editor opens (not the classic customizer), with your pages first and "Theme settings" last;
+   - every static text, image and icon shows a pencil, and typing changes the preview live;
+   - **Save draft** keeps the live site unchanged; **Publish** changes it; **Reset** brings back the default;
+   - the Style tab works for texts, images and icons;
+   - Theme settings: colours and header/footer texts follow live, the menu changes after publish;
+   - a notice title changed on its detail page also changes on the dashboard's Notices page.
+
+If the classic customizer opens instead: check that the new version is published **and** approved, that `features` contains `template_customization`, and that the school's live design uses this template.
+
+### 9.3 Common problems
+
+| Problem | Cause and fix |
+| :--- | :--- |
+| `npm run build` fails with `"defaults" differ from ...` | A content file changed without sync. Run `npm run editor:sync`. |
+| `editor:sync` says a key `is not in "sections"` | The content file has a top-level key that the page's `editorPages` entry does not list (or the reverse). Make them match. |
+| A text has no pencil | It is not inside a `<CmsField>`, or its `<CmsSection>` has no `page=`, or the section is missing from `editorPages`. |
+| A field shows an image or icon picker instead of a text box | Its name looks like an image or icon field. Rename it (section 5). |
+| An icon picker is empty, or a picked icon does not show | The icon name is not in `editorIcons`. Add it and run `npm run editor:sync`. |
+| A new field is empty for a school | Read the page through its `use<Page>Text` helper (it fills new fields from the defaults), not `usePageContent` directly. |
+| Theme settings colours change nothing | The design uses fixed colours (`bg-green-700`). Use `bg-brand`, `text-accent`... |
+| A dashboard change does not show | The dashboard uses your last **approved** version. Increase `version`, publish, approve. |
+| Admins have no Templates menu | `features` is missing `template_customization`. |
 
 ---
 

@@ -1,208 +1,141 @@
 # Storio Template Manifest Guide (`storio.template.json`)
 
-This document is written for 3rd-party developers creating custom templates for the Storio platform. It explains the purpose, structure, and configuration options of the `storio.template.json` manifest file.
+Every Storio template has one manifest: `public/storio.template.json`. This guide explains every field in it.
 
-> [!IMPORTANT]
-> **Templates edited with the Storio editor** have `"editor": "storio-elements"`, an `editorPages` list (their editable pages) and an `editorIcons` list. Their `customization` and `navigation` fields become the editor's **Theme settings**. See [6. Editor Fields](#6-editor-fields) and the [Storio Editor Template Guide](./Storio_Editor_Template_Guide.md).
+**Short version:** the starter kit's manifest is already complete and valid. You only need to:
 
----
-
-## Overview: What is `storio.template.json`?
-
-The `storio.template.json` file is the **communication bridge** between your Next.js template and the Storio CMS backend. 
-
-### Why is it needed?
-When a school administrator logs into the Storio CMS dashboard, they need to be able to change colors, typography, toggle UI sections (like a Hero slider), and manage their navigation menu. However, the Storio backend doesn't inherently know *what* your specific Next.js template allows them to change. 
-
-The manifest file solves this by explicitly declaring to the backend:
-1. **Customization Schema:** What inputs to show in the "Template Customization" UI (e.g., color pickers, text inputs).
-2. **Supported Features:** Which CMS modules (like Blogs or Admissions) this template supports.
-3. **Navigation Seed:** What the default navigation menu should look like upon fresh installation.
-
-### How it works (The Lifecycle)
-1. **Placement:** You write the JSON file and place it in your `public/` folder.
-2. **Deployment:** When you submit/upload your template to the Storio platform, the Storio backend automatically detects and reads this manifest file from your repository.
-3. **Dynamic UI Generation:** The Storio backend parses the JSON and **dynamically generates the CMS Dashboard UI** for schools that install your template.
-4. **Validation:** If you forget to include this file, the Storio platform will reject the template with an error: *"This template does not have a valid storio.template.json manifest registered."*
-
-> [!NOTE]
-> **Important Note on Local Testing:** 
-> Because you are developing your frontend locally in "Standalone Preview" mode, you do not have the Storio CMS backend running on your computer. Therefore, you **cannot** see or test the Storio Admin Dashboard locally, and your Next.js app does not actively use this JSON file while running on `localhost`. 
->
-> You are writing this manifest purely as a **deployment contract**. When you submit your completed template to the Storio platform, the live backend will read this file and generate the CMS dashboard for schools that install your template. To test if your CSS/customizations actually work locally, you should manually alter your mock SDK data (e.g., in `DEFAULT_DEMO_DATA`) to simulate what the live CMS *would* send.
+1. set your template id: `npm run template:id -- template-9-sunrise`,
+2. set `name`,
+3. adjust `features`, `customization` and `navigation` to your design,
+4. add your pages to `editorPages` and run `npm run editor:sync` (see the [Editor Template Guide](./Storio_Editor_Template_Guide.md)),
+5. increase `version` before every publish.
 
 ---
 
-## Configuration Reference
+## 1. What the manifest is for
 
-Here is a complete breakdown of the available options you can configure in the manifest.
+The manifest tells Storio what your template offers, so Storio can build the school's dashboard for it:
 
-### 1. Core Identity Options
-This section identifies your template to the platform.
+| Storio uses... | ...to |
+| :--- | :--- |
+| `id`, `name`, `version` | register and version your template |
+| `features` | decide which dashboard modules (Notices, Blogs, Staff...) a school using your template gets |
+| `editor`, `editorPages`, `editorIcons` | build the visual editor: your editable pages, their sections and default content, and the icons admins may pick |
+| `customization`, `navigation` | build the editor's **Theme settings**: colours, site-wide texts and the menu |
+
+Your template reads the manifest too: `src/cms.config.ts` builds the editor config from `editorPages`, and `src/lib/theme.ts` takes the Theme settings defaults from `customization` and `navigation`.
+
+**When does a change reach the dashboard?** Storio reads the manifest of your **approved, published version**. After changing the manifest, increase `version`, run `storio publish`, and wait for approval. Until then the dashboard keeps showing the previous version.
+
+---
+
+## 2. Identity: `id`, `name`, `version`
 
 ```json
-"id": "template-1-starter",
-"name": "My Starter Template",
+"id": "template-9-sunrise",
+"name": "Sunrise",
 "version": "1.0.0"
 ```
-- **`id`**: A unique string identifier for your template assigned by the Storio platform.
-- **`name`**: The human-readable name of your template.
-- **`version`**: Semantic versioning for your template.
+
+- **`id`**: your template's unique id, in the format `template-<number>-<name>` (lowercase letters, digits, `-` or `_`). `storio validate` and `storio publish` refuse anything else.
+  - Every editor page key and every content file name starts with the id, so **never change it by hand**. Use `npm run template:id -- template-9-sunrise`: it updates the manifest, the content file names and the code.
+  - The starter kit ships with the placeholder `template-0-starter`; `npm run build` warns until you change it.
+- **`name`**: the template's display name.
+- **`version`**: a semantic version (`1.0.0`, `1.0.1`...). Increase it before every publish.
 
 ---
 
-### 2. Customization Schema (Theme settings)
+## 3. `features`: the dashboard modules
 
-> [!NOTE]
-> In templates with `"editor": "storio-elements"`, these groups appear in the editor under **Theme settings**. In the starter kit, `colors` become CSS variables (`primaryColor` → `--primary-color`) and `content` texts are shown with a `<ThemeField>` pencil. Never name an editor section like one of these groups.
+The CMS modules your template supports.
 
-This section defines the input fields that will dynamically render in the school administrator's **Template Customization** page in the CMS.
+> [!IMPORTANT]
+> When a school selects your template, Storio turns on **only** the modules listed here: the dashboard hides every other menu and blocks its API. Always keep the base modules, or the school loses its own admin pages:
+> - `template_customization`: the **Templates** menu and the editor. Without it, admins cannot open Template Customization.
+> - `generalSettings`: school name, logo, contact details (the starter kit's header and footer show them).
+> - `accounts` and `auth`: users and roles.
+> - `mediaFile`: the media library.
+
+The starter kit lists the base modules plus `notice`, `contact` and `socialLink`. Add the modules your pages show, and leave out the ones they don't, so admins are not shown managers for content that never appears on their site.
+
+**All 30 modules:**
+
+| Module | What it is |
+| :--- | :--- |
+| `notice` | Notices, circulars, urgent announcements, attachments |
+| `blogs` | News, articles, blog posts, categories, tags |
+| `gallery` | Photo albums and galleries |
+| `faq` | Frequently asked questions |
+| `heroSlide` | Homepage hero carousel slides |
+| `reels` | Embedded video reels (YouTube, Vimeo, Facebook) |
+| `activity` | Sports, clubs, co-curricular activities |
+| `mediaFile` | Media library (**base module**) |
+| `careers` | Job vacancies and applications |
+| `testimonial` | Testimonials from parents, students, alumni |
+| `contact` | Contact form inbox and office contact details |
+| `staff` | Teachers and staff directory, departments |
+| `team` | Governing body, committee, leadership profiles |
+| `leadership_message` | Messages from the Principal, Chairman, Founder |
+| `important_links` | Quick links to boards, ministries, resources |
+| `socialLink` | Social media links |
+| `institution_profile` | EIIN, registration codes, establishment year, recognitions |
+| `accounts` | User accounts (**base module**) |
+| `auth` | Login, roles and permissions (**base module**) |
+| `generalSettings` | Site title, tagline, logo, favicon, contact details, SEO (**base module**) |
+| `template_customization` | Templates menu and the visual editor (**base module**) |
+| `formbuilder` | Custom forms (registrations, surveys, sign-ups) |
+| `custom_pages` | Pages created by admins (`/page/<slug>`) |
+| `promotions` | Popups and announcement banners |
+| `admission` | Online admission portal |
+| `exam_results` | Published exam results |
+| `calendar_events` | Academic calendar, holidays, exam schedules |
+| `events` | Campus events |
+| `academics` | Class routines, syllabuses, student statistics |
+| `compliance` | MPO information, information service desk, complaint officer, emergency hotlines |
+
+---
+
+## 4. `customization`: Theme settings
+
+The school-wide settings an admin changes in the editor under **Theme settings**. Fields are grouped; each group becomes one section of Theme settings.
 
 ```json
 "customization": {
   "colors": [
     { "id": "primaryColor", "label": "Primary Color", "type": "color", "default": "#0e704b" },
-    { "id": "backgroundColor", "label": "Background Color", "type": "color", "default": "#f8f4e7" },
-    { "id": "surfaceColor", "label": "Surface Color", "type": "color", "default": "#ffffff" },
-    { "id": "textColor", "label": "Text Color", "type": "color", "default": "#3a3a41" },
-    { "id": "headingColor", "label": "Heading Color", "type": "color", "default": "#3a3a41" },
-    { "id": "footerColor", "label": "Footer Color", "type": "color", "default": "#101828" },
-    { "id": "accentColor", "label": "Accent Color", "type": "color", "default": "#0e704b" },
-    { "id": "buttonColor", "label": "Button Color", "type": "color", "default": "#0e704b" },
-    { "id": "buttonTextColor", "label": "Button Text Color", "type": "color", "default": "#f8f4e7" },
-    { "id": "buttonHoverColor", "label": "Button Hover Color", "type": "color", "default": "#b62309" },
-    { "id": "buttonTextHoverColor", "label": "Button Text Hover Color", "type": "color", "default": "#f8f4e7" },
-    { "id": "activeNavBgColor", "label": "Active Nav BG Color", "type": "color", "default": "#f0f7ef" },
-    { "id": "activeNavTextColor", "label": "Active Nav Text Color", "type": "color", "default": "#0e704b" }
-  ],
-  "typography": [
-    { "id": "fontFamily", "label": "Body Font", "type": "text", "default": "Roboto" }
-  ],
-  "layout": [
-    { "id": "borderRadius", "label": "Border Radius", "type": "text", "default": "8px" }
+    { "id": "accentColor", "label": "Accent Color", "type": "color", "default": "#d97706" }
   ],
   "content": [
-    { "id": "showHero", "label": "Show Hero Section", "type": "boolean", "default": true },
-    { "id": "heroHeadline", "label": "Hero Headline", "type": "text", "default": "Welcome to Our Institution" },
-    { 
-      "id": "headerStyle", 
-      "label": "Header Style", 
-      "type": "select", 
-      "options": [
-        { "label": "Classic", "value": "classic" },
-        { "label": "Modern", "value": "modern" },
-        { "label": "Minimal", "value": "minimal" }
-      ],
-      "default": "modern" 
-    }
+    { "id": "header_cta_text", "label": "Header button text", "type": "text", "default": "Apply Now" },
+    { "id": "footer_tagline", "label": "Footer tagline", "type": "text", "default": "Empowering future leaders through excellence." }
   ]
 }
 ```
 
-- **Categories:** Organize settings into `colors`, `typography`, `layout`, and `content`.
-- **Available Input Types:**
-  - `color`: Renders a color picker.
-  - `text`: Renders a standard text input field.
-  - `boolean`: Renders a toggle/checkbox.
-  - `select`: Renders a dropdown menu (requires providing an `options` array).
-- **How it integrates:** When the admin changes "Primary Color" in the CMS, it saves to the tenant's database. Your Next.js app then fetches it via the SDK using `storio.getCustomization()` and you apply it to your CSS!
+- **Groups:** usually `colors`, `typography`, `layout` and `content`. The starter kit uses `colors` and `content`.
+- **Field types:** `color` (colour picker), `text` (text input), `boolean` (toggle), `select` (dropdown; add `"options": [{ "label": "Classic", "value": "classic" }]`).
+- **`id`** is the key your template reads; **`default`** is the value until the school changes it.
+
+**What belongs here (and what doesn't):**
+
+| Put in `customization` | Put in page content (`editorPages`) instead |
+| :--- | :--- |
+| Colours, fonts, corner radius: settings for the whole site | Texts, images and icons of one page (hero title, section headings...) |
+| Texts shown on every page: header button, footer tagline, copyright | Anything that appears on one page only |
+
+**How the starter kit uses it:**
+
+- `colors` → CSS variables: `primaryColor` becomes `--primary-color` (`<ThemeColors>`), which `globals.css` maps to Tailwind classes (`bg-brand`...). The colours follow the pickers live in the editor preview.
+- `content` → texts shown with a `<ThemeField>` pencil, so admins can click them on any page.
+- Values are read on the server with `loadTheme()` (`src/lib/theme.ts`): the school's saved value, or the `default`.
+
+Never name an editor page section like a group here (`colors`, `content`...): it breaks the Theme settings pencils. `npm run editor:sync` refuses it.
 
 ---
 
-### 3. Features Array
-This is a list of CMS modules that your template actually supports. 
+## 5. `navigation`: the menu
 
-> [!IMPORTANT]
-> When a school selects your template, Storio turns on **only** the modules listed here: the dashboard hides every other menu and blocks its API. Always include the base modules, or the school loses its own admin pages:
-> - `template_customization`: the **Templates** menu and the editor (without it, admins cannot reach Template Customization),
-> - `generalSettings`: school name, logo, contact details (the starter kit's header and footer read them),
-> - `accounts` and `auth`: users and roles,
-> - `mediaFile`: the media library.
-
-```json
-"features": [
-  "notice",
-  "blogs",
-  "gallery",
-  "faq",
-  "heroSlide",
-  "reels",
-  "activity",
-  "mediaFile",
-  "careers",
-  "testimonial",
-  "contact",
-  "staff",
-  "team",
-  "leadership_message",
-  "important_links",
-  "socialLink",
-  "institution_profile",
-  "accounts",
-  "auth",
-  "generalSettings",
-  "template_customization",
-  "formbuilder",
-  "custom_pages",
-  "promotions",
-  "admission",
-  "exam_results",
-  "calendar_events",
-  "events",
-  "academics",
-  "compliance"
-]
-```
-
-**Available Feature Flags & Modules (All 30 Supported Features):**
-
-Below is the complete reference of all 30 feature modules that can be declared in your `storio.template.json` manifest:
-
-1. `"notice"`: Public notices, circulars, urgent announcements, and downloadable attachments (PDF/images) with pinned/urgent flags.
-2. `"blogs"`: School news, editorial articles, blog posts, press releases, categories, and tags.
-3. `"gallery"`: Photo albums, categorized image galleries, event photo collections, and responsive lightboxes.
-4. `"faq"`: Frequently asked questions and expandable accordion Q&A pairs for parents and students.
-5. `"heroSlide"`: Homepage hero carousel banners, promotional slides, taglines, call-to-action buttons, and background images.
-6. `"reels"`: Embedded short-form video reels and video highlights (YouTube, Vimeo, Facebook video).
-7. `"activity"`: School sports, clubs, co-curricular programs, cultural activities, and student event archives.
-8. `"mediaFile"`: Centralized media library manager allowing administrators to upload, manage, and reuse images, documents, and assets.
-9. `"careers"`: Job vacancy listings, career postings, requirements, and job application management.
-10. `"testimonial"`: Testimonials and reviews from alumni, parents, students, community leaders, and donors.
-11. `"contact"`: Public contact form submissions, general inquiry inbox, and school office contact information.
-12. `"staff"`: Teachers, faculty directory, designations, academic departments, qualifications, and teacher profiles.
-13. `"team"`: School administration, governing body members, managing committee, board of trustees, and executive leadership profiles.
-14. `"leadership_message"`: Official public messages and speeches from the Principal, Headmaster, Chairman, or Founder.
-15. `"important_links"`: Quick reference external web links to education boards, ministry portals, curriculum sites, and public resources.
-16. `"socialLink"`: Institutional social media channel links (Facebook, YouTube, X/Twitter, Instagram, LinkedIn).
-17. `"institution_profile"`: Core institutional identity, school registration code, EIIN number, establishment year, campus address, mission, and vision statements.
-18. `"accounts"`: User account management, staff administration, role assignments, and dashboard access permissions.
-19. `"auth"`: Secure authentication system, admin/staff login, password recovery, session handling, and security controls.
-20. `"generalSettings"`: Global institution configurations, site title, tagline, branding logos, favicon, contact email/phone numbers, mailing address, SEO metadata, and hCaptcha keys.
-21. `"template_customization"`: Visual theme customization panel allowing school administrators to configure primary/secondary colors, fonts, layout styles, and section toggles defined in the manifest.
-22. `"formbuilder"`: Dynamic custom form generator for creating online registration forms, feedback surveys, event signups, and custom inquiries.
-23. `"custom_pages"`: Dynamic CMS pages created and published by administrators with rich-text content (e.g. `/page/about-us`, `/page/campus-history`, `/page/rules-regulations`).
-24. `"promotions"`: Promotional popups, modal alerts, and seasonal announcement banners displayed across the public site.
-25. `"admission"`: Online student admission portal, intake forms, email OTP verification, and application processing dashboard.
-26. `"exam_results"`: Published board results, term exam results, pass rates, GPA analytics, and downloadable grade sheet PDFs.
-27. `"calendar_events"`: Interactive academic calendar, holidays, semester milestones, and examination schedules.
-28. `"events"`: Campus events, annual sports days, cultural festivals, workshops, and event registration.
-29. `"academics"`: Comprehensive academic management suite:
-    - **Class Routines:** Weekly period schedules, subject assignments, teacher allocations, room numbers, and downloadable routine PDFs.
-    - **Syllabuses:** Term/annual examination syllabuses, marked chapters, and downloadable PDF documents.
-    - **Student Statistics:** Aggregated student body demographics, gender distribution (male/female/total), section counts, and class-wise stream/group distributions (Science, Arts, Commerce).
-30. `"compliance"`: Government and regulatory governance suite:
-    - **MPO Information:** Monthly Pay Order government accreditation, MPO code, order numbers, gazette dates, and teacher statistics (MPO vs Non-MPO).
-    - **Information Service Center:** Right to Information (RTI / তথ্য অধিকার) desk details, designated officer contact cards, and listed public services.
-    - **Complaint Officer:** Grievance Redress System (GRS / অভিযোগ প্রতিকার ব্যবস্থা) focal point officer details and official step-by-step grievance resolution process.
-    - **Emergency Hotlines:** Quick-dial national emergency helplines (999, 333, 1098) and custom campus security numbers.
-
-**Why is this important?** 
-If your template doesn't have a "Careers" or "Academics" page built into it, you shouldn't confuse the admin by showing them those managers in their CMS dashboard. By omitting a feature from this array, the Storio backend will safely and automatically hide that entire module from the admin panel.
-
----
-
-### 4. Navigation Seed
-When a school installs your template for the very first time, they need a starting point for their navigation menu.
+The default menu, which admins change in the editor under **Theme settings > Navigation**:
 
 ```json
 "navigation": [
@@ -211,321 +144,78 @@ When a school installs your template for the very first time, they need a starti
     "label": "Navigation Links",
     "type": "links",
     "default": [
-      {
-        "id": "1",
-        "name": "Home",
-        "href": "/"
-      },
+      { "id": "1", "name": "Home", "href": "/" },
       {
         "id": "2",
         "name": "About Us",
         "href": "/about",
-        "subLinks": [
-          { "id": "2-1", "name": "Institution Profile", "href": "/about/institution" }
-        ]
+        "subLinks": [{ "id": "2-1", "name": "Our History", "href": "/about/history" }]
       }
     ]
   }
 ]
 ```
-- The Storio CMS will read this array upon fresh template installation and pre-populate the school's Navigation Builder. 
-- You can provide nested dropdown menus by utilizing the `subLinks` array within a link object.
+
+- Keep the id `navbarLinks`.
+- `subLinks` makes a dropdown.
+- The starter kit's header reads it with `themeNavLinks(theme)` (`src/lib/theme.ts`).
 
 ---
 
-## 5. Complete Example (`storio.template.json`)
+## 6. Editor fields: `editor`, `editorPages`, `editorIcons`
 
-Here is what a complete, fully configured `storio.template.json` file looks like (without the editor fields). For the editor fields, see [6. Editor Fields](#6-editor-fields) and the starter kit's own `public/storio.template.json`:
+These turn on the visual editor and describe your editable pages.
 
 ```json
-{
-    "id": "template-1-starter",
-    "name": "My Starter Template",
-    "version": "1.0.0",
-    "customization": {
-        "colors": [
-            {
-                "id": "primaryColor",
-                "label": "Primary Color",
-                "type": "color",
-                "default": "#0e704b"
-            },
-            {
-                "id": "backgroundColor",
-                "label": "Background Color",
-                "type": "color",
-                "default": "#f8f4e7"
-            },
-            {
-                "id": "surfaceColor",
-                "label": "Surface Color",
-                "type": "color",
-                "default": "#ffffff"
-            },
-            {
-                "id": "textColor",
-                "label": "Text Color",
-                "type": "color",
-                "default": "#3a3a41"
-            },
-            {
-                "id": "headingColor",
-                "label": "Heading Color",
-                "type": "color",
-                "default": "#3a3a41"
-            },
-            {
-                "id": "footerColor",
-                "label": "Footer Color",
-                "type": "color",
-                "default": "#101828"
-            },
-            {
-                "id": "accentColor",
-                "label": "Accent Color",
-                "type": "color",
-                "default": "#0e704b"
-            },
-            {
-                "id": "buttonColor",
-                "label": "Button Color",
-                "type": "color",
-                "default": "#0e704b"
-            },
-            {
-                "id": "buttonTextColor",
-                "label": "Button Text Color",
-                "type": "color",
-                "default": "#f8f4e7"
-            },
-            {
-                "id": "buttonHoverColor",
-                "label": "Button Hover Color",
-                "type": "color",
-                "default": "#b62309"
-            },
-            {
-                "id": "buttonTextHoverColor",
-                "label": "Button Text Hover Color",
-                "type": "color",
-                "default": "#f8f4e7"
-            },
-            {
-                "id": "activeNavBgColor",
-                "label": "Active Nav BG Color",
-                "type": "color",
-                "default": "#f0f7ef"
-            },
-            {
-                "id": "activeNavTextColor",
-                "label": "Active Nav Text Color",
-                "type": "color",
-                "default": "#0e704b"
-            }
-        ],
-        "typography": [
-            {
-                "id": "fontFamily",
-                "label": "Body Font",
-                "type": "text",
-                "default": "Roboto"
-            }
-        ],
-        "layout": [
-            {
-                "id": "borderRadius",
-                "label": "Border Radius",
-                "type": "text",
-                "default": "8px"
-            }
-        ],
-        "content": [
-            {
-                "id": "showHero",
-                "label": "Show Hero Section",
-                "type": "boolean",
-                "default": true
-            },
-            {
-                "id": "heroHeadline",
-                "label": "Hero Headline",
-                "type": "text",
-                "default": "Welcome to Our Institution"
-            },
-            {
-                "id": "headerStyle",
-                "label": "Header Style",
-                "type": "select",
-                "options": [
-                    {
-                        "label": "Classic",
-                        "value": "classic"
-                    },
-                    {
-                        "label": "Modern",
-                        "value": "modern"
-                    },
-                    {
-                        "label": "Minimal",
-                        "value": "minimal"
-                    }
-                ],
-                "default": "modern"
-            }
-        ]
-    },
-    "features": [
-        "notice",
-        "blogs",
-        "gallery",
-        "faq",
-        "heroSlide",
-        "reels",
-        "activity",
-        "mediaFile",
-        "careers",
-        "testimonial",
-        "contact",
-        "staff",
-        "team",
-        "leadership_message",
-        "important_links",
-        "socialLink",
-        "institution_profile",
-        "accounts",
-        "auth",
-        "generalSettings",
-        "template_customization",
-        "formbuilder",
-        "custom_pages",
-        "promotions",
-        "admission",
-        "exam_results",
-        "calendar_events",
-        "events",
-        "academics",
-        "compliance"
+"editor": "storio-elements",
+"editorPages": [
+  {
+    "key": "template-9-sunrise-home",
+    "title": "Home",
+    "route": "/",
+    "sections": [
+      { "key": "hero", "label": "Hero" },
+      { "key": "seo", "label": "SEO" }
     ],
-    "navigation": [
-        {
-            "id": "navbarLinks",
-            "label": "Navigation Links",
-            "type": "links",
-            "default": [
-                {
-                    "id": "1",
-                    "name": "Home",
-                    "href": "/"
-                },
-                {
-                    "id": "2",
-                    "name": "About Us",
-                    "href": "/about",
-                    "subLinks": [
-                        {
-                            "id": "2-1",
-                            "name": "Institution Profile",
-                            "href": "/about/institution"
-                        },
-                        {
-                            "id": "2-2",
-                            "name": "School Information",
-                            "href": "/about/schoolInfo"
-                        },
-                        {
-                            "id": "2-3",
-                            "name": "Administrators",
-                            "href": "/about/administrator"
-                        }
-                    ]
-                },
-                {
-                    "id": "3",
-                    "name": "Personnel",
-                    "href": "/personnel",
-                    "subLinks": [
-                        {
-                            "id": "3-1",
-                            "name": "Teachers",
-                            "href": "/personnel/teachers"
-                        },
-                        {
-                            "id": "3-2",
-                            "name": "Committee Members",
-                            "href": "/personnel/staff"
-                        }
-                    ]
-                },
-                {
-                    "id": "4",
-                    "name": "Exam Results",
-                    "href": "/examResults",
-                    "subLinks": [
-                        {
-                            "id": "4-1",
-                            "name": "Public Examination",
-                            "href": "/results/publicExam"
-                        },
-                        {
-                            "id": "4-2",
-                            "name": "Internal School Examination",
-                            "href": "/results/schoolExam"
-                        }
-                    ]
-                },
-                {
-                    "id": "5",
-                    "name": "Notice",
-                    "href": "/notice"
-                },
-                {
-                    "id": "6",
-                    "name": "Gallery",
-                    "href": "/gallery",
-                    "subLinks": [
-                        {
-                            "id": "6-1",
-                            "name": "Photos",
-                            "href": "/gallery/photos"
-                        },
-                        {
-                            "id": "6-2",
-                            "name": "Videos",
-                            "href": "/gallery/videos"
-                        }
-                    ]
-                },
-                {
-                    "id": "7",
-                    "name": "Blog",
-                    "href": "/blog"
-                },
-                {
-                    "id": "8",
-                    "name": "Event",
-                    "href": "/event"
-                },
-                {
-                    "id": "9",
-                    "name": "Careers",
-                    "href": "/career"
-                },
-                {
-                    "id": "10",
-                    "name": "Contact",
-                    "href": "/contact"
-                }
-            ]
-        }
-    ]
-}
+    "defaults": { "...": "copied from src/content/template-9-sunrise-home.json" }
+  },
+  {
+    "key": "template-9-sunrise-notice-detail",
+    "title": "Notice",
+    "route": "/notices/[id]",
+    "collection": "notice",
+    "parent": "template-9-sunrise-notices",
+    "sections": [{ "key": "labels", "label": "Labels" }]
+  }
+],
+"editorIcons": ["GraduationCap", "Users", "BookOpen"]
 ```
+
+| Field | Meaning |
+| :--- | :--- |
+| `editor` | `"storio-elements"` turns on the visual editor. Without it, the dashboard shows the classic customizer. |
+| `editorPages[].key` | `<template id>-<name>`, lowercase letters, digits and `-`. Unique. |
+| `editorPages[].title` | The page's name in the editor's page list. |
+| `editorPages[].route` | The page's URL (`/`, `/about`, `/notices/[id]`). |
+| `editorPages[].sections` | One entry per top-level key of the page's content file, in page order. `seo` is the page's SEO section. |
+| `editorPages[].defaults` | The page's default content. **Never write it by hand**: `npm run editor:sync` copies it from `src/content/<key>.json`. |
+| `editorPages[].collection` | Only for a `[id]`/`[slug]` page: the Storio records it shows (`notice`, `blog` or `event`). Required exactly when the route has brackets. |
+| `editorPages[].parent` | Optional, with `collection`: the key of its list page. |
+| `editorIcons` | lucide-react icon names admins may pick for icon fields. `npm run editor:sync` generates the matching imports. |
+
+**Rules** (Storio refuses a manifest that breaks them; `npm run editor:sync` checks all of them):
+
+- Never add `"global": true` to a page, and never name a section `navigation` or like a `customization` group.
+- Section keys: letters, digits, `_` or `-`, starting with a letter, unique within the page.
+- Every section must have content in the page's file, and every key of the file must be a section.
+
+Run `npm run editor:sync` after every change to `src/content/*.json`, `editorPages` or `editorIcons`. `npm run build` runs the check and fails when they are out of sync.
 
 ---
 
-## 6. Editor Fields
+## 7. Complete example
 
-Templates edited with the Storio editor add three top-level fields. The Storio dashboard builds the **Template Customization** editor from them, and the Storio backend accepts saves only for the pages and sections they list.
+The starter kit's own `public/storio.template.json` is the complete, valid example. In short:
 
 ```json
 {
@@ -533,34 +223,34 @@ Templates edited with the Storio editor add three top-level fields. The Storio d
   "editor": "storio-elements",
   "name": "Sunrise",
   "version": "1.0.0",
-  "customization": { "colors": [ ... ], "content": [ ... ] },
-  "features": ["notice", "contact"],
-  "navigation": [ ... ],
+  "customization": {
+    "colors": [{ "id": "primaryColor", "label": "Primary Color", "type": "color", "default": "#0e704b" }],
+    "content": [{ "id": "footer_tagline", "label": "Footer tagline", "type": "text", "default": "Learning for life." }]
+  },
+  "features": ["notice", "contact", "socialLink", "mediaFile", "generalSettings", "accounts", "auth", "template_customization"],
+  "navigation": [
+    { "id": "navbarLinks", "label": "Navigation Links", "type": "links", "default": [{ "id": "1", "name": "Home", "href": "/" }] }
+  ],
   "editorPages": [
     {
       "key": "template-9-sunrise-home",
       "title": "Home",
       "route": "/",
-      "sections": [{ "key": "hero", "label": "Hero" }, { "key": "seo", "label": "SEO" }],
-      "defaults": { "hero": { "title": "Welcome" }, "seo": { "title": "", "description": "", "keywords": [], "ogImage": "" } }
-    },
-    {
-      "key": "template-9-sunrise-notice-detail",
-      "title": "Notice",
-      "route": "/notices/[id]",
-      "collection": "notice",
-      "parent": "template-9-sunrise-notices",
-      "sections": []
+      "sections": [{ "key": "hero", "label": "Hero" }],
+      "defaults": { "hero": { "title": "Welcome" } }
     }
   ],
-  "editorIcons": ["GraduationCap", "Users"]
+  "editorIcons": ["GraduationCap"]
 }
 ```
 
-| Field | Meaning |
-| :--- | :--- |
-| `editor` | `"storio-elements"` turns on the Storio editor. Without it, the dashboard shows the classic customizer. |
-| `editorPages` | Every editable page. `key` starts with the template id (`<id>-<name>`); `route` is the page's URL; `sections` are its section keys and labels (`seo` = the page's SEO). `defaults` is copied from `src/content/<key>.json` by `npm run editor:sync`: never write it by hand. A page with a `[id]`/`[slug]` route has `collection` (`notice`, `blog` or `event`) and optionally `parent` (its list page). Never add `"global": true`. |
-| `editorIcons` | lucide-react icon names an administrator may pick. `npm run editor:sync` generates the matching imports. |
+---
 
-Run `npm run editor:sync` after every change to `src/content/*.json`, `editorPages` or `editorIcons`. `npm run build` checks it. The dashboard reads the manifest of the **approved published version**, so a manifest change shows only after a new version is published and approved.
+## 8. Before you publish
+
+```bash
+npm run editor:check   # editor pages, icons and content in sync
+storio validate        # id, name, version, SDK dependency, security scan, .storioignore
+```
+
+Then increase `version` and run `storio publish -m "What changed"`.

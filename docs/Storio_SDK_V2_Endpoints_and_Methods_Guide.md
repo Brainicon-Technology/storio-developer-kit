@@ -1,12 +1,15 @@
 # Storio Template SDK (v2) — Comprehensive Developer API & Data Reference Manual
 
-> **Last Updated:** November 9, 2026 | **SDK Version:** `@storio/template-sdk@1.0.1` | **Platform:** Storio CMS v2
+> **Last Updated:** November 25, 2026 | **SDK Version:** `@storio/template-sdk@1.0.1` | **Platform:** Storio CMS v2
 
 Welcome 3rd-party template developers! 
 
 This is the **complete, official API and Data Payload reference manual** for `@storio/template-sdk` (bundled in your starter template under `packages/storio-template-sdk-1.0.1.tgz`).
 
 Every single SDK method, backend V2 endpoint path, method signature, parameter, TypeScript type interface, and exact JSON data payload structure from `packages/template-sdk/src/index.ts` is documented below.
+
+> [!NOTE]
+> **The SDK loads the school's own data** (settings, notices, blogs, staff, events...). That data is edited on the dashboard's own pages and gets **no editor pencil**. The static texts, images and icons of your pages are page content, made editable with the Storio editor: see the [Editor Template Guide](./Storio_Editor_Template_Guide.md). Both work together on the same page (section 6).
 
 ---
 
@@ -39,12 +42,10 @@ Every single SDK method, backend V2 endpoint path, method signature, parameter, 
   - [Section 16: Core API Fetcher (Method 44)](#section-16-core-api-fetcher-apifetch)
 - [4. Complete TypeScript Type Interfaces (46 Interfaces)](#4-complete-typescript-type-interfaces)
 - [5. Architectural Best Practices & Error Handling](#5-architectural-best-practices--error-handling)
-- [6. Next.js App Router Implementation Guide & Examples](#6-nextjs-app-router-implementation-guide--examples)
-  - [Example 1: Complete Server Homepage (`src/app/page.tsx`)](#example-1-complete-server-homepage-srcapppagetsx)
-  - [Example 2: Dynamic Blog Detail Server Page (`src/app/blog/[slug]/page.tsx`)](#example-2-dynamic-blog-detail-server-page-srcappblogslugpagetsx)
-  - [Example 3: Client Form Submission Component (`src/components/ContactForm.tsx`)](#example-3-client-form-submission-component-srccomponentscontactformtsx)
-  - [Example 4: Academics Routine & Syllabus Page (`src/app/academics/page.tsx`)](#example-4-academics-routine--syllabus-page-srcappacademicspagetsx)
-  - [Example 5: Citizen Charter & Compliance Page (`src/app/compliance/page.tsx`)](#example-5-citizen-charter--compliance-page-srcappcompliancepagetsx)
+- [6. Using the SDK in the Starter Kit (Examples)](#6-using-the-sdk-in-the-starter-kit-examples)
+  - [Example 1: A list page with editable texts](#example-1-a-list-page-with-editable-texts)
+  - [Example 2: A record detail page](#example-2-a-record-detail-page)
+  - [Example 3: A form (Server Action)](#example-3-a-form-server-action)
 
 ---
 
@@ -52,63 +53,37 @@ Every single SDK method, backend V2 endpoint path, method signature, parameter, 
 
 ### Importing the SDK
 
-Install the `@storio/template-sdk` package in your template repository:
+The SDK is already installed in the starter kit (bundled as `packages/storio-template-sdk-1.0.1.tgz`, listed in `package.json`). Do not install it from npm.
 
-```bash
-npm install @storio/template-sdk
-```
-
-Import the singleton instance `storio` or specific TypeScript models anywhere in your server or client components:
+Import the singleton instance `storio` and the TypeScript types anywhere in your server code:
 
 ```typescript
-import { storio, StorioLayoutResponse, StorioNotice, StorioBlogPost } from '@storio/template-sdk';
+import { storio, type StorioNotice, type StorioBlogPost } from '@storio/template-sdk';
 ```
 
 ### Key SDK Capabilities
 
-- **Automatic Multi-Tenant Resolution:** Detects tenant context automatically from `NEXT_PUBLIC_STORIO_TENANT_HOST` or incoming HTTP request headers (`x-tenant-host`, `host`).
-- **Edge & Next.js ISR/SSR Ready:** Built on native web standards (`fetch`), allowing seamless use inside Server Components, Server Actions, Route Handlers, and Edge Middleware with full Next.js cache revalidation support (`next: { revalidate: 60 }`).
-- **Comprehensive Backend Coverage:** 43 specialized methods covering layout, navigation, notices, blogs, staff, events, admissions, academics, and regulatory compliance.
-- **Fail-Safe Typing:** Fully written in strict TypeScript with zero implicit `any` types.
+- **Multi-tenant:** every method takes the school's host (`tenantHost`). In the starter kit, get it from `resolveTenant()` (`src/lib/tenant.ts`).
+- **Server-first:** built on `fetch`; use it in Server Components, Server Actions and Route Handlers, with Next.js cache options (`next: { revalidate: 60 }`).
+- **44 methods** covering settings, notices, blogs, staff, events, admissions, academics and compliance.
+- **Fail-safe:** methods return `null` (or an empty list) on network errors instead of throwing.
 
 ---
 
 ### Fetching Live Database Data with Storio CLI
 
-Template developers can connect their local preview environment to live production or development tenant databases using the official Storio CLI tool.
+By default the starter kit runs in **Standalone Preview**: demo data on `localhost`. To see real school data, link the template with the Storio CLI:
 
-#### 1. Authenticate with Storio
 ```bash
-# Connect to production cloud:
-storio login
-
-# Or connect to local development backend:
-storio login --api-url http://localhost:8000
+storio login          # sign in with your developer account
+storio link           # link this project to the Storio demo school
+storio dev            # start Next.js with the linked school's data
+storio unlink         # back to Standalone Preview (demo data)
 ```
 
-#### 2. Link Template to a Tenant Database
-```bash
-# Select from accessible cloud tenants:
-storio link
+`storio link` writes `NEXT_PUBLIC_STORIO_TENANT_HOST` (the school) and `NEXT_PUBLIC_API_URL` (the Storio backend) to `.env.local`.
 
-# Or select from local backend tenants:
-storio link --api-url http://localhost:8000
-```
-*This command writes `NEXT_PUBLIC_STORIO_TENANT_HOST=<tenant-host>` directly to your `.env.local` file.*
-
-#### 3. Launch Development Server with Live Database Data
-```bash
-# Automatically injects linked tenant context and starts Next.js:
-storio dev
-
-# Or with local backend:
-storio dev --api-url http://localhost:8000
-```
-
-#### 4. Disconnect & Return to Mock Data
-```bash
-storio unlink
-```
+Storio team members with a local Storio backend add `--local` to every command (`storio login --local`, `storio link --local`, `storio dev --local`): `link --local` lets you pick any local school.
 
 ---
 
@@ -116,56 +91,43 @@ storio unlink
 
 #### Rule 1: Tenant DB vs. Standalone Preview Mock Data Rule
 
-When a customer installs a template into their live tenant, the database starts empty or contains only their populated records. 
-
 > [!IMPORTANT]
 > **The Golden Data Fallback Rule:**
-> 1. When running on a live tenant domain (or when linked via `storio link` / `NEXT_PUBLIC_STORIO_TENANT_HOST`), the template **MUST render actual database data**. If a database table is empty (e.g. 0 notices, 0 blogs), render a clean empty state or gracefully hide the section. **NEVER fallback to mock demo data in live tenant mode.**
-> 2. When running in unlinked local preview mode (`localhost` without `NEXT_PUBLIC_STORIO_TENANT_HOST`), the template **MUST fallback to default demo data** so prospective buyers can preview the template design.
+> 1. On a live school domain, or when linked with `storio link`, the template **MUST show only the school's real data**. If a list is empty (0 notices, 0 blogs), show an empty state or hide the section. **NEVER show demo data to a real school.**
+> 2. In Standalone Preview (`localhost` with no linked school), the template **falls back to the demo data** (`DEFAULT_DEMO_DATA` in `src/data/defaultDemoData.ts`), so the design can be previewed.
+
+The starter kit implements this rule once. **Use its helpers; never copy the host-detection logic into your code:**
+
+- `resolveTenant()` (`src/lib/tenant.ts`) returns `{ tenantHost, isStandalone }` for the current request;
+- `withDemoFallback(real, demo, isStandalone)` (lists) and `withDemoRecord(real, demo, isStandalone)` (one record) in `src/lib/data.ts` apply the rule.
 
 #### Golden Code Pattern for Data Fetching:
 
 ```typescript
-import { headers } from 'next/headers';
-import { storio, StorioLayoutResponse, StorioNotice } from '@storio/template-sdk';
+// src/lib/notices.ts (in the starter kit)
+import { storio, type StorioNotice } from '@storio/template-sdk';
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
+import { withDemoFallback, withDemoRecord } from './data';
+import type { TenantContext } from './tenant';
 
-export default async function Page() {
-  // 1. Resolve Host from Next.js Headers
-  const headersList = await headers();
-  const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host = rawHost.split(':')[0];
+export async function loadNotices(ctx: TenantContext): Promise<StorioNotice[]> {
+  const real = await storio.getNotices(ctx.tenantHost);
+  return withDemoFallback(real, DEFAULT_DEMO_DATA.notices, ctx.isStandalone);
+}
 
-  // 2. Determine Mode
-  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const isStandalone = isLocalHost && !linkedTenant;
-  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
-
-  // 3. Fetch Real Tenant Data via SDK
-  const [rawLayout, rawNotices] = await Promise.all([
-    storio.getLayout(tenantHost),
-    storio.getNotices(tenantHost),
-  ]);
-
-  // 4. Apply the Golden Rule
-  const layout: StorioLayoutResponse | null = rawLayout || (isStandalone ? DEFAULT_DEMO_DATA.layout : null);
-  const notices: StorioNotice[] = (Array.isArray(rawNotices) && rawNotices.length > 0)
-    ? rawNotices
-    : (isStandalone ? DEFAULT_DEMO_DATA.notices : []);
-
-  return (
-    <main>
-      <h1>{layout?.settings?.site_title || "Campus Portal"}</h1>
-      {notices.length > 0 ? (
-        <ul>{notices.map(n => <li key={n.id}>{n.title}</li>)}</ul>
-      ) : (
-        <p>No notices currently published.</p>
-      )}
-    </main>
-  );
+export async function loadNotice(id: string, ctx: TenantContext): Promise<StorioNotice | null> {
+  const real = await storio.getNoticeDetail(id, ctx.tenantHost);
+  const demo = DEFAULT_DEMO_DATA.notices.find((n) => String(n.id) === id);
+  return withDemoRecord(real, demo, ctx.isStandalone);
 }
 ```
+
+```tsx
+// in a server page
+const notices = await loadNotices(await resolveTenant());
+```
+
+Write one loader like this per kind of data (in `src/lib/`), and add matching demo data to `DEFAULT_DEMO_DATA`.
 
 ### Rule 2: Strict Typing Rule (No `any` Types Allowed)
 Every component, utility, and state hook must use the exported TypeScript interfaces provided by `@storio/template-sdk`. The use of `any`, `unknown` casts without guards, or loose objects is strictly prohibited.
@@ -253,17 +215,18 @@ Every component, utility, and state hook must use the exported TypeScript interf
 #### 2. `storio.getCustomization(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/customization/`
 - **Method Signature:** `storio.getCustomization(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioCustomizationResponse | null>`
-- **Description:** Returns tenant-configured theme settings that define the active color scheme, typography tokens, layout preferences, and custom CSS variables declared in the template manifest.
-- **Data Payload Obtained:**
+- **Description:** Returns the school's **Theme settings** values: the fields you declare in the manifest's `customization` and `navigation` (see the [Manifest Guide](./Storio_Template_Manifest_Guide.md)). The keys of `config` are your manifest field ids. A field the school never changed may be missing: fall back to its manifest `default`.
+- **In the starter kit:** use `loadTheme()` from `src/lib/theme.ts`, which does this fallback for you.
+- **Data Payload Obtained** (for a manifest with `primaryColor`, `footer_tagline` and `navbarLinks`):
   ```json
   {
     "config": {
-      "primary_color": "#059669",
-      "accent_color": "#d97706",
-      "font_family": "Inter, sans-serif",
-      "header_style": "sticky",
-      "footer_columns": 4,
-      "enable_dark_mode": false
+      "primaryColor": "#059669",
+      "footer_tagline": "Learning for life.",
+      "navbarLinks": [
+        { "id": "1", "name": "Home", "href": "/" },
+        { "id": "2", "name": "About", "href": "/about", "subLinks": [{ "id": "2-1", "name": "History", "href": "/about/history" }] }
+      ]
     }
   }
   ```
@@ -271,26 +234,14 @@ Every component, utility, and state hook must use the exported TypeScript interf
 #### 3. `storio.getNavigation(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/navigation/`
 - **Method Signature:** `storio.getNavigation(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioNavigationResponse | null>`
-- **Description:** Returns the institutional navigation menu hierarchy (Header, Footer, Mobile Drawer menus), including nested dropdown children.
+- **Description:** Returns the school's menu: the `navbarLinks` value of Theme settings, as `items`.
+- **Note:** the backend returns the links in the manifest's shape (`id`, `name`, `href`, `subLinks`), while the SDK's TypeScript type describes `label`/`url`/`children`. Until the type is fixed, read the menu with `loadTheme()` + `themeNavLinks()` from `src/lib/theme.ts`, as the starter kit's header does.
 - **Data Payload Obtained:**
   ```json
   {
     "items": [
-      {
-        "id": "nav-1",
-        "label": "About Us",
-        "url": "/about",
-        "target": "_self",
-        "children": [
-          { "id": "nav-1-1", "label": "Leadership Messages", "url": "/about/leadership", "target": "_self" },
-          { "id": "nav-1-2", "label": "Faculty Directory", "url": "/about/faculty", "target": "_self" },
-          { "id": "nav-1-3", "label": "Campus Infrastructure", "url": "/about/infrastructure", "target": "_self" }
-        ]
-      },
-      { "id": "nav-2", "label": "Academics", "url": "/academics", "target": "_self" },
-      { "id": "nav-3", "label": "Admissions", "url": "/admissions", "target": "_self" },
-      { "id": "nav-4", "label": "Notice Board", "url": "/notices", "target": "_self" },
-      { "id": "nav-5", "label": "Contact Us", "url": "/contact", "target": "_self" }
+      { "id": "1", "name": "Home", "href": "/" },
+      { "id": "2", "name": "About", "href": "/about", "subLinks": [{ "id": "2-1", "name": "History", "href": "/about/history" }] }
     ]
   }
   ```
@@ -298,7 +249,7 @@ Every component, utility, and state hook must use the exported TypeScript interf
 #### 4. `storio.getLayout(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/layout/`
 - **Method Signature:** `storio.getLayout(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioLayoutResponse | null>`
-- **Description:** Aggregation endpoint combining `settings`, `customization`, and `navigation` into a single high-performance payload. Highly recommended for root Next.js `layout.tsx` files.
+- **Description:** `settings`, `customization` and `navigation` in one response (the three methods above).
 - **Data Payload Obtained:**
   ```json
   {
@@ -308,23 +259,10 @@ Every component, utility, and state hook must use the exported TypeScript interf
       "logo_url": "https://tenant.storio.app/media/branding/logo.png",
       "contact_email": "admissions@emeraldacademy.edu",
       "phone_number": "+880 1711-000000",
-      "social_links": [
-        { "platform": "facebook", "url": "https://facebook.com/emeraldacademy" }
-      ]
+      "social_links": [{ "platform": "facebook", "url": "https://facebook.com/emeraldacademy" }]
     },
-    "customization": {
-      "config": {
-        "primary_color": "#059669",
-        "accent_color": "#d97706"
-      }
-    },
-    "navigation": {
-      "items": [
-        { "id": "nav-1", "label": "Home", "url": "/" },
-        { "id": "nav-2", "label": "Academics", "url": "/academics" },
-        { "id": "nav-3", "label": "Notices", "url": "/notices" }
-      ]
-    }
+    "customization": { "config": { "primaryColor": "#059669" } },
+    "navigation": { "items": [{ "id": "1", "name": "Home", "href": "/" }] }
   }
   ```
 
@@ -2024,488 +1962,158 @@ export interface StorioHotline {
    ```
 2. **Next.js Revalidation Strategy:** Configure appropriate ISR revalidation windows via the `next` options object:
    ```typescript
-   // Static data (institution profile, customization): revalidate daily
-   const profile = await storio.getInstitutionProfile({ next: { revalidate: 86400 } });
+   // Rarely changing data (institution profile): revalidate daily
+   const profile = await storio.getInstitutionProfile({ tenantHost, next: { revalidate: 86400 } });
+
+   // Never cache settings or customization for long: admins expect a published Theme settings
+   // change to show at once. (The starter kit renders every request fresh.)
 
    // High-velocity data (notices, blogs): revalidate every 60 seconds
-   const notices = await storio.getNotices({ next: { revalidate: 60 } });
+   const notices = await storio.getNotices({ tenantHost, next: { revalidate: 60 } });
    ```
 3. **Graceful Degradation:** The SDK never throws uncaught exceptions on network errors; it returns `null` or empty collections and logs informative warnings in development. Always write clean null-check fallbacks.
 
 ---
 
-## 6. Next.js App Router Implementation Guide & Examples
+## 6. Using the SDK in the Starter Kit (Examples)
 
-### Example 1: Complete Server Homepage (`src/app/page.tsx`)
+Every public page in the starter kit has two files. Follow the same pattern:
+
+| File | Runs on | Does |
+| :--- | :--- | :--- |
+| `src/app/(site)/<route>/page.tsx` | server | loads the school's data with the SDK (through a loader in `src/lib/`) and the page metadata |
+| `src/components/views/<Name>View.tsx` | client | renders it; the page's static texts are editable page content (`<CmsSection>`, `<CmsField>`) |
+
+SDK data is the school's own data: render it as it is, without `<CmsField>`. The exceptions are the record fields the editor may change (Example 2).
+
+The working versions of these examples are in the starter kit: `src/app/(site)/notices/`, `src/components/views/NoticesView.tsx`, `NoticeDetailView.tsx` and `ContactView.tsx`.
+
+### Example 1: A list page with editable texts
 
 ```tsx
-import { headers } from 'next/headers';
-import { storio, StorioLayoutResponse, StorioHeroSlide, StorioNotice } from '@storio/template-sdk';
-import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
+// src/app/(site)/notices/page.tsx (server)
+import type { Metadata } from 'next';
+import { NoticesView } from '@/components/views/NoticesView';
+import { pageMetadata } from '@/lib/seo';
+import { loadNotices } from '@/lib/notices';
+import { resolveTenant } from '@/lib/tenant';
 
-export default async function HomePage() {
-  // 1. RESOLVE HOST FROM REQUEST HEADERS
-  const headersList = await headers();
-  const rawHost: string = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host: string = rawHost.split(':')[0];
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('template-0-starter-notices');
+}
 
-  // 2. CHECK FOR LINKED TENANT (CLI) VS STANDALONE PREVIEW MODE
-  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const isStandalone = isLocalHost && !linkedTenant;
-  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
-
-  // 3. FETCH REAL TENANT DATA VIA SDK
-  const [rawLayout, rawHeroSlides, rawNotices] = await Promise.all([
-    storio.getLayout(tenantHost),
-    storio.getHeroSlides(tenantHost),
-    storio.getNotices(tenantHost),
-  ]);
-
-  // 4. APPLY THE GOLDEN RULE (Standalone Demo Data vs Tenant DB Real Data)
-  const layout: StorioLayoutResponse | null = rawLayout || (isStandalone ? DEFAULT_DEMO_DATA.layout : null);
-
-  const heroSlides: StorioHeroSlide[] = (Array.isArray(rawHeroSlides) && rawHeroSlides.length > 0)
-    ? rawHeroSlides
-    : (isStandalone ? DEFAULT_DEMO_DATA.heroSlides : []);
-
-  const notices: StorioNotice[] = (Array.isArray(rawNotices) && rawNotices.length > 0)
-    ? rawNotices
-    : (isStandalone ? DEFAULT_DEMO_DATA.notices : []);
-
-  return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
-      {/* Header Bar */}
-      <header className="p-4 bg-white shadow-sm flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          {layout?.settings?.logo_url && (
-            <img src={layout.settings.logo_url} alt="Logo" className="h-10 w-auto" />
-          )}
-          <h1 className="text-xl font-bold text-gray-900">
-            {layout?.settings?.site_title || "Emerald Campus"}
-          </h1>
-        </div>
-        <nav className="flex space-x-4">
-          {layout?.navigation?.items?.map((item) => (
-            <a key={item.id || item.url} href={item.url} className="text-gray-700 hover:text-emerald-600 font-medium">
-              {item.label}
-            </a>
-          ))}
-        </nav>
-      </header>
-
-      {/* Hero Carousel */}
-      <section className="bg-emerald-800 text-white p-12 text-center">
-        {heroSlides.length > 0 ? (
-          <div>
-            <h2 className="text-4xl font-extrabold">{heroSlides[0].title}</h2>
-            <p className="mt-2 text-lg text-emerald-100">{heroSlides[0].subtitle}</p>
-            {heroSlides[0].button_text && (
-              <a 
-                href={heroSlides[0].button_url || '#'} 
-                className="mt-6 inline-block bg-amber-500 text-black px-6 py-3 rounded-lg font-bold hover:bg-amber-400"
-              >
-                {heroSlides[0].button_text}
-              </a>
-            )}
-          </div>
-        ) : (
-          <div className="p-8 text-emerald-200">No banner slides configured.</div>
-        )}
-      </section>
-
-      {/* Notice Board */}
-      <section className="max-w-4xl mx-auto p-6 mt-8 bg-white rounded-lg shadow">
-        <h3 className="text-2xl font-bold text-gray-900 border-b pb-3 mb-4">Notice Board</h3>
-        
-        {notices.length > 0 ? (
-          <ul className="divide-y divide-gray-200">
-            {notices.map((notice) => (
-              <li key={notice.id} className="py-4 flex justify-between items-center">
-                <div>
-                  <h4 className="font-semibold text-lg text-gray-900">{notice.title}</h4>
-                  <p className="text-sm text-gray-500">{notice.published_date}</p>
-                </div>
-                {notice.attachment_url && (
-                  <a 
-                    href={notice.attachment_url} 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded hover:bg-emerald-700"
-                  >
-                    Download PDF
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="p-6 text-center text-gray-500 bg-gray-50 rounded">
-            No announcements or notices posted at this time.
-          </div>
-        )}
-      </section>
-    </div>
-  );
+export default async function NoticesPage() {
+  const notices = await loadNotices(await resolveTenant()); // SDK + Rule 1
+  return <NoticesView notices={notices} />;
 }
 ```
 
----
-
-### Example 2: Dynamic Blog Detail Server Page (`src/app/blog/[slug]/page.tsx`)
-
 ```tsx
-import { storio, StorioBlogPost } from '@storio/template-sdk';
-import { headers } from 'next/headers';
-import { notFound } from 'next/navigation';
-import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
-
-interface BlogPageProps {
-  params: Promise<{ slug: string }>;
-}
-
-export default async function BlogDetailPage({ params }: BlogPageProps) {
-  const { slug } = await params;
-
-  // 1. Resolve Host from Request Headers
-  const headersList = await headers();
-  const rawHost: string = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host: string = rawHost.split(':')[0];
-
-  // 2. Check for Linked Tenant (CLI) vs Standalone Mode
-  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const isStandalone = isLocalHost && !linkedTenant;
-  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
-
-  // 3. Fetch Real Tenant Article via SDK
-  const rawArticle: StorioBlogPost | null = await storio.getBlogDetail(slug, tenantHost);
-
-  // 4. Apply Golden Rule (Fallback to Demo Data ONLY in Standalone Preview mode)
-  const article: StorioBlogPost | null = rawArticle || (
-    isStandalone 
-      ? DEFAULT_DEMO_DATA.blogs?.find((b: StorioBlogPost) => b.slug === slug) || DEFAULT_DEMO_DATA.blogs?.[0] || null
-      : null
-  );
-
-  if (!article) {
-    notFound();
-  }
-
-  return (
-    <article className="max-w-3xl mx-auto p-8">
-      <h1 className="text-4xl font-extrabold text-gray-900">{article.title}</h1>
-      <p className="mt-2 text-gray-500">{article.published_at}</p>
-      
-      {article.featured_image_url && (
-        <img 
-          src={article.featured_image_url} 
-          alt={article.title} 
-          className="my-6 w-full h-80 object-cover rounded-lg" 
-        />
-      )}
-
-      <div 
-        className="prose max-w-none mt-6" 
-        dangerouslySetInnerHTML={{ __html: article.content || article.summary || '' }} 
-      />
-    </article>
-  );
-}
-```
-
----
-
-### Example 3: Client Form Submission Component (`src/components/ContactForm.tsx`)
-
-Strict TypeScript client component with hCaptcha integration, mobile + subject fields, and correct tenant host forwarding:
-
-> **Note:** Install hCaptcha React package first: `npm install @hcaptcha/react-hcaptcha`
-
-```tsx
+// src/components/views/NoticesView.tsx (client)
 'use client';
 
-import React, { useRef, useState } from 'react';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { storio, StorioContactFormResponse } from '@storio/template-sdk';
+import type { StorioNotice } from '@storio/template-sdk';
+import { CmsField, CmsSection } from '@/lib/storio-editor/site';
+import { useNoticesText } from '@/components/cms/useNoticesText';
 
-interface ContactFormProps {
-  tenantHost: string;
-  hcaptchaSiteKey: string | null;
-}
-
-export default function ContactForm({ tenantHost, hcaptchaSiteKey }: ContactFormProps) {
-  const [status, setStatus] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const captchaRef = useRef<HCaptcha>(null);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setStatus(null);
-
-    const formData = new FormData(e.currentTarget);
-
-    // Strict typing — no `any` types
-    const payload: Record<string, unknown> = {
-      name:    formData.get('name') as string,
-      email:   formData.get('email') as string,
-      mobile:  formData.get('mobile') as string,
-      subject: formData.get('subject') as string,
-      message: formData.get('message') as string,
-      ...(captchaToken ? { recaptcha_token: captchaToken } : {}),
-    };
-
-    const res: StorioContactFormResponse | null =
-      await storio.submitContactMessage(payload, tenantHost);
-
-    setIsSubmitting(false);
-    captchaRef.current?.resetCaptcha();
-    setCaptchaToken(null);
-
-    if (res?.success) {
-      setStatus('Message sent successfully!');
-      (e.target as HTMLFormElement).reset();
-    } else {
-      setStatus(res?.message || 'Failed to send message. Please try again.');
-    }
-  };
+export function NoticesView({ notices }: { notices: StorioNotice[] }) {
+  const { intro } = useNoticesText(); // the page's editable texts
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto p-6 bg-white rounded shadow">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Name</label>
-        <input name="name" type="text" required className="mt-1 w-full border p-2 rounded" />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Email</label>
-        <input name="email" type="email" required className="mt-1 w-full border p-2 rounded" />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Mobile</label>
-        <input name="mobile" type="tel" placeholder="+8801700000000" className="mt-1 w-full border p-2 rounded" />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Subject</label>
-        <input name="subject" type="text" required className="mt-1 w-full border p-2 rounded" />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Message</label>
-        <textarea name="message" rows={4} required className="mt-1 w-full border p-2 rounded" />
-      </div>
-
-      {/* hCaptcha widget — optional but recommended */}
-      {hcaptchaSiteKey && (
-        <HCaptcha
-          ref={captchaRef}
-          sitekey={hcaptchaSiteKey}
-          onVerify={(token) => setCaptchaToken(token)}
-          onExpire={() => setCaptchaToken(null)}
-        />
+    <CmsSection sectionKey="intro" title="Notice board" page="template-0-starter-notices">
+      <h1><CmsField path="title" label="Title">{intro.title}</CmsField></h1>
+      {notices.length === 0 ? (
+        // Rule 1: a real school with no notices gets an empty state, never demo data
+        <p><CmsField path="emptyText" label="Empty text">{intro.emptyText}</CmsField></p>
+      ) : (
+        <ul>
+          {notices.map((notice) => (
+            <li key={notice.id}>
+              {/* a record field: the editor may change a notice's title (Example 2) */}
+              <CmsField collection="notice" item={String(notice.id)} path="title">{notice.title}</CmsField>
+              {/* plain SDK data: no pencil */}
+              {notice.published_date && <span>{notice.published_date}</span>}
+            </li>
+          ))}
+        </ul>
       )}
-
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full bg-emerald-600 text-white font-medium py-2 rounded hover:bg-emerald-700 disabled:opacity-50"
-      >
-        {isSubmitting ? 'Sending...' : 'Send Message'}
-      </button>
-
-      {status && (
-        <p className={`mt-2 text-sm text-center ${status.includes('successfully') ? 'text-green-600' : 'text-red-600'}`}>
-          {status}
-        </p>
-      )}
-    </form>
+    </CmsSection>
   );
 }
 ```
 
-**Usage in a Server Page (passes `tenantHost` and `hcaptchaSiteKey` as props):**
+### Example 2: A record detail page
+
+A notice, blog post or event detail page loads one record with the SDK. The editor may change a few fields of that record (saving the record itself):
+
+| Record | URL holds | Editable fields |
+| :--- | :--- | :--- |
+| notice (`collection="notice"`) | its id | `title` |
+| blog post (`collection="blog"`) | its slug | `title`, `excerpt` |
+| event (`collection="event"`) | its slug | `title`, `excerpt`, `location` |
 
 ```tsx
-// src/app/contact/page.tsx  (Server Component)
-import { headers } from 'next/headers';
+// src/app/(site)/events/[slug]/page.tsx (server)
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { EventView } from '@/components/views/EventView';
+import { loadEvent } from '@/lib/events'; // your loader: storio.getEventDetail + withDemoRecord
+import { resolveTenant } from '@/lib/tenant';
+
+export async function generateMetadata({ params }: PageProps<'/events/[slug]'>): Promise<Metadata> {
+  const { slug } = await params;
+  const event = await loadEvent(slug, await resolveTenant());
+  return event ? { title: event.title, description: event.excerpt } : {};
+}
+
+export default async function EventPage({ params }: PageProps<'/events/[slug]'>) {
+  const { slug } = await params;
+  const event = await loadEvent(slug, await resolveTenant());
+  if (!event?.slug) notFound();
+  return <EventView event={event} />;
+}
+```
+
+```tsx
+// in EventView (client); `event.slug` is the record id the editor uses
+<h1><CmsField collection="event" item={event.slug} path="title">{event.title}</CmsField></h1>
+<p><CmsField collection="event" item={event.slug} path="excerpt">{event.excerpt}</CmsField></p>
+<p><CmsField collection="event" item={event.slug} path="location">{event.location}</CmsField></p>
+{/* the body is rich text from the school: never wrap it */}
+<div dangerouslySetInnerHTML={{ __html: event.content ?? '' }} />
+```
+
+List the page in the manifest's `editorPages` with `"route": "/events/[slug]"` and `"collection": "event"` (see the [Editor Template Guide](./Storio_Editor_Template_Guide.md), section 8). `useCollectionItem` shows the editor's unsaved values live (see `NoticeDetailView.tsx`).
+
+> **Blog posts:** the API returns the short text as `excerpt`, but the SDK's `StorioBlogPost` type still calls it `summary`. Until the type is fixed, read it as `(post as StorioBlogPost & { excerpt?: string }).excerpt`.
+
+### Example 3: A form (Server Action)
+
+Forms send data to the school with the SDK from a Server Action, so the school's host is resolved on the server:
+
+```tsx
+// src/app/(site)/contact/actions.ts
+'use server';
+
 import { storio } from '@storio/template-sdk';
-import ContactForm from '@/components/ContactForm';
+import { resolveTenant } from '@/lib/tenant';
 
-export default async function ContactPage() {
-  const headersList = await headers();
-  const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host = rawHost.split(':')[0];
-  const tenantHost = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST || host;
+export interface ContactFormState {
+  status: 'idle' | 'success' | 'error';
+}
 
-  const settings = await storio.getSettings(tenantHost);
+export async function sendContactMessage(_prev: ContactFormState, formData: FormData): Promise<ContactFormState> {
+  const name = String(formData.get('name') ?? '').trim();
+  const email = String(formData.get('email') ?? '').trim();
+  const message = String(formData.get('message') ?? '').trim();
+  if (!name || !email || !message) return { status: 'error' };
 
-  // On localhost dev, fall back to official hCaptcha test site key
-  const isLocal = host === 'localhost' || host === '127.0.0.1';
-  const hcaptchaSiteKey =
-    settings?.hcaptcha_site_key ??
-    (isLocal ? '10000000-ffff-ffff-ffff-000000000001' : null);
+  const { tenantHost, isStandalone } = await resolveTenant();
+  if (isStandalone) return { status: 'success' }; // Standalone Preview: nothing is sent
 
-  return (
-    <main>
-      <h1>Contact Us</h1>
-      <ContactForm tenantHost={tenantHost} hcaptchaSiteKey={hcaptchaSiteKey} />
-    </main>
-  );
+  const result = await storio.submitContactMessage({ name, email, message }, tenantHost);
+  return { status: result?.success ? 'success' : 'error' };
 }
 ```
 
----
-
-### Example 4: Academics Routine & Syllabus Page (`src/app/academics/page.tsx`)
-
-```tsx
-import { headers } from 'next/headers';
-import { storio, StorioClassRoutine, StorioSyllabus } from '@storio/template-sdk';
-
-export default async function AcademicsPage() {
-  const headersList = await headers();
-  const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host = rawHost.split(':')[0];
-
-  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const isStandalone = isLocalHost && !linkedTenant;
-  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
-
-  const [routines, syllabuses] = await Promise.all([
-    storio.getClassRoutines(tenantHost),
-    storio.getSyllabuses(tenantHost),
-  ]);
-
-  return (
-    <div className="max-w-5xl mx-auto p-8">
-      <h1 className="text-3xl font-extrabold text-gray-900 mb-6">Academic Routines & Syllabuses</h1>
-
-      {/* Class Routines */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Class Timetables</h2>
-        {routines && routines.length > 0 ? (
-          <div className="grid md:grid-cols-2 gap-4">
-            {routines.map((r) => (
-              <div key={r.id} className="p-4 border rounded-lg bg-white shadow-sm flex justify-between items-center">
-                <div>
-                  <h3 className="font-semibold text-lg">{r.class_name} {r.section ? `(${r.section})` : ''}</h3>
-                  <p className="text-sm text-gray-500">Shift: {r.shift || 'General'} | Year: {r.academic_year}</p>
-                </div>
-                {r.routine_file && (
-                  <a href={r.routine_file} target="_blank" rel="noreferrer" className="px-3 py-1.5 bg-emerald-600 text-white rounded text-sm">
-                    PDF Routine
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-500">No class routines published yet.</p>
-        )}
-      </section>
-
-      {/* Syllabuses */}
-      <section>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Curriculum Syllabuses</h2>
-        {syllabuses && syllabuses.length > 0 ? (
-          <div className="divide-y border rounded-lg bg-white">
-            {syllabuses.map((s) => (
-              <div key={s.id} className="p-4 flex justify-between items-center">
-                <div>
-                  <h3 className="font-semibold">{s.class_name} — {s.exam_type}</h3>
-                  <p className="text-sm text-gray-500">{s.description || `Academic Session ${s.academic_year}`}</p>
-                </div>
-                {s.file_url && (
-                  <a href={s.file_url} target="_blank" rel="noreferrer" className="px-3 py-1.5 bg-gray-800 text-white rounded text-sm">
-                    Download
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-500">No syllabuses published yet.</p>
-        )}
-      </section>
-    </div>
-  );
-}
-```
-
----
-
-### Example 5: Citizen Charter & Compliance Page (`src/app/compliance/page.tsx`)
-
-```tsx
-import { headers } from 'next/headers';
-import { storio, StorioInformationService, StorioComplaintOfficer, StorioHotline } from '@storio/template-sdk';
-
-export default async function CompliancePage() {
-  const headersList = await headers();
-  const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host = rawHost.split(':')[0];
-
-  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const isStandalone = isLocalHost && !linkedTenant;
-  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
-
-  const [infoService, complaintOfficer, hotlines] = await Promise.all([
-    storio.getInformationService(tenantHost),
-    storio.getComplaintOfficer(tenantHost),
-    storio.getHotlines(tenantHost),
-  ]);
-
-  return (
-    <div className="max-w-4xl mx-auto p-8 space-y-8">
-      <h1 className="text-3xl font-extrabold text-gray-900">Institutional Governance & Citizen Charter</h1>
-
-      {/* RTI Officer */}
-      {infoService?.officer_name && (
-        <section className="p-6 bg-white border rounded-lg shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-2">Right to Information (RTI) Officer</h2>
-          <p className="font-medium text-gray-900">{infoService.officer_name}</p>
-          <p className="text-sm text-gray-600">{infoService.designation}</p>
-          <p className="text-sm text-gray-500 mt-2">Email: {infoService.email} | Phone: {infoService.phone}</p>
-        </section>
-      )}
-
-      {/* Grievance Redress Officer */}
-      {complaintOfficer?.officer_name && (
-        <section className="p-6 bg-white border rounded-lg shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-2">Grievance Redress System (GRS)</h2>
-          <p className="font-medium text-gray-900">{complaintOfficer.officer_name}</p>
-          <p className="text-sm text-gray-600">{complaintOfficer.designation}</p>
-          <div className="mt-4 space-y-2">
-            {complaintOfficer.steps?.map((step) => (
-              <div key={step.step_number} className="text-sm">
-                <span className="font-semibold">Step {step.step_number}: {step.title}</span> — {step.description}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Emergency Hotlines */}
-      {hotlines && hotlines.length > 0 && (
-        <section className="p-6 bg-emerald-50 border border-emerald-200 rounded-lg">
-          <h2 className="text-xl font-bold text-emerald-900 mb-4">Emergency Hotlines</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {hotlines.map((h) => (
-              <div key={h.id} className="p-3 bg-white rounded border border-emerald-100 shadow-sm text-center">
-                <p className="text-2xl font-black text-emerald-700">{h.number}</p>
-                <p className="text-xs font-medium text-gray-600 mt-1">{h.title}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-    </div>
-  );
-}
-```
+The form's labels, button text and success/error messages are editable page content (see `ContactView.tsx`). If the school uses hCaptcha, `getSettings()` returns its `hcaptcha_site_key`; send the token as `recaptcha_token`.
