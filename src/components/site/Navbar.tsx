@@ -27,10 +27,22 @@ export function Navbar({ settings, theme }: { settings: StorioSettingsResponse |
         </Link>
         <ul className="flex flex-wrap items-center gap-6 text-sm">
           {links.map((link, i) => (
-            <li key={link.id ?? `${link.href}-${i}`}>
+            <li key={link.id ?? `${link.href}-${i}`} className="group relative">
               <Link href={link.href} className="hover:text-brand">
                 {link.name}
               </Link>
+              {/* Sub-links (Theme settings > Navigation): shown on hover. */}
+              {link.subLinks && link.subLinks.length > 0 && (
+                <ul className="invisible absolute left-0 top-full z-20 min-w-48 rounded-lg border border-black/10 bg-page py-2 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100">
+                  {link.subLinks.map((sub, j) => (
+                    <li key={sub.id ?? `${sub.href}-${j}`}>
+                      <Link href={sub.href} className="block px-4 py-2 hover:text-brand">
+                        {sub.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
           <li>

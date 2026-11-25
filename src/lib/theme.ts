@@ -68,9 +68,12 @@ export function themeColorFields(): string[] {
 
 /** The header menu (Theme settings > Navigation). */
 export function themeNavLinks(theme: ThemeValues): NavLink[] {
-  const links = theme.navbarLinks;
-  if (!Array.isArray(links)) return [];
-  return links.filter(
-    (link): link is NavLink => !!link && typeof link === 'object' && typeof link.name === 'string' && typeof link.href === 'string'
-  );
+  return cleanLinks(theme.navbarLinks);
+}
+
+function cleanLinks(value: unknown): NavLink[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((link): link is NavLink => !!link && typeof link === 'object' && typeof link.name === 'string' && typeof link.href === 'string')
+    .map((link) => ({ ...link, subLinks: cleanLinks(link.subLinks) }));
 }

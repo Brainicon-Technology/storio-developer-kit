@@ -112,6 +112,13 @@ This section defines the input fields that will dynamically render in the school
 ### 3. Features Array
 This is a list of CMS modules that your template actually supports. 
 
+> [!IMPORTANT]
+> When a school selects your template, Storio turns on **only** the modules listed here: the dashboard hides every other menu and blocks its API. Always include the base modules, or the school loses its own admin pages:
+> - `template_customization`: the **Templates** menu and the editor (without it, admins cannot reach Template Customization),
+> - `generalSettings`: school name, logo, contact details (the starter kit's header and footer read them),
+> - `accounts` and `auth`: users and roles,
+> - `mediaFile`: the media library.
+
 ```json
 "features": [
   "notice",

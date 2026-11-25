@@ -59,7 +59,13 @@
   },
   "features": [
     "notice",
-    "contact"
+    "contact",
+    "socialLink",
+    "mediaFile",
+    "generalSettings",
+    "accounts",
+    "auth",
+    "template_customization"
   ],
   "navigation": [
     {

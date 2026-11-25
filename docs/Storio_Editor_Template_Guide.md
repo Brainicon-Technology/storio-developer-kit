@@ -26,7 +26,8 @@ The dashboard builds its editor from `public/storio.template.json`:
 - `"editor": "storio-elements"` turns the editor on (without it the dashboard shows the classic customizer);
 - `"editorPages"` lists your editable pages, their sections and default content;
 - `"editorIcons"` lists the icons an administrator may pick;
-- `"customization"` and `"navigation"` become the editor's **Theme settings** (colours, header/footer texts, menu).
+- `"customization"` and `"navigation"` become the editor's **Theme settings** (colours, header/footer texts, menu);
+- `"features"` must include `"template_customization"`: a school gets only the dashboard modules listed there, and without it its admins have no **Templates** menu and cannot open the editor. Keep the other base modules too (`generalSettings`, `accounts`, `auth`, `mediaFile`; see the [Manifest Guide](./Storio_Template_Manifest_Guide.md)).
 
 The dashboard reads the manifest of your **approved published version**. A change to the manifest (a page, section, field, icon or Theme settings field) shows in the dashboard only after you publish a new version and it is approved.
 

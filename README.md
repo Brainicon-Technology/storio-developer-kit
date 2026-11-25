@@ -150,7 +150,7 @@ Before submitting or deploying your template to the Storio platform, you **MUST*
 
 - This file serves as the communication bridge between your Next.js template and the Storio CMS backend.
 - **Set your template id first:** `npm run template:id -- template-9-sunrise`. It must follow the format `template-[id number]-[slug]`. Every editor page key and content file name starts with it, so never change it by hand. Then set `name`.
-- List the CMS modules your template supports in `features`.
+- List the CMS modules your template supports in `features`. Keep the base modules (`template_customization`, `generalSettings`, `accounts`, `auth`, `mediaFile`): a school gets only the modules listed here, and without `template_customization` its admins cannot open the editor.
 - `"editor": "storio-elements"` turns on the Storio editor. `editorPages` (your editable pages) gets its `defaults` from `src/content/*.json` with `npm run editor:sync`.
 - `customization` and `navigation` are the editor's Theme settings (colours, header/footer texts, menu).
 - See the [Manifest Guide](./docs/Storio_Template_Manifest_Guide.md) to understand how to fully populate this file.
