@@ -2,25 +2,25 @@
 
 import Link from 'next/link';
 import type { StorioNotice } from '@storio/template-sdk';
-import { CmsField, CmsIcon, CmsSection, usePageContent } from '@brainicon/storio-elements-editor/site';
+import { CmsField, CmsIcon, CmsSection } from '@/lib/storio-editor/site';
 
-import type homeDefaults from '@/content/home.json';
+import { useHomeText } from '@/components/cms/useHomeText';
 
-type HomeContent = typeof homeDefaults;
+const PAGE = 'template-0-starter-home';
 
 /**
  * Home page. Rules shown here:
- * - one <CmsSection> per top-level key of src/content/home.json,
+ * - one <CmsSection page={PAGE}> per top-level key of src/content/template-0-starter-home.json,
  * - a <CmsField> around every visible value, with list positions for arrays (items.0.title),
  * - icons stored by name and drawn with <CmsIcon>,
- * - tenant records (notices) edited through their collection, not as page content.
+ * - Storio records (notices) edited as records (collection="notice"), not as page content.
  */
 export function HomeView({ notices }: { notices: StorioNotice[] }) {
-  const { hero, features, notices: noticesSection, faq } = usePageContent<HomeContent>('home');
+  const { hero, features, notices: noticesSection, faq } = useHomeText();
 
   return (
     <main>
-      <CmsSection sectionKey="hero" title="Hero">
+      <CmsSection sectionKey="hero" title="Hero" page={PAGE}>
         <section className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-2">
           <div className="space-y-5">
             {hero.badge && (
@@ -52,7 +52,7 @@ export function HomeView({ notices }: { notices: StorioNotice[] }) {
         </section>
       </CmsSection>
 
-      <CmsSection sectionKey="features" title="Features">
+      <CmsSection sectionKey="features" title="Features" page={PAGE}>
         <section className="bg-surface px-6 py-16">
           <div className="mx-auto max-w-6xl">
             <h2 className="mb-8 text-3xl font-bold">
@@ -77,7 +77,7 @@ export function HomeView({ notices }: { notices: StorioNotice[] }) {
         </section>
       </CmsSection>
 
-      <CmsSection sectionKey="notices" title="Latest notices">
+      <CmsSection sectionKey="notices" title="Latest notices" page={PAGE}>
         <section className="mx-auto max-w-6xl px-6 py-16">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-3xl font-bold">
@@ -97,7 +97,7 @@ export function HomeView({ notices }: { notices: StorioNotice[] }) {
                 <li key={notice.id} className="rounded-xl border border-black/10 p-5">
                   <Link href={`/notices/${notice.id}`} className="font-semibold hover:text-brand">
                     {/* A field of a database record: collection + item + path. */}
-                    <CmsField collection="notices" item={String(notice.id)} path="title" label="Notice title">
+                    <CmsField collection="notice" item={String(notice.id)} path="title" label="Notice title">
                       {notice.title}
                     </CmsField>
                   </Link>
@@ -109,7 +109,7 @@ export function HomeView({ notices }: { notices: StorioNotice[] }) {
         </section>
       </CmsSection>
 
-      <CmsSection sectionKey="faq" title="FAQ">
+      <CmsSection sectionKey="faq" title="FAQ" page={PAGE}>
         <section className="mx-auto max-w-3xl px-6 py-16">
           <h2 className="mb-6 text-3xl font-bold">
             <CmsField path="title" label="Title">{faq.title}</CmsField>

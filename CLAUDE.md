@@ -6,44 +6,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is the starter kit that `npx @brainicon/create-storio-app` copies with degit from `main`. Every push to `main` ships to new template developers. The old starter kit (SDK only, no editor) is tagged `v1-legacy`.
 
-It's a Next.js 16 app (App Router, React 19, Tailwind v4, TypeScript strict) for building themes ("templates") for Storio, a multi-tenant school CMS. It uses two libraries:
+It's a Next.js 16 app (App Router, React 19, Tailwind v4, TypeScript strict) for building themes ("templates") for Storio, a multi-tenant school CMS. School admins edit a template's content in the Storio dashboard's editor. No editor library is installed:
 
-- `@brainicon/storio-elements-editor`: makes page content editable. Source lives in `D:\Brainicon Technology\Public-Site-CMS` (github.com/MostofaSeum/storio-elements-editor), installed from GitHub at a tag.
-- `@storio/template-sdk`: fetches tenant DB records. It's bundled as `packages/storio-template-sdk-1.0.1.tgz`. If the `.tgz` is replaced, update its `integrity` in `package-lock.json`, or `npm install` fails with EINTEGRITY.
+- `src/lib/storio-editor/` is the editor kit (25 files), copied byte for byte from Storio (same as `storio-cms/packages/template-sdk/STORIO_EDITOR_TEMPLATE_PROMPT.md`, Appendix A, and the little-flowers template). It is a fixed protocol with the Storio dashboard and backend: never edit it here; change it in Storio and copy it over. ESLint ignores it.
+- `@storio/template-sdk` fetches the school's data. It's bundled as `packages/storio-template-sdk-1.0.1.tgz`. If the `.tgz` is replaced, update its `integrity` in `package-lock.json`, or `npm install` fails with EINTEGRITY.
 
 ## Commands
 
 ```bash
-npm run dev            # Standalone Preview; local editor at /admin/cms
-npm run build
+npm run dev            # Standalone Preview (demo data, default content)
+npm run build          # prebuild runs template:id --check and editor:check
 npm run lint
 npm run typecheck      # tsc --noEmit (run `npx next typegen` first on a fresh clone: PageProps/LayoutProps)
-npm run cms:manifest   # regenerate the "editor" block of public/storio.template.json
+npm run editor:sync    # copy src/content/*.json into the manifest's editorPages, regenerate src/lib/cms-icons.generated.ts
+npm run editor:check   # the same checks without writing
+npm run template:id -- template-9-sunrise   # set the template id everywhere (keys, content file names)
 ```
 
-There is no test runner.
+There is no test runner. The editor UI is not in this repo: test pencils and saving behind a local storio-cms (docs/Storio_Editor_Template_Guide.md §9).
 
 Storio CLI commands: `storio link` sets `NEXT_PUBLIC_STORIO_TENANT_HOST` in `.env.local`. `storio dev`, `storio unlink`, `storio validate` and `storio publish` do what their names say.
 
 ## Architecture
 
 - **Modes** come from `resolveTenant()` in `src/lib/tenant.ts`. Standalone means localhost with no linked tenant. Everything else is a tenant. Never copy this logic into components.
-- **Rule 1** (demo data only in Standalone) goes through `withDemoFallback` / `withDemoRecord` in `src/lib/data.ts`. **Rule 2:** no `any`. Type SDK data with SDK interfaces and content with `typeof <page>.json`.
-- **The CMS config is split on purpose:**
-  - `src/cms/pages.ts` is plain serializable data: pages, sections, defaults, icon names, style presets. Server code imports it, and `scripts/build-cms-manifest.ts` copies it into the manifest for the Storio dashboard.
-  - `src/cms/config.ts` adds the lucide icon components and the browser adapter. Import it only from client components.
-  - Because of this split, `npx storio-editor doctor` reports a FAIL for "cms.config.ts not found", and the library's `scan`/`add-page` CLI commands don't fit this layout. Add pages by hand (`docs/Storio_Editor_Template_Guide.md` §3).
-- **Storage:** `getCmsStorage()` in `src/lib/cms-storage.ts` runs once per request.
-  - Standalone uses `fileStorage()` (`.cms/`, git-ignored).
-  - A tenant uses `restAdapter` against `STORIO_CMS_API_URL` with an `X-Tenant-Host` header. Without that variable it falls back to a defaults-only read-only store.
-- **`src/app/api/cms/[...path]/route.ts`** builds `createCmsRouteHandler` per request. Writes, drafts and collections are allowed only in Standalone under `next dev`. Tenants edit from the Storio dashboard, which writes to the backend directly.
-- **Page pattern:**
-  - `src/app/(site)/<route>/page.tsx` is a server file with `pageMetadata(key)` from `src/lib/seo.ts`, plus SDK records.
-  - It renders `src/components/views/<Name>View.tsx` (client). The view uses `usePageContent` and puts `<CmsField>` around every visible value.
-  - `<CmsProviders>` in the root layout already loads all page content server-side.
-- **Global page** `site` (`src/content/site.json`) has the sections header, footer, contact, `siteSeo` and theme. Its SEO section is `siteSeo`, not `seo`: `defineCms` rejects a section key that's on both a page and the global page. Library v1.3.4's `getPageMetadata` hardcodes the global `seo` key, so `src/lib/seo.ts` passes the site fallback manually.
-- **Theme:** `<CmsThemeStyle>` turns `theme.primaryColor` into `--primary-color`. `globals.css` keeps matching fallbacks in `:root` and maps them to the Tailwind colours `brand`, `accent`, `ink`, `page` and `surface`. Use those classes, not fixed colours.
-- **Notices** are a collection (`collection: 'notices'`). `src/lib/notices.ts` loads them through the SDK. Standalone edits go to `.cms/demo-notices.json`.
+- **Rule 1** (demo data only in Standalone) goes through `withDemoFallback` / `withDemoRecord` in `src/lib/data.ts`. **Rule 2:** no `any`.
+- **Manifest is the source of truth** (`public/storio.template.json`): `"editor": "storio-elements"` turns the dashboard editor on; `editorPages` (keys `<template id>-<name>`, defaults copied from `src/content/<key>.json` by `scripts/storio-editor-sync.mjs`); `editorIcons`; `customization` + `navigation` = the editor's Theme settings. `src/cms.config.ts` builds the editor config from it. The Storio backend refuses saves for pages and sections not listed. Never add `"global": true` or a section named `navigation` or like a customization group: it breaks every Theme settings pencil (the sync script refuses both).
+- **Storage:** `src/lib/cms-server-storage.ts` reads the school's published content from the Storio backend (`/api/cms/records`, `x-tenant-host` from `resolveTenant()`); `src/components/cms/CmsProviders.tsx` in the root layout loads every page server-side. In the browser the kit talks to `/api/cms` on the school's domain (Storio gateway). There is no `/api/cms` route, admin page or file storage in this repo.
+- **Page pattern:** `src/app/(site)/<route>/page.tsx` (server: `pageMetadata('<key>')` from `src/lib/seo.ts`, SDK data) renders `src/components/views/<Name>View.tsx` (client: `use<Page>Text()` from `src/components/cms/`, `<CmsSection page=...>`, `<CmsField>` around every static value).
+- **No global page.** Header/footer: school name, logo and contact from the school's settings (`loadSettings()` in `src/lib/site.ts`, no pencil); menu from Theme settings `navbarLinks`; header/footer texts are `customization.content` fields shown with `<ThemeField>` (`loadTheme()` / `themeText()` in `src/lib/theme.ts`).
+- **Theme colours:** `customization.colors` → CSS variables via `<ThemeColors>` in `src/app/(site)/layout.tsx` (`primaryColor` → `--primary-color`, live in the editor preview). `globals.css` keeps matching fallbacks in `:root` and maps them to the Tailwind colours `brand`, `accent`, `ink`, `page` and `surface`.
+- **Records:** notices use `<CmsField collection="notice" item={id} path="title">` (Storio allows notice `title`; blog `title`/`excerpt`; event `title`/`excerpt`/`location`). `/notices/[id]` is an editorPages entry with `collection: "notice"` and `parent`.
 - On Windows, `src/Components` and `src/components` are the same folder. Keep it lowercase in git.
 
 <!-- BEGIN:nextjs-agent-rules -->

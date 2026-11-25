@@ -40,6 +40,3 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# storio-elements-editor (local Standalone Preview edits and uploads)
-/.cms/
-/public/cms-uploads/

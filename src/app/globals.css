@@ -1,12 +1,11 @@
 @import "tailwindcss";
-/* Lets Tailwind see the class names of the editor library (needed by the dev studio at /admin/cms). */
-@source "../../node_modules/@brainicon/storio-elements-editor/dist";
 
 /*
  * Theme variables.
- * <CmsThemeStyle /> (in CmsClientProviders) overwrites these with the values of the
- * "theme" section of the site page, so editors can change them from the dashboard.
- * Keep these fallbacks equal to src/content/site.json -> theme.
+ * <ThemeColors /> (in src/app/(site)/layout.tsx) overwrites these with the school's
+ * Theme settings colours (the manifest's customization.colors), and follows the colour
+ * pickers live in the Storio editor preview.
+ * Keep these fallbacks equal to the "default" values in public/storio.template.json.
  * Key mapping: primaryColor -> --primary-color, accentColor -> --accent-color, ...
  */
 :root {

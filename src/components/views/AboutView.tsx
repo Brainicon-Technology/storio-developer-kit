@@ -1,18 +1,18 @@
 'use client';
 
-import { CmsField, CmsIcon, CmsSection, usePageContent } from '@brainicon/storio-elements-editor/site';
+import { CmsField, CmsIcon, CmsSection } from '@/lib/storio-editor/site';
 
-import type aboutDefaults from '@/content/about.json';
+import { useAboutText } from '@/components/cms/useAboutText';
 
-type AboutContent = typeof aboutDefaults;
+const PAGE = 'template-0-starter-about';
 
 /** A simple static page: content only, no tenant records. */
 export function AboutView() {
-  const { intro, values } = usePageContent<AboutContent>('about');
+  const { intro, values } = useAboutText();
 
   return (
     <main>
-      <CmsSection sectionKey="intro" title="Intro">
+      <CmsSection sectionKey="intro" title="Intro" page={PAGE}>
         <section className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-16 md:grid-cols-2">
           <div className="space-y-4">
             <h1 className="text-4xl font-extrabold tracking-tight">
@@ -31,7 +31,7 @@ export function AboutView() {
         </section>
       </CmsSection>
 
-      <CmsSection sectionKey="values" title="Values">
+      <CmsSection sectionKey="values" title="Values" page={PAGE}>
         <section className="bg-surface px-6 py-16">
           <div className="mx-auto max-w-6xl">
             <h2 className="mb-8 text-3xl font-bold">

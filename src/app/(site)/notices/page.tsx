@@ -6,7 +6,7 @@ import { loadNotices } from '@/lib/notices';
 import { resolveTenant } from '@/lib/tenant';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata('notices');
+  return pageMetadata('template-0-starter-notices');
 }
 
 export default async function NoticesPage() {

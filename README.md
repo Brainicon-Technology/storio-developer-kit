@@ -2,8 +2,8 @@
 
 Welcome to the Storio Developer Starter Kit! This template is built with [Next.js](https://nextjs.org) to help you rapidly develop and test 3rd-party themes for the Storio CMS platform. It comes pre-configured with:
 
-- **`@brainicon/storio-elements-editor`**: makes every text, image, icon, the header, footer, SEO and theme colours editable by the school from the Storio dashboard.
-- **`@storio/template-sdk`**: loads the school's database records (notices, blogs, staff, events and so on).
+- **The Storio editor kit** (`src/lib/storio-editor/`, no library to install): makes every static text, image and icon, page SEO, theme colours and header/footer texts editable by the school from the Storio dashboard.
+- **`@storio/template-sdk`**: loads the school's own data (settings, notices, blogs, staff, events and so on).
 
 It ships sample pages that are already editable: Home, About, Contact, and a notice board with a detail page. Use them as the pattern for your own pages.
 
@@ -86,7 +86,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-Open [http://localhost:3000/admin/cms](http://localhost:3000/admin/cms) for the **local editor**. Hover any part of a page, click its pencil, and edit. It works only in Standalone Preview under `npm run dev`; real schools edit from the Storio dashboard.
+The editor itself lives in the Storio dashboard. To test pencils and saving, run the template behind a local Storio (see section 9 of the [Editor Template Guide](./docs/Storio_Editor_Template_Guide.md)).
 
 ---
 
@@ -123,11 +123,12 @@ Quick syntax and command reference for 3rd-party developers:
 Before you start building your template, you **MUST** strictly follow the official documentation provided in the `docs/` folder:
 
 1. **[Storio Editor Template Guide](./docs/Storio_Editor_Template_Guide.md)**
-   How to structure pages so schools can edit them: content JSON, `<CmsSection>`/`<CmsField>`, site-wide content, theme colours, and database records. Start here.
+   How to structure pages so schools can edit them: content JSON, `<CmsSection>`/`<CmsField>`, Theme settings, header/footer and records. Start here.
 
    **Mandatory Editor Rules:**
-   - **Rule 3 (Editable by default):** Every visible text, image and icon on a public page must be editable.
-   - **Rule 4 (Manifest in sync):** Run `npm run cms:manifest` after changing `src/cms/pages.ts` or `src/content/*.json`.
+   - **Rule 3 (Editable by default):** Every visible static text, image and icon on a public page must be editable.
+   - **Rule 4 (Manifest in sync):** Run `npm run editor:sync` after changing `src/content/*.json`, `editorPages` or `editorIcons`.
+   - **Rule 5:** Never edit the editor kit (`src/lib/storio-editor/`).
 
 2. **[Storio SDK V2 Guide](./docs/Storio_SDK_V2_Endpoints_and_Methods_Guide.md)**
    The complete API and Data Payload reference manual containing all 36 SDK methods, parameter signatures, and TypeScript interfaces.
@@ -148,10 +149,10 @@ Before you start building your template, you **MUST** strictly follow the offici
 Before submitting or deploying your template to the Storio platform, you **MUST** properly configure the `public/storio.template.json` file. 
 
 - This file serves as the communication bridge between your Next.js template and the Storio CMS backend.
-- Update `CHANGE_ME_TO_YOUR_TEMPLATE_ID` and `CHANGE_ME_TO_YOUR_TEMPLATE_NAME` with your actual information.
-- The `id` field must strictly follow the format: `template-[id number]-[slug]` (e.g., `template-01-horizon` or `template-101-apex`).
+- **Set your template id first:** `npm run template:id -- template-9-sunrise`. It must follow the format `template-[id number]-[slug]`. Every editor page key and content file name starts with it, so never change it by hand. Then set `name`.
 - List the CMS modules your template supports in `features`.
-- Do not write the `editor` block by hand. Generate it with `npm run cms:manifest`, which also sets `"sdkVersion": 2`.
+- `"editor": "storio-elements"` turns on the Storio editor. `editorPages` (your editable pages) gets its `defaults` from `src/content/*.json` with `npm run editor:sync`.
+- `customization` and `navigation` are the editor's Theme settings (colours, header/footer texts, menu).
 - See the [Manifest Guide](./docs/Storio_Template_Manifest_Guide.md) to understand how to fully populate this file.
 
 **If left unconfigured or improperly configured, your template will fail validation upon deployment.**
@@ -165,8 +166,8 @@ Once you have completed your template, tested both in Standalone Preview (mock d
 Run the pre-flight validation and publish commands:
 
 ```bash
-# 1. Generate the editor block of the manifest
-npm run cms:manifest
+# 1. Check the editor pages of the manifest (also runs before every build)
+npm run editor:check
 
 # 2. Run pre-flight check
 storio validate

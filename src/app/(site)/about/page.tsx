@@ -4,7 +4,7 @@ import { AboutView } from '@/components/views/AboutView';
 import { pageMetadata } from '@/lib/seo';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata('about');
+  return pageMetadata('template-0-starter-about');
 }
 
 export default function AboutPage() {

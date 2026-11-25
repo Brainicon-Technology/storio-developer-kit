@@ -1,8 +1,7 @@
 'use client';
 
-import { CmsProvider, CmsThemeStyle } from '@brainicon/storio-elements-editor/site';
-
-import { cms } from '@/cms/config';
+import { CmsProvider } from '@/lib/storio-editor/site';
+import { cms } from '@/cms.config';
 
 export function CmsClientProviders({
   initialContent,
@@ -13,8 +12,6 @@ export function CmsClientProviders({
 }) {
   return (
     <CmsProvider config={cms} initialContent={initialContent}>
-      {/* Writes the "theme" section of the site page as CSS variables (--primary-color, ...). */}
-      <CmsThemeStyle />
       {children}
     </CmsProvider>
   );

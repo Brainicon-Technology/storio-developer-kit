@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The Storio editor kit: copied as is from Storio (a fixed protocol), never edited here.
+    "src/lib/storio-editor/**",
   ]),
 ]);
 

@@ -1,49 +1,45 @@
-'use client';
-
 import Link from 'next/link';
-import { CmsField, CmsSection, useSiteContent } from '@brainicon/storio-elements-editor/site';
+import type { StorioSettingsResponse } from '@storio/template-sdk';
 
-import type siteDefaults from '@/content/site.json';
-
-type SiteContent = typeof siteDefaults;
+import ThemeField from '@/components/cms/ThemeField';
+import { themeNavLinks, themeText, type ThemeValues } from '@/lib/theme';
 
 /**
- * Site-wide header. Its content lives in the "header" section of the global
- * "site" page, so it is editable from every page in the studio.
- * Pattern: <CmsSection page="site"> around the block, <CmsField> around every value.
+ * Site-wide header (a Server Component). What edits what:
+ * - school name and logo: the school's settings (SDK), edited on the dashboard's settings pages, no pencil;
+ * - menu links: Theme settings > Navigation (navbarLinks in the manifest);
+ * - button text: a Theme settings text with a <ThemeField> pencil, so it is editable on every page.
+ * Header and footer never get a page of their own in the editor (no "global" page in Storio).
  */
-export function Navbar() {
-  const { header } = useSiteContent<SiteContent>();
+export function Navbar({ settings, theme }: { settings: StorioSettingsResponse | null; theme: ThemeValues }) {
+  const links = themeNavLinks(theme);
+  const siteName = settings?.site_title ?? '';
 
   return (
-    <CmsSection sectionKey="header" title="Header" page="site" buttonPlacement="fixed">
-      <header className="border-b border-black/10 bg-page">
-        <nav className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
-          <Link href="/" className="flex items-center gap-2 text-lg font-bold text-brand">
-            {header.logo && (
-              <CmsField path="logo" label="Logo">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={header.logo} alt="" className="h-8 w-auto" />
-              </CmsField>
-            )}
-            <CmsField path="logoText" label="Site name">{header.logoText}</CmsField>
-          </Link>
-          <ul className="flex flex-wrap items-center gap-6 text-sm">
-            {header.links.map((link, i) => (
-              <li key={`${link.href}-${i}`}>
-                <Link href={link.href} className="hover:text-brand">
-                  <CmsField path={`links.${i}.label`} label="Menu link">{link.label}</CmsField>
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link href={header.ctaHref} className="rounded-lg bg-brand px-4 py-2 font-semibold text-white">
-                <CmsField path="ctaLabel" label="Button">{header.ctaLabel}</CmsField>
+    <header className="border-b border-black/10 bg-page">
+      <nav className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+        <Link href="/" className="flex items-center gap-2 text-lg font-bold text-brand">
+          {settings?.logo_url && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={settings.logo_url} alt="" className="h-8 w-auto" />
+          )}
+          {siteName}
+        </Link>
+        <ul className="flex flex-wrap items-center gap-6 text-sm">
+          {links.map((link, i) => (
+            <li key={link.id ?? `${link.href}-${i}`}>
+              <Link href={link.href} className="hover:text-brand">
+                {link.name}
               </Link>
             </li>
-          </ul>
-        </nav>
-      </header>
-    </CmsSection>
+          ))}
+          <li>
+            <Link href="/contact" className="rounded-lg bg-brand px-4 py-2 font-semibold text-white">
+              <ThemeField field="header_cta_text" label="Header button">{themeText(theme, 'header_cta_text')}</ThemeField>
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
   );
 }

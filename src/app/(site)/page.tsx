@@ -12,7 +12,7 @@ import { resolveTenant } from '@/lib/tenant';
  * Page content itself is already loaded by <CmsProviders> in the root layout.
  */
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata('home');
+  return pageMetadata('template-0-starter-home');
 }
 
 export default async function HomePage() {

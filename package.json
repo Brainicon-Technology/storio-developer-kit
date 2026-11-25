@@ -8,10 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "cms:manifest": "tsx scripts/build-cms-manifest.ts"
+    "editor:sync": "node scripts/storio-editor-sync.mjs",
+    "editor:check": "node scripts/storio-editor-sync.mjs --check",
+    "prebuild": "node scripts/storio-template-id.mjs --check && node scripts/storio-editor-sync.mjs --check",
+    "template:id": "node scripts/storio-template-id.mjs"
   },
   "dependencies": {
-    "@brainicon/storio-elements-editor": "github:MostofaSeum/storio-elements-editor#v1.3.4",
     "@storio/template-sdk": "file:./packages/storio-template-sdk-1.0.1.tgz",
     "lucide-react": "^0.554.0",
     "next": "16.3.0",
@@ -27,7 +29,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
     "tailwindcss": "^4",
-    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }

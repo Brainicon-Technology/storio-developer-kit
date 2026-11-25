@@ -5,7 +5,7 @@ import { loadNotice } from '@/lib/notices';
 import { resolveTenant } from '@/lib/tenant';
 
 /**
- * One record of the "notices" collection. Its metadata is built from the record
+ * One notice (Storio record, collection "notice"). Its metadata is built from the record
  * itself (a page "seo" section would give every notice the same title).
  */
 export async function generateMetadata({ params }: PageProps<'/notices/[id]'>): Promise<Metadata> {

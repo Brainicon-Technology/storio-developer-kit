@@ -1,38 +1,36 @@
 import type { Metadata } from 'next';
-import { getPageContent, getPageMetadata, getSiteMetadata } from '@brainicon/storio-elements-editor/next';
 
-import { cmsPages } from '@/cms/pages';
-import type siteDefaults from '@/content/site.json';
-import { getCmsStorage } from './cms-storage';
+import { getPageMetadata } from '@/lib/storio-editor/server';
+import { cms } from '@/cms.config';
+import { serverCmsStorage } from './cms-server-storage';
+import { loadSettings } from './site';
+import { resolveTenant } from './tenant';
 
 /**
  * SEO helpers.
  *
- * The site-wide SEO section is called "siteSeo", not "seo": defineCms does not allow
- * the same section key on a page and on the global page, and every page has its own
- * "seo" section. (storio-elements-editor v1.3.4 reads the global "seo" section in
- * getPageMetadata, so we pass the site defaults as the fallback ourselves.)
+ * - Site-wide: the school's name and tagline (its settings, SDK) give the title template and the
+ *   default description.
+ * - Per page: the page's "seo" section (title, description, keywords, share image), editable in the
+ *   Storio editor. Empty fields keep the fallback.
  */
 
-const SITE_SEO_SECTION = 'siteSeo';
-
-type SiteSeo = (typeof siteDefaults)['siteSeo'];
-
-/** Root layout metadata: title template, default description, share image, favicon. */
-export async function siteMetadata(fallback: Metadata): Promise<Metadata> {
-  return getSiteMetadata({ pages: cmsPages }, { storage: await getCmsStorage(), section: SITE_SEO_SECTION, fallback });
+/** Root layout metadata: "<page> | <school name>", default description, favicon. */
+export async function siteMetadata(fallbackTitle: string): Promise<Metadata> {
+  const settings = await loadSettings(await resolveTenant());
+  const siteName = settings?.site_title || fallbackTitle;
+  return {
+    title: { default: siteName, template: `%s | ${siteName}` },
+    description: settings?.site_tagline || undefined,
+    icons: settings?.favicon_url ? { icon: settings.favicon_url } : undefined,
+  };
 }
 
-/** A page's metadata from its "seo" section. Empty fields fall back to the site SEO. */
-export async function pageMetadata(pageKey: string): Promise<Metadata> {
-  const storage = await getCmsStorage();
-  const site = await getPageContent<Record<string, unknown>>({ pages: cmsPages }, 'site', { storage });
-  const siteSeo = site[SITE_SEO_SECTION] as SiteSeo | undefined;
-
-  const fallback: Metadata = {
-    description: siteSeo?.description || undefined,
-    openGraph: siteSeo?.ogImage ? { images: [siteSeo.ogImage] } : undefined,
-  };
-
-  return getPageMetadata({ pages: cmsPages }, pageKey, { storage, site: false, fallback });
+/** A page's metadata from its "seo" section. */
+export async function pageMetadata(pageKey: string, fallback: Metadata = {}): Promise<Metadata> {
+  try {
+    return await getPageMetadata(cms, pageKey, { storage: await serverCmsStorage(), fallback, site: false });
+  } catch {
+    return fallback;
+  }
 }

@@ -1,30 +1,28 @@
 'use client';
 
 import { useActionState } from 'react';
-import { CmsField, CmsSection, usePageContent, useSiteContent } from '@brainicon/storio-elements-editor/site';
+import type { StorioSettingsResponse } from '@storio/template-sdk';
+import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 
 import { sendContactMessage, type ContactFormState } from '@/app/(site)/contact/actions';
-import type contactDefaults from '@/content/contact.json';
-import type siteDefaults from '@/content/site.json';
+import { useContactText } from '@/components/cms/useContactText';
 
-type ContactContent = typeof contactDefaults;
-type SiteContent = typeof siteDefaults;
+const PAGE = 'template-0-starter-contact';
 
 const initialState: ContactFormState = { status: 'idle' };
 
 /**
  * Contact page. Shows:
- * - site-wide contact details reused in a page body (<CmsField page="site" section="contact">),
+ * - the school's contact details from its settings (SDK data: no pencil),
  * - form labels as editable content, while the form posts to the tenant via a Server Action.
  */
-export function ContactView() {
-  const { intro, form } = usePageContent<ContactContent>('contact');
-  const { contact } = useSiteContent<SiteContent>();
+export function ContactView({ settings }: { settings: StorioSettingsResponse | null }) {
+  const { intro, form } = useContactText();
   const [state, formAction, pending] = useActionState(sendContactMessage, initialState);
 
   return (
     <main className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-2">
-      <CmsSection sectionKey="intro" title="Intro">
+      <CmsSection sectionKey="intro" title="Intro" page={PAGE}>
         <section className="space-y-4">
           <h1 className="text-4xl font-extrabold tracking-tight">
             <CmsField path="title" label="Title">{intro.title}</CmsField>
@@ -33,14 +31,14 @@ export function ContactView() {
             <CmsField path="text" label="Text">{intro.text}</CmsField>
           </p>
           <ul className="space-y-1 pt-4 text-sm">
-            <li><CmsField page="site" section="contact" path="email" label="Email">{contact.email}</CmsField></li>
-            <li><CmsField page="site" section="contact" path="phone" label="Phone">{contact.phone}</CmsField></li>
-            <li><CmsField page="site" section="contact" path="address" label="Address">{contact.address}</CmsField></li>
+            {settings?.contact_email && <li>{settings.contact_email}</li>}
+            {settings?.phone_number && <li>{settings.phone_number}</li>}
+            {settings?.mailing_address && <li>{settings.mailing_address}</li>}
           </ul>
         </section>
       </CmsSection>
 
-      <CmsSection sectionKey="form" title="Form">
+      <CmsSection sectionKey="form" title="Form" page={PAGE}>
         <form action={formAction} className="space-y-4 rounded-2xl border border-black/10 bg-surface p-6">
           <label className="block text-sm font-medium">
             <CmsField path="nameLabel" label="Name label">{form.nameLabel}</CmsField>

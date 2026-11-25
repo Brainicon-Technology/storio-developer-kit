@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Site-wide SEO (title template, description, share image, favicon) comes from the
-// "siteSeo" section of the site page, so editors can change it from the dashboard.
+// Site-wide SEO (title template, description, favicon) comes from the school's settings.
+// Each page adds its own from its editable "seo" section (see src/lib/seo.ts).
 export async function generateMetadata(): Promise<Metadata> {
   const { host, isStandalone } = await resolveTenant();
-  const base = await siteMetadata({ title: "Storio Template" });
+  const base = await siteMetadata("Storio Template");
   // metadataBase turns relative share-image paths into the full URLs social networks need.
   return { ...base, metadataBase: new URL(isStandalone ? "http://localhost:3000" : `https://${host}`) };
 }

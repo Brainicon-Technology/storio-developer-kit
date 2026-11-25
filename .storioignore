@@ -5,8 +5,6 @@ dist/
 build/
 .turbo/
 .cache/
-.cms/
-public/cms-uploads/
 coverage/
 
 # 2. Secret environment files
