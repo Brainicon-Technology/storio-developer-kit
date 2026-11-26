@@ -2,6 +2,7 @@ import { storio, type StorioNotice } from '@storio/template-sdk';
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 import { safely, withDemoFallback, withDemoRecord } from './data';
+import { normalizeNotice, normalizeNotices } from './normalize';
 import type { TenantContext } from './tenant';
 
 /**
@@ -16,12 +17,12 @@ import type { TenantContext } from './tenant';
  */
 
 export async function loadNotices(ctx: TenantContext): Promise<StorioNotice[]> {
-  const real = await safely(storio.getNotices(ctx.tenantHost));
+  const real = normalizeNotices(await safely(storio.getNotices(ctx.tenantHost)));
   return withDemoFallback(real, DEFAULT_DEMO_DATA.notices, ctx.isStandalone);
 }
 
 export async function loadNotice(id: string, ctx: TenantContext): Promise<StorioNotice | null> {
-  const real = await safely(storio.getNoticeDetail(id, ctx.tenantHost));
+  const real = normalizeNotice(await safely(storio.getNoticeDetail(id, ctx.tenantHost)));
   const demo = DEFAULT_DEMO_DATA.notices.find((n) => String(n.id) === id);
   return withDemoRecord(real, demo, ctx.isStandalone);
 }
@@ -37,12 +38,13 @@ export async function searchNotices(query: string, ctx: TenantContext): Promise<
   if (!q) return loadNotices(ctx);
 
   const real = await safely(
-    storio.apiFetch<StorioNotice[]>(`/api/v2/template/notices/?search=${encodeURIComponent(q)}`, {
+    storio.apiFetch<unknown>(`/api/v2/template/notices/?search=${encodeURIComponent(q)}`, {
       tenantHost: ctx.tenantHost,
       next: { revalidate: 60 },
     }),
   );
-  if (Array.isArray(real)) return real;
+  const found = normalizeNotices(real);
+  if (found) return found;
 
   // Standalone Preview: search the demo notices the same way.
   const needle = q.toLowerCase();

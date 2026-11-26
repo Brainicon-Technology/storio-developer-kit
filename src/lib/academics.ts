@@ -9,6 +9,7 @@ import {
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 import { safely, withDemoFallback, withDemoRecord } from './data';
+import { normalizeClassRoutines } from './normalize';
 import type { TenantContext } from './tenant';
 
 /** Programs (primary, secondary...) and their classes. */
@@ -19,7 +20,7 @@ export async function loadAcademicPrograms(ctx: TenantContext): Promise<StorioAc
 
 /** Active class routines (timetables). */
 export async function loadClassRoutines(ctx: TenantContext): Promise<StorioClassRoutine[]> {
-  const real = await safely(storio.getClassRoutines(ctx.tenantHost));
+  const real = normalizeClassRoutines(await safely(storio.getClassRoutines(ctx.tenantHost)));
   return withDemoFallback(real, DEFAULT_DEMO_DATA.classRoutines, ctx.isStandalone).filter((r) => r.is_active !== false);
 }
 

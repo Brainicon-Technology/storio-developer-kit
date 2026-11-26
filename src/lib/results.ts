@@ -2,6 +2,7 @@ import { storio, type StorioBoardNotice, type StorioExamResult } from '@storio/t
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 import { safely, withDemoFallback } from './data';
+import { normalizeBoardNotices } from './normalize';
 import type { TenantContext } from './tenant';
 
 /** Published exam results, newest year first. */
@@ -13,7 +14,7 @@ export async function loadExamResults(ctx: TenantContext): Promise<StorioExamRes
 
 /** Notices synced from the national education boards, newest first. */
 export async function loadBoardNotices(ctx: TenantContext): Promise<StorioBoardNotice[]> {
-  const real = await safely(storio.getBoardNotices(ctx.tenantHost));
+  const real = normalizeBoardNotices(await safely(storio.getBoardNotices(ctx.tenantHost)));
   const notices = withDemoFallback(real, DEFAULT_DEMO_DATA.boardNotices, ctx.isStandalone);
   return [...notices].sort((a, b) => (b.publish_date ?? '').localeCompare(a.publish_date ?? ''));
 }

@@ -10,6 +10,8 @@
  * ============================================================================
  */
 
+import { mediaUrl, textToHtml } from './normalize';
+
 export interface Testimonial {
   id: number;
   author_name: string;
@@ -54,33 +56,49 @@ export interface Job {
   attachments_data?: JobAttachment[];
 }
 
+
 type Loose = Record<string, unknown>;
 
 const str = (r: Loose, key: string): string | undefined => (typeof r[key] === 'string' ? (r[key] as string) : undefined);
 const num = (r: Loose, key: string): number | undefined => (typeof r[key] === 'number' ? (r[key] as number) : undefined);
 
+/** The documented name first, then the name the live backend sends. */
+const first = (r: Loose, keys: string[]) => keys.map((k) => str(r, k)).find(Boolean);
+const isHidden = (r: Loose) => r.status !== undefined && !['active', 'published'].includes(String(r.status));
+
 export function toTestimonial(r: Loose): Testimonial | null {
   const id = num(r, 'id');
-  const author_name = str(r, 'author_name');
-  const content = str(r, 'content');
-  if (id === undefined || !author_name || !content) return null;
-  return { id, author_name, content, author_title: str(r, 'author_title'), rating: num(r, 'rating'), avatar_url: str(r, 'avatar_url'), order: num(r, 'order') };
-}
-
-export function toLeadershipMessage(r: Loose): LeadershipMessage | null {
-  const id = num(r, 'id');
-  const author_name = str(r, 'author_name');
-  const content = str(r, 'content');
-  if (id === undefined || !author_name || !content) return null;
+  const author_name = first(r, ['author_name', 'name']);
+  const content = first(r, ['content', 'message']);
+  if (id === undefined || !author_name || !content || isHidden(r)) return null;
+  const title = str(r, 'author_title') ?? [str(r, 'designation'), str(r, 'organization')].filter(Boolean).join(', ');
   return {
     id,
     author_name,
     content,
-    title: str(r, 'title'),
-    author_role: str(r, 'author_role'),
-    photo_url: str(r, 'photo_url'),
-    signature_url: str(r, 'signature_url'),
+    author_title: title || undefined,
+    rating: num(r, 'rating'),
+    avatar_url: mediaUrl(r.avatar_url) ?? mediaUrl(r.photo_data),
     order: num(r, 'order'),
+  };
+}
+
+export function toLeadershipMessage(r: Loose): LeadershipMessage | null {
+  const id = num(r, 'id');
+  const author_name = first(r, ['author_name', 'name']);
+  const content = first(r, ['content', 'message']);
+  if (id === undefined || !author_name || !content || isHidden(r)) return null;
+  const role = str(r, 'author_role') ?? [str(r, 'role'), str(r, 'company')].filter(Boolean).join(', ');
+  return {
+    id,
+    author_name,
+    // The backend may send plain text with line breaks: turned into simple HTML for <RichText>.
+    content: textToHtml(content),
+    title: first(r, ['title', 'section_title']),
+    author_role: role || undefined,
+    photo_url: mediaUrl(r.photo_url) ?? mediaUrl(r.image_data),
+    signature_url: mediaUrl(r.signature_url) ?? mediaUrl(r.signature_data),
+    order: num(r, 'order') ?? num(r, 'display_order'),
   };
 }
 
@@ -104,7 +122,7 @@ export function toJob(r: Loose): Job | null {
     application_link: str(r, 'application_link'),
     attachments_data: attachments
       .filter((a): a is Loose => !!a && typeof a === 'object')
-      .map((a) => ({ id: num(a, 'id'), file_name: str(a, 'file_name'), url: str(a, 'url') ?? '' }))
+      .map((a) => ({ id: num(a, 'id'), file_name: str(a, 'file_name'), url: mediaUrl(a) ?? '' }))
       .filter((a) => a.url),
   };
 }

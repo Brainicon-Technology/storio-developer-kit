@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function GalleryPage() {
   const ctx = await resolveTenant();
-  const [photos, albums, videos] = await Promise.all([loadGallery(ctx), loadAlbums(ctx), loadVideos(ctx)]);
+  const [photos, videos] = await Promise.all([loadGallery(ctx), loadVideos(ctx)]);
+  const albums = await loadAlbums(ctx, photos); // albums are filled from the photos
   return <GalleryView photos={photos} albums={albums} videos={videos} />;
 }

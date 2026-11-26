@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import type { StorioNotice } from '@storio/template-sdk';
+import { formatDate } from '@/lib/format';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 
 import { useNoticesText } from '@/components/cms/useNoticesText';
@@ -69,7 +70,7 @@ export function NoticesView({ notices, query }: { notices: StorioNotice[]; query
                     </span>
                   )}
                 </div>
-                {notice.published_date && <p className="mt-1 text-xs opacity-60">{notice.published_date}</p>}
+                {notice.published_date && <p className="mt-1 text-xs opacity-60">{formatDate(notice.published_date)}</p>}
                 <Link href={`/notices/${notice.id}`} className="mt-3 inline-block text-sm font-semibold text-brand">
                   <CmsField path="readMoreText" label="Read more">{intro.readMoreText}</CmsField>
                 </Link>

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import type { StorioNotice } from '@storio/template-sdk';
+import { formatDate } from '@/lib/format';
 import { CmsField, CmsSection, useCollectionItem } from '@/lib/storio-editor/site';
 
 import { useNoticeDetailText } from '@/components/cms/useNoticeDetailText';
@@ -39,7 +40,7 @@ export function NoticeDetailView({ notice }: { notice: StorioNotice | null }) {
             {notice.published_date && (
               <p className="text-sm opacity-60">
                 <CmsField path="publishedLabel" label="Published label">{labels.publishedLabel}</CmsField>{' '}
-                {notice.published_date}
+                {formatDate(notice.published_date)}
               </p>
             )}
             <p className="whitespace-pre-line text-lg leading-relaxed">

@@ -9,24 +9,27 @@ import {
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 import { byOrder, safely, withDemoFallback, withDemoRecord } from './data';
+import { mediaUrl, normalizeMpoInfo } from './normalize';
 import type { TenantContext } from './tenant';
 
 /**
  * Citizen charter and compliance data (dashboard: Compliance), shown on /citizen-charter.
  */
 export async function loadMpoInfo(ctx: TenantContext): Promise<StorioMpoInfo | null> {
-  const real = await safely(storio.getMpoInfo(ctx.tenantHost));
+  const real = normalizeMpoInfo(await safely(storio.getMpoInfo(ctx.tenantHost)));
   return withDemoRecord(real, DEFAULT_DEMO_DATA.mpoInfo, ctx.isStandalone);
 }
 
 export async function loadInformationService(ctx: TenantContext): Promise<StorioInformationService | null> {
   const real = await safely(storio.getInformationService(ctx.tenantHost));
-  return withDemoRecord(real, DEFAULT_DEMO_DATA.informationService, ctx.isStandalone);
+  const info = real ? { ...real, photo_url: mediaUrl(real.photo_url) } : null;
+  return withDemoRecord(info, DEFAULT_DEMO_DATA.informationService, ctx.isStandalone);
 }
 
 export async function loadComplaintOfficer(ctx: TenantContext): Promise<StorioComplaintOfficer | null> {
   const real = await safely(storio.getComplaintOfficer(ctx.tenantHost));
-  return withDemoRecord(real, DEFAULT_DEMO_DATA.complaintOfficer, ctx.isStandalone);
+  const officer = real ? { ...real, photo_url: mediaUrl(real.photo_url) } : null;
+  return withDemoRecord(officer, DEFAULT_DEMO_DATA.complaintOfficer, ctx.isStandalone);
 }
 
 /** Emergency and helpline numbers, emergency numbers first. */

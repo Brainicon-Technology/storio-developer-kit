@@ -41,6 +41,25 @@ export async function loadLayout(ctx: TenantContext): Promise<SiteLayout> {
   return {
     settings: withDemoRecord(hasSettings ? settings : null, DEFAULT_DEMO_DATA.settings, ctx.isStandalone),
     theme: themeFromConfig(customization?.config ?? {}),
-    navigation: withDemoFallback(navigation?.items, DEFAULT_DEMO_DATA.navigation, ctx.isStandalone),
+    navigation: withDemoFallback(normalizeNavigation(navigation?.items), DEFAULT_DEMO_DATA.navigation, ctx.isStandalone),
   };
+}
+
+/**
+ * The SDK types navigation items as { label, url, children }, but the backend sends the same
+ * shape as Theme settings links: { name, href, subLinks }. Accept both, and drop items without
+ * a text or a link, so a menu entry with a missing field can never break the page.
+ */
+export function normalizeNavigation(items: unknown): StorioNavigationItem[] {
+  if (!Array.isArray(items)) return [];
+  return items.flatMap((raw): StorioNavigationItem[] => {
+    if (!raw || typeof raw !== 'object') return [];
+    const r = raw as Record<string, unknown>;
+    const label = typeof r.label === 'string' ? r.label : typeof r.name === 'string' ? r.name : '';
+    const url = typeof r.url === 'string' ? r.url : typeof r.href === 'string' ? r.href : '';
+    if (!label || !url) return [];
+    const id = typeof r.id === 'string' || typeof r.id === 'number' ? r.id : undefined;
+    const target = typeof r.target === 'string' ? r.target : undefined;
+    return [{ id, label, url, target, children: normalizeNavigation(r.children ?? r.subLinks) }];
+  });
 }

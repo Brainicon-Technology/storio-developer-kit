@@ -2,18 +2,19 @@ import { storio, type StorioStaffMember, type StorioTeamMember } from '@storio/t
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 import { byOrder, safely, withDemoFallback } from './data';
+import { normalizeStaff, normalizeTeam } from './normalize';
 import type { TenantContext } from './tenant';
 import { narrowList, toLeadershipMessage, type LeadershipMessage } from './types';
 
 /** Teachers and staff (dashboard: Staff). */
 export async function loadStaff(ctx: TenantContext): Promise<StorioStaffMember[]> {
-  const real = await safely(storio.getStaff(ctx.tenantHost));
+  const real = normalizeStaff(await safely(storio.getStaff(ctx.tenantHost)));
   return withDemoFallback(real, DEFAULT_DEMO_DATA.staff, ctx.isStandalone);
 }
 
 /** Governing body and committees (dashboard: Team). Hidden members are left out. */
 export async function loadTeam(ctx: TenantContext): Promise<StorioTeamMember[]> {
-  const real = await safely(storio.getTeam(ctx.tenantHost));
+  const real = normalizeTeam(await safely(storio.getTeam(ctx.tenantHost)));
   return byOrder(withDemoFallback(real, DEFAULT_DEMO_DATA.team, ctx.isStandalone).filter((m) => m.is_visible !== false));
 }
 

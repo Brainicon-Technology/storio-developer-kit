@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, ExternalLink, Quote, Star } from 'lucide-react';
 import type { StorioFaq, StorioHeroSlide, StorioImportantLink, StorioNotice } from '@storio/template-sdk';
+import { formatDate } from '@/lib/format';
 import { CmsField, CmsIcon, CmsSection } from '@/lib/storio-editor/site';
 
 import { useHomeText } from '@/components/cms/useHomeText';
@@ -121,7 +122,7 @@ export function HomeView({ slides, notices, testimonials, faqs, links }: HomeDat
                       {notice.title}
                     </CmsField>
                   </Link>
-                  {notice.published_date && <p className="mt-1 text-xs opacity-60">{notice.published_date}</p>}
+                  {notice.published_date && <p className="mt-1 text-xs opacity-60">{formatDate(notice.published_date)}</p>}
                 </li>
               ))}
             </ul>

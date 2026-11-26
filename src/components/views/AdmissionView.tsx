@@ -32,10 +32,17 @@ export function AdmissionView({ fields }: { fields: StorioAdmissionField[] }) {
 
   const set = (id: string, value: string | boolean) => setValues((v) => ({ ...v, [id]: value }));
 
+  // Most schools' forms already ask for an email (and a phone): those fields are used for the
+  // verification code, and the template's own email/phone inputs are shown only when missing.
+  const emailField = fields.find((f) => f.type === 'email');
+  const phoneField = fields.find((f) => f.type === 'tel');
+  const otpEmail = emailField ? String(values[emailField.id] ?? '') : email;
+  const otpPhone = phoneField ? String(values[phoneField.id] ?? '') : phone;
+
   const onSendCode = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
-      const res = await sendAdmissionCode(email, phone);
+      const res = await sendAdmissionCode(otpEmail, otpPhone);
       setResult(res);
       if (res.ok) setStep('code');
     });
@@ -44,7 +51,7 @@ export function AdmissionView({ fields }: { fields: StorioAdmissionField[] }) {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
-      const res = await submitAdmission(email, code, values);
+      const res = await submitAdmission(otpEmail, code, values);
       setResult(res);
       if (res.ok) setStep('done');
       else if (res.missing?.length) setStep('form');
@@ -92,23 +99,29 @@ export function AdmissionView({ fields }: { fields: StorioAdmissionField[] }) {
                   <AdmissionInput key={field.id} field={field} value={values[field.id]} onChange={set} placeholder={form.selectPlaceholder} />
                 ))}
               </fieldset>
-              <fieldset className="space-y-4">
-                <legend className="mb-2 text-xl font-semibold">
-                  <CmsField path="contactTitle" label="Contact title">{form.contactTitle}</CmsField>
-                </legend>
-                <label className="block space-y-1">
-                  <span className="text-sm font-semibold">
-                    <CmsField path="emailLabel" label="Email label">{form.emailLabel}</CmsField> *
-                  </span>
-                  <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
-                </label>
-                <label className="block space-y-1">
-                  <span className="text-sm font-semibold">
-                    <CmsField path="phoneLabel" label="Phone label">{form.phoneLabel}</CmsField>
-                  </span>
-                  <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} />
-                </label>
-              </fieldset>
+              {(!emailField || !phoneField) && (
+                <fieldset className="space-y-4">
+                  <legend className="mb-2 text-xl font-semibold">
+                    <CmsField path="contactTitle" label="Contact title">{form.contactTitle}</CmsField>
+                  </legend>
+                  {!emailField && (
+                    <label className="block space-y-1">
+                      <span className="text-sm font-semibold">
+                        <CmsField path="emailLabel" label="Email label">{form.emailLabel}</CmsField> *
+                      </span>
+                      <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
+                    </label>
+                  )}
+                  {!phoneField && (
+                    <label className="block space-y-1">
+                      <span className="text-sm font-semibold">
+                        <CmsField path="phoneLabel" label="Phone label">{form.phoneLabel}</CmsField>
+                      </span>
+                      <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} />
+                    </label>
+                  )}
+                </fieldset>
+              )}
               {error}
               <button type="submit" disabled={pending} className="rounded-xl bg-brand px-5 py-3 font-semibold text-white disabled:opacity-60">
                 <CmsField path="sendCodeText" label="Send code button">{form.sendCodeText}</CmsField>

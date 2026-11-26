@@ -602,7 +602,7 @@
     {
       "key": "template-0-starter-event-detail",
       "title": "Event",
-      "route": "/events/[slug]",
+      "route": "/events/[id]",
       "collection": "event",
       "parent": "template-0-starter-events",
       "sections": [

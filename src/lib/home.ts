@@ -2,18 +2,19 @@ import { storio, type StorioHeroSlide, type StorioImportantLink, type StorioProm
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 import { byOrder, safely, withDemoFallback } from './data';
+import { normalizeHeroSlides, normalizePromotions } from './normalize';
 import type { TenantContext } from './tenant';
 import { narrowList, toTestimonial, type Testimonial } from './types';
 
 /** Hero carousel slides (dashboard: Hero Slides), in the school's order. */
 export async function loadHeroSlides(ctx: TenantContext): Promise<StorioHeroSlide[]> {
-  const real = await safely(storio.getHeroSlides(ctx.tenantHost));
+  const real = normalizeHeroSlides(await safely(storio.getHeroSlides(ctx.tenantHost)));
   return byOrder(withDemoFallback(real, DEFAULT_DEMO_DATA.heroSlides, ctx.isStandalone));
 }
 
 /** Active promotions: banners and popups (dashboard: Promotions). */
 export async function loadPromotions(ctx: TenantContext): Promise<StorioPromotion[]> {
-  const real = await safely(storio.getPromotions(ctx.tenantHost));
+  const real = normalizePromotions(await safely(storio.getPromotions(ctx.tenantHost)));
   return withDemoFallback(real, DEFAULT_DEMO_DATA.promotions, ctx.isStandalone);
 }
 
