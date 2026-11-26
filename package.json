@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "editor:sync": "node scripts/storio-editor-sync.mjs",
     "editor:check": "node scripts/storio-editor-sync.mjs --check",
-    "prebuild": "node scripts/storio-template-id.mjs --check && node scripts/storio-editor-sync.mjs --check",
+    "pages:check": "node scripts/check-pages.mjs",
+    "storio:check": "npm run editor:check && npm run pages:check && npm run typecheck && npm run lint",
+    "prebuild": "node scripts/storio-template-id.mjs --check && node scripts/storio-editor-sync.mjs --check && node scripts/check-pages.mjs",
     "template:id": "node scripts/storio-template-id.mjs",
     "check:links": "node scripts/check-links.mjs"
   },

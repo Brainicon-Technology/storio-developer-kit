@@ -206,7 +206,7 @@ export default function FacilitiesPage() {
 }
 ```
 
-**Step 6.** Run `npm run editor:check`, `npm run typecheck` and `npm run build`. Then test it in Storio (section 9).
+**Step 6.** Run `npm run storio:check` (`editor:check`, `pages:check`, typecheck, lint) and `npm run build`. Then test it in Storio (section 9).
 
 ---
 
@@ -233,6 +233,8 @@ export default function FacilitiesPage() {
 7. **Never move into page content:** the school's data (SDK), Theme settings values, hrefs, class names, dates or anything computed in code.
 8. **Do not edit `src/content/*.json` to change one school's site.** Those are the defaults for every school.
 9. **Field styles** (the Style tab: font, colour, size, spacing, background, corners, aspect ratio...) are saved and applied by `<CmsField>` automatically. No code needed.
+
+`npm run pages:check` enforces these rules on the code: every section has its `<CmsSection page={PAGE}>`, every `<CmsField path>` exists in the content JSON, record fields are the allowed ones, `<ThemeField>` fields exist in the manifest, and no word is written straight into the markup (text, `{'...'}`, `alt`, `placeholder`, `title`, `aria-label`). A line that must stay fixed (a brand name, for example) can opt out with a `{/* storio-check-ignore */}` comment on the line above.
 
 ---
 
@@ -330,8 +332,7 @@ Every other piece of school data follows one pattern. Copy it from any sample pa
 
 ```bash
 npm run dev            # http://localhost:3000: default content + demo records (Standalone Preview)
-npm run editor:check   # manifest, content files and icons in sync
-npm run typecheck
+npm run storio:check   # manifest, content files, icons, page code (pages:check), typecheck, lint
 npm run build          # also runs the checks above
 ```
 

@@ -20,8 +20,12 @@ npm run lint
 npm run typecheck      # tsc --noEmit (run `npx next typegen` first on a fresh clone: PageProps/LayoutProps)
 npm run editor:sync    # copy src/content/*.json into the manifest's editorPages, regenerate src/lib/cms-icons.generated.ts
 npm run editor:check   # the same checks without writing
+npm run pages:check    # the code: every section/field/path editable, no static text in JSX, routes, SEO
+npm run storio:check   # editor:check + pages:check + typecheck + lint (run before finishing any page work)
 npm run template:id -- template-9-sunrise   # set the template id everywhere (keys, content file names)
 ```
+
+**Creating or changing a page or section: always follow the `storio-page` skill** (`.claude/skills/storio-page/SKILL.md`), then run `npm run storio:check` until it is clean. Hooks in `.claude/settings.json` run `pages:check` after each edit and before finishing. The build also runs it.
 
 There is no test runner. The editor UI is not in this repo: test pencils and saving behind a local storio-cms (docs/Storio_Editor_Template_Guide.md §9).
 

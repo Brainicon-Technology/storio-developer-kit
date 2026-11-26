@@ -78,12 +78,26 @@ The visual editor itself runs in the Storio dashboard, where your template shows
 | Script | Does |
 | :--- | :--- |
 | `npm run dev` | Start the site (Standalone Preview) |
-| `npm run build` | Production build (checks the template id and the editor pages first) |
+| `npm run build` | Production build (checks the template id, the editor pages and the page code first) |
 | `npm run lint` / `npm run typecheck` | ESLint / TypeScript |
 | `npm run template:id -- <id>` | Set the template id everywhere (manifest, page keys, content file names) |
 | `npm run editor:sync` | Copy `src/content/*.json` into the manifest and regenerate the icon list |
 | `npm run editor:check` | Check the manifest, content and icons without changing anything |
+| `npm run pages:check` | Check the code: every section, field and path editable, no static text in the markup, routes and SEO |
+| `npm run storio:check` | All checks: `editor:check`, `pages:check`, typecheck, lint |
 | `npm run check:links` | With the site running: follow every internal link and list the broken ones (`-- <url>` for another address) |
+
+---
+
+## Building with an AI agent
+
+The repo ships rules for coding agents, so a page an agent creates is editable in the Storio dashboard without extra prompting:
+
+- **Claude Code:** the `storio-page` skill (`.claude/skills/storio-page/`) loads by itself when you ask for a page or section ("add a Facilities page"). Hooks in `.claude/settings.json` run `pages:check` after every edit and before the agent finishes, and send any problem back to it. Type `/storio-page` to call the skill by name.
+- **Other agents** (Cursor, Copilot, Codex...): `AGENTS.md` has the same rules.
+- **Any tool:** `npm run build` runs `pages:check`, so a page that can't be edited never builds or publishes.
+
+`.claude/` is excluded from `storio publish` (`.storioignore`).
 
 ---
 
@@ -108,7 +122,7 @@ Add `--local` to a command to use a local Storio backend (`http://127.0.0.1:8000
 ## Publish
 
 ```bash
-npm run editor:check            # editor pages, content and icons in sync
+npm run storio:check            # editor pages, content, icons and page code in sync, typecheck, lint
 npm run build                   # the template builds
 storio validate                 # pre-flight check
 storio publish -m "Release 1.0.0"

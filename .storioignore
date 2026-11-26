@@ -39,3 +39,6 @@ Thumbs.db
 .idea/
 *.log
 *.tmp
+
+# 7. Claude Code agent files (skills, hooks): not part of the template
+.claude/
