@@ -242,7 +242,7 @@ Storio has no site-wide page in the editor. What appears on every page comes fro
 
 | What | From | Editable where |
 | :--- | :--- | :--- |
-| School name, logo, contact details, social links | the school's settings (`loadSettings()` in `src/lib/site.ts`, SDK) | the dashboard's settings pages (no pencil) |
+| School name, logo, contact details, social links | the school's settings (`loadLayout()` in `src/lib/site.ts`: one `getLayout` call per request) | the dashboard's settings pages (no pencil) |
 | Header menu | Theme settings > Navigation (`navigation.navbarLinks` in the manifest) | the editor's Theme settings |
 | Colours | Theme settings > Colors (`customization.colors`) | the editor's Theme settings |
 | Header and footer texts | Theme settings > Content (`customization.content`), shown with `<ThemeField>` | a pencil on every page |

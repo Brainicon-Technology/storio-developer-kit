@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 import { BlogDetailView } from '@/components/views/BlogDetailView';
@@ -20,5 +21,6 @@ export async function generateMetadata({ params }: PageProps<'/blogs/[slug]'>): 
 export default async function BlogDetailPage({ params }: PageProps<'/blogs/[slug]'>) {
   const { slug } = await params;
   const post = await loadBlog(slug, await resolveTenant());
+  if (!post) notFound(); // a real 404 (src/app/(site)/not-found.tsx)
   return <BlogDetailView post={post} />;
 }

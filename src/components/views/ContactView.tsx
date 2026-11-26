@@ -2,8 +2,8 @@
 
 /*
  * SDK data on this page (loaded on the server, passed in as props):
- *   storio.getSettings()                   ->  StorioSettingsResponse | null (contact details)
- *     loadSettings() in src/lib/site.ts
+ *   storio.getLayout()                     ->  StorioLayoutResponse (its settings: contact details)
+ *     loadLayout() in src/lib/site.ts (falls back to getSettings + getCustomization + getNavigation)
  *   storio.submitContactMessage(formData)  ->  StorioContactFormResponse | null
  *     sendContactMessage() in src/app/(site)/contact/actions.ts
  */

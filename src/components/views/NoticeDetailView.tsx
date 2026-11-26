@@ -22,10 +22,10 @@ const PAGE = 'template-0-starter-notice-detail';
  * - useCollectionItem shows the editor's unsaved title live in the preview.
  * - The fixed labels of the page are page content (section "labels").
  */
-export function NoticeDetailView({ notice }: { notice: StorioNotice | null }) {
+export function NoticeDetailView({ notice }: { notice: StorioNotice }) {
   const { labels } = useNoticeDetailText();
-  const id = notice ? String(notice.id) : '';
-  const values = useCollectionItem('notice', id, { title: notice?.title ?? '' });
+  const id = String(notice.id);
+  const values = useCollectionItem('notice', id, { title: notice.title });
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
@@ -34,31 +34,25 @@ export function NoticeDetailView({ notice }: { notice: StorioNotice | null }) {
           <CmsField path="backText" label="Back link">{labels.backText}</CmsField>
         </Link>
 
-        {!notice ? (
-          <p className="mt-8 opacity-70">
-            <CmsField path="notFoundText" label="Not found text">{labels.notFoundText}</CmsField>
-          </p>
-        ) : (
-          <article className="mt-6 space-y-4">
-            <h1 className="text-3xl font-extrabold tracking-tight">
-              <CmsField collection="notice" item={id} path="title" label="Notice title">{values.title}</CmsField>
-            </h1>
-            {notice.published_date && (
-              <p className="text-sm opacity-60">
-                <CmsField path="publishedLabel" label="Published label">{labels.publishedLabel}</CmsField>{' '}
-                {formatDate(notice.published_date)}
-              </p>
-            )}
-            <p className="whitespace-pre-line text-lg leading-relaxed">
-              {notice.content}
+        <article className="mt-6 space-y-4">
+          <h1 className="text-3xl font-extrabold tracking-tight">
+            <CmsField collection="notice" item={id} path="title" label="Notice title">{values.title}</CmsField>
+          </h1>
+          {notice.published_date && (
+            <p className="text-sm opacity-60">
+              <CmsField path="publishedLabel" label="Published label">{labels.publishedLabel}</CmsField>{' '}
+              {formatDate(notice.published_date)}
             </p>
-            {notice.attachment_url && (
-              <a href={notice.attachment_url} className="inline-block rounded-xl bg-brand px-5 py-3 font-semibold text-white">
-                <CmsField path="attachmentText" label="Attachment link">{labels.attachmentText}</CmsField>
-              </a>
-            )}
-          </article>
-        )}
+          )}
+          <p className="whitespace-pre-line text-lg leading-relaxed">
+            {notice.content}
+          </p>
+          {notice.attachment_url && (
+            <a href={notice.attachment_url} className="inline-block rounded-xl bg-brand px-5 py-3 font-semibold text-white">
+              <CmsField path="attachmentText" label="Attachment link">{labels.attachmentText}</CmsField>
+            </a>
+          )}
+        </article>
       </CmsSection>
     </main>
   );

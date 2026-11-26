@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { storio, type StorioActivityItem } from '@storio/template-sdk';
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
@@ -11,10 +12,10 @@ export async function loadActivities(ctx: TenantContext): Promise<StorioActivity
   return withDemoFallback(real, DEFAULT_DEMO_DATA.activities, ctx.isStandalone);
 }
 
-export async function loadActivity(slug: string, ctx: TenantContext): Promise<StorioActivityItem | null> {
+export const loadActivity = cache(async function loadActivity(slug: string, ctx: TenantContext): Promise<StorioActivityItem | null> {
   const real = normalizeActivity(await safely(storio.getActivityDetail(slug, ctx.tenantHost)));
   return withDemoRecord(real, DEFAULT_DEMO_DATA.activities.find((a) => a.slug === slug), ctx.isStandalone);
-}
+});
 
 /** Activities have two names for some fields; these read whichever the school's data has. */
 export const activitySummary = (a: StorioActivityItem) => a.summary || a.excerpt || '';

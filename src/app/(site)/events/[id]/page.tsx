@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 import { EventDetailView } from '@/components/views/EventDetailView';
@@ -16,5 +17,6 @@ export async function generateMetadata({ params }: PageProps<'/events/[id]'>): P
 export default async function EventDetailPage({ params }: PageProps<'/events/[id]'>) {
   const { id } = await params;
   const event = await loadEvent(id, await resolveTenant());
+  if (!event) notFound(); // a real 404 (src/app/(site)/not-found.tsx)
   return <EventDetailView event={event} />;
 }

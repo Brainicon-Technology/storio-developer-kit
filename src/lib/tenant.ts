@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { headers } from 'next/headers';
 
 /**
@@ -28,7 +29,12 @@ export interface TenantContext {
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '::1']);
 const DEMO_TENANT_HOST = 'demo.storio.cloud';
 
-export async function resolveTenant(): Promise<TenantContext> {
+/**
+ * Wrapped in React cache(): one TenantContext object per request. Loaders wrapped in cache() too
+ * (loadNotice, loadLayout...) then run once per request, even when generateMetadata and the page
+ * both call them.
+ */
+export const resolveTenant = cache(async function resolveTenant(): Promise<TenantContext> {
   const headersList = await headers();
   const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
   const host = rawHost.split(':')[0];
@@ -38,4 +44,4 @@ export async function resolveTenant(): Promise<TenantContext> {
   const tenantHost = linkedTenant || (isStandalone ? DEMO_TENANT_HOST : host);
 
   return { host, tenantHost, isStandalone };
-}
+});

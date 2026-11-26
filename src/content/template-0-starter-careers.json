@@ -11,13 +11,16 @@
   "detail": {
     "backText": "Back to all jobs",
     "applyText": "Apply now",
-    "attachmentsTitle": "Documents",
-    "notFoundText": "This job could not be found."
+    "attachmentsTitle": "Documents"
   },
   "seo": {
     "title": "Careers",
     "description": "Job openings at Storio Model Academy.",
-    "keywords": ["careers", "jobs", "teaching jobs"],
+    "keywords": [
+      "careers",
+      "jobs",
+      "teaching jobs"
+    ],
     "ogImage": ""
   }
 }

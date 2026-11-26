@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { storio, type StorioBlogPost } from '@storio/template-sdk';
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
@@ -14,7 +15,7 @@ export async function loadBlogs(ctx: TenantContext): Promise<StorioBlogPost[]> {
   return withDemoFallback(real, DEFAULT_DEMO_DATA.blogs, ctx.isStandalone);
 }
 
-export async function loadBlog(slug: string, ctx: TenantContext): Promise<StorioBlogPost | null> {
+export const loadBlog = cache(async function loadBlog(slug: string, ctx: TenantContext): Promise<StorioBlogPost | null> {
   const real = normalizeBlog(await safely(storio.getBlogDetail(slug, ctx.tenantHost)));
   return withDemoRecord(real, DEFAULT_DEMO_DATA.blogs.find((b) => b.slug === slug), ctx.isStandalone);
-}
+});

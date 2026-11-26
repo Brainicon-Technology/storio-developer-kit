@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { getPageMetadata } from '@/lib/storio-editor/server';
 import { cms } from '@/cms.config';
 import { serverCmsStorage } from './cms-server-storage';
-import { loadSettings } from './site';
+import { loadLayout } from './site';
 import { resolveTenant } from './tenant';
 
 /**
@@ -17,7 +17,7 @@ import { resolveTenant } from './tenant';
 
 /** Root layout metadata: "<page> | <school name>", default description, favicon. */
 export async function siteMetadata(fallbackTitle: string): Promise<Metadata> {
-  const settings = await loadSettings(await resolveTenant());
+  const { settings } = await loadLayout(await resolveTenant());
   const siteName = settings?.site_title || fallbackTitle;
   return {
     title: { default: siteName, template: `%s | ${siteName}` },

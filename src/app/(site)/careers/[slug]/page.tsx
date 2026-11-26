@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 import { JobDetailView } from '@/components/views/JobDetailView';
@@ -16,5 +17,6 @@ export async function generateMetadata({ params }: PageProps<'/careers/[slug]'>)
 export default async function JobDetailPage({ params }: PageProps<'/careers/[slug]'>) {
   const { slug } = await params;
   const job = await loadJob(slug, await resolveTenant());
+  if (!job) notFound(); // a real 404 (src/app/(site)/not-found.tsx)
   return <JobDetailView job={job} />;
 }

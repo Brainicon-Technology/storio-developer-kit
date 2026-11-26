@@ -6,13 +6,16 @@
     "emptyText": "No activities listed yet."
   },
   "detail": {
-    "backText": "Back to all activities",
-    "notFoundText": "This activity could not be found."
+    "backText": "Back to all activities"
   },
   "seo": {
     "title": "Activities",
     "description": "Sports, clubs and co-curricular activities at Storio Model Academy.",
-    "keywords": ["activities", "clubs", "sports"],
+    "keywords": [
+      "activities",
+      "clubs",
+      "sports"
+    ],
     "ogImage": ""
   }
 }

@@ -25,9 +25,9 @@ import { formatDate } from '@/lib/format';
  */
 const LIST_PAGE = 'template-0-starter-activities';
 
-export function ActivityDetailView({ activity }: { activity: StorioActivityItem | null }) {
+export function ActivityDetailView({ activity }: { activity: StorioActivityItem }) {
   const { detail } = useActivitiesText();
-  const image = activity ? activityImage(activity) : '';
+  const image = activityImage(activity);
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
@@ -36,21 +36,15 @@ export function ActivityDetailView({ activity }: { activity: StorioActivityItem 
           <CmsField path="backText" label="Back link">{detail.backText}</CmsField>
         </Link>
 
-        {!activity ? (
-          <p className="mt-8 opacity-70">
-            <CmsField path="notFoundText" label="Not found text">{detail.notFoundText}</CmsField>
-          </p>
-        ) : (
-          <article className="mt-6 space-y-6">
-            <h1 className="text-4xl font-extrabold tracking-tight">{activity.title}</h1>
-            {activityDate(activity) && <p className="text-sm opacity-60">{formatDate(activityDate(activity))}</p>}
-            {image && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={image} alt="" className="aspect-video w-full rounded-2xl object-cover" />
-            )}
-            <RichText html={activity.content || activitySummary(activity)} className="space-y-4 text-lg leading-relaxed" />
-          </article>
-        )}
+        <article className="mt-6 space-y-6">
+          <h1 className="text-4xl font-extrabold tracking-tight">{activity.title}</h1>
+          {activityDate(activity) && <p className="text-sm opacity-60">{formatDate(activityDate(activity))}</p>}
+          {image && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={image} alt="" className="aspect-video w-full rounded-2xl object-cover" />
+          )}
+          <RichText html={activity.content || activitySummary(activity)} className="space-y-4 text-lg leading-relaxed" />
+        </article>
       </CmsSection>
     </main>
   );

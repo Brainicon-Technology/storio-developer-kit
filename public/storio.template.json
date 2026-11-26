@@ -66,6 +66,24 @@
         "label": "Promotion bar close button (screen readers)",
         "type": "text",
         "default": "Dismiss"
+      },
+      {
+        "id": "not_found_title",
+        "label": "404 page title",
+        "type": "text",
+        "default": "Page not found"
+      },
+      {
+        "id": "not_found_text",
+        "label": "404 page text",
+        "type": "text",
+        "default": "The page you are looking for does not exist or has moved."
+      },
+      {
+        "id": "not_found_link",
+        "label": "404 page button",
+        "type": "text",
+        "default": "Back to home"
       }
     ]
   },
@@ -510,8 +528,7 @@
         "labels": {
           "backText": "Back to all notices",
           "publishedLabel": "Published",
-          "attachmentText": "Download attachment",
-          "notFoundText": "This notice could not be found."
+          "attachmentText": "Download attachment"
         }
       }
     },
@@ -562,8 +579,7 @@
       "defaults": {
         "labels": {
           "backText": "Back to all stories",
-          "publishedLabel": "Published",
-          "notFoundText": "This story could not be found."
+          "publishedLabel": "Published"
         }
       }
     },
@@ -616,8 +632,7 @@
         "labels": {
           "backText": "Back to all events",
           "dateLabel": "When",
-          "locationLabel": "Where",
-          "notFoundText": "This event could not be found."
+          "locationLabel": "Where"
         }
       }
     },
@@ -647,8 +662,7 @@
           "emptyText": "No activities listed yet."
         },
         "detail": {
-          "backText": "Back to all activities",
-          "notFoundText": "This activity could not be found."
+          "backText": "Back to all activities"
         },
         "seo": {
           "title": "Activities",
@@ -948,8 +962,7 @@
         "detail": {
           "backText": "Back to all jobs",
           "applyText": "Apply now",
-          "attachmentsTitle": "Documents",
-          "notFoundText": "This job could not be found."
+          "attachmentsTitle": "Documents"
         },
         "seo": {
           "title": "Careers",

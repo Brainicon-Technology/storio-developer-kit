@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { storio, type StorioEvent } from '@storio/template-sdk';
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
@@ -13,14 +14,14 @@ import type { TenantContext } from './tenant';
  * - getEvents returns a paginated object ({ count, results }), handled by normalizeEvents;
  * - getEventDetail finds an event by its id only, so event URLs use the id (/events/24).
  */
-export async function loadEvents(ctx: TenantContext): Promise<StorioEvent[]> {
+export const loadEvents = cache(async function loadEvents(ctx: TenantContext): Promise<StorioEvent[]> {
   const real = normalizeEvents(await safely(storio.getEvents(ctx.tenantHost)));
   const events = withDemoFallback(real, DEFAULT_DEMO_DATA.events, ctx.isStandalone);
   return [...events].sort((a, b) => (a.start_date ?? '').localeCompare(b.start_date ?? ''));
-}
+});
 
 /** One event by id. An old slug URL still works: the slug is looked up in the list first. */
-export async function loadEvent(idOrSlug: string, ctx: TenantContext): Promise<StorioEvent | null> {
+export const loadEvent = cache(async function loadEvent(idOrSlug: string, ctx: TenantContext): Promise<StorioEvent | null> {
   let id = idOrSlug;
   if (!/^\d+$/.test(idOrSlug)) {
     const match = (await loadEvents(ctx)).find((e) => e.slug === idOrSlug);
@@ -29,7 +30,7 @@ export async function loadEvent(idOrSlug: string, ctx: TenantContext): Promise<S
   const real = /^\d+$/.test(id) ? normalizeEvent(await safely(storio.getEventDetail(id, ctx.tenantHost))) : null;
   const demo = DEFAULT_DEMO_DATA.events.find((e) => String(e.id) === id || e.slug === idOrSlug);
   return withDemoRecord(real, demo, ctx.isStandalone);
-}
+});
 
 /** The public URL of an event (by id: see above). */
 export const eventPath = (event: StorioEvent) => `/events/${event.id}`;

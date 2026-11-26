@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { storio, type StorioNavigationItem, type StorioSettingsResponse } from '@storio/template-sdk';
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
@@ -6,16 +7,12 @@ import { menuHref } from './routes';
 import type { TenantContext } from './tenant';
 import { themeFromConfig, type ThemeValues } from './theme';
 
-/**
- * The school's own settings (name, logo, contact details, social links), loaded with the SDK.
- * This is school data, edited on the dashboard's settings pages: it gets no editor pencil.
- */
-export async function loadSettings(ctx: TenantContext): Promise<StorioSettingsResponse | null> {
-  const real = await storio.getSettings(ctx.tenantHost).catch(() => null);
-  return withDemoRecord(real, DEFAULT_DEMO_DATA.settings, ctx.isStandalone);
-}
-
 export interface SiteLayout {
+  /**
+   * The school's own settings (name, logo, contact details, social links). School data, edited on
+   * the dashboard's settings pages: it gets no editor pencil. Read it from here, not with a second
+   * getSettings call: loadLayout runs once per request.
+   */
   settings: StorioSettingsResponse | null;
   theme: ThemeValues;
   /** The dashboard's own menu (Settings > Navigation), shown as the footer's quick links. */
@@ -28,7 +25,7 @@ export interface SiteLayout {
  * If that fails (an older backend, a network error), the three single calls are used instead:
  * getSettings, getCustomization and getNavigation.
  */
-export async function loadLayout(ctx: TenantContext): Promise<SiteLayout> {
+export const loadLayout = cache(async function loadLayout(ctx: TenantContext): Promise<SiteLayout> {
   const layout = await safely(storio.getLayout(ctx.tenantHost));
   const [settings, customization, navigation] = layout
     ? [layout.settings, layout.customization, layout.navigation]
@@ -44,7 +41,7 @@ export async function loadLayout(ctx: TenantContext): Promise<SiteLayout> {
     theme: themeFromConfig(customization?.config ?? {}),
     navigation: withDemoFallback(quickLinks(normalizeNavigation(navigation?.items)), DEFAULT_DEMO_DATA.navigation, ctx.isStandalone),
   };
-}
+});
 
 /**
  * Footer quick links: the dashboard menu's links that exist in this template (old URLs are mapped,

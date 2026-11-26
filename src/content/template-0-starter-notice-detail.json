@@ -2,7 +2,6 @@
   "labels": {
     "backText": "Back to all notices",
     "publishedLabel": "Published",
-    "attachmentText": "Download attachment",
-    "notFoundText": "This notice could not be found."
+    "attachmentText": "Download attachment"
   }
 }

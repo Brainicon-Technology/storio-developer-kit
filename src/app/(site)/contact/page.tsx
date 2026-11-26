@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 import { ContactView } from '@/components/views/ContactView';
 import { pageMetadata } from '@/lib/seo';
-import { loadSettings } from '@/lib/site';
+import { loadLayout } from '@/lib/site';
 import { resolveTenant } from '@/lib/tenant';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -10,6 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactPage() {
-  const settings = await loadSettings(await resolveTenant());
+  // The settings come with the layout data (one cached getLayout call per request).
+  const { settings } = await loadLayout(await resolveTenant());
   return <ContactView settings={settings} />;
 }

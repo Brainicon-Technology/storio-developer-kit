@@ -11,7 +11,8 @@
     "editor:sync": "node scripts/storio-editor-sync.mjs",
     "editor:check": "node scripts/storio-editor-sync.mjs --check",
     "prebuild": "node scripts/storio-template-id.mjs --check && node scripts/storio-editor-sync.mjs --check",
-    "template:id": "node scripts/storio-template-id.mjs"
+    "template:id": "node scripts/storio-template-id.mjs",
+    "check:links": "node scripts/check-links.mjs"
   },
   "dependencies": {
     "@storio/template-sdk": "file:./packages/storio-template-sdk-1.0.1.tgz",

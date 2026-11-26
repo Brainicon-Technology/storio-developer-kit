@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { storio, type StorioNotice } from '@storio/template-sdk';
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
@@ -16,16 +17,16 @@ import type { TenantContext } from './tenant';
  * ============================================================================
  */
 
-export async function loadNotices(ctx: TenantContext): Promise<StorioNotice[]> {
+export const loadNotices = cache(async function loadNotices(ctx: TenantContext): Promise<StorioNotice[]> {
   const real = normalizeNotices(await safely(storio.getNotices(ctx.tenantHost)));
   return withDemoFallback(real, DEFAULT_DEMO_DATA.notices, ctx.isStandalone);
-}
+});
 
-export async function loadNotice(id: string, ctx: TenantContext): Promise<StorioNotice | null> {
+export const loadNotice = cache(async function loadNotice(id: string, ctx: TenantContext): Promise<StorioNotice | null> {
   const real = normalizeNotice(await safely(storio.getNoticeDetail(id, ctx.tenantHost)));
   const demo = DEFAULT_DEMO_DATA.notices.find((n) => String(n.id) === id);
   return withDemoRecord(real, demo, ctx.isStandalone);
-}
+});
 
 /**
  * Search notices with storio.apiFetch: the low-level call every SDK method is built on.

@@ -83,6 +83,7 @@ The visual editor itself runs in the Storio dashboard, where your template shows
 | `npm run template:id -- <id>` | Set the template id everywhere (manifest, page keys, content file names) |
 | `npm run editor:sync` | Copy `src/content/*.json` into the manifest and regenerate the icon list |
 | `npm run editor:check` | Check the manifest, content and icons without changing anything |
+| `npm run check:links` | With the site running: follow every internal link and list the broken ones (`-- <url>` for another address) |
 
 ---
 

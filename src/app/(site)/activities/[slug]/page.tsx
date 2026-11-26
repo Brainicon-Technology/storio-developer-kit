@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 import { ActivityDetailView } from '@/components/views/ActivityDetailView';
@@ -19,5 +20,6 @@ export async function generateMetadata({ params }: PageProps<'/activities/[slug]
 export default async function ActivityDetailPage({ params }: PageProps<'/activities/[slug]'>) {
   const { slug } = await params;
   const activity = await loadActivity(slug, await resolveTenant());
+  if (!activity) notFound(); // a real 404 (src/app/(site)/not-found.tsx)
   return <ActivityDetailView activity={activity} />;
 }

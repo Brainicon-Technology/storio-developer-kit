@@ -2,7 +2,6 @@
   "labels": {
     "backText": "Back to all events",
     "dateLabel": "When",
-    "locationLabel": "Where",
-    "notFoundText": "This event could not be found."
+    "locationLabel": "Where"
   }
 }
