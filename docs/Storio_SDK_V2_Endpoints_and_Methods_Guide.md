@@ -1,12 +1,10 @@
 # Storio Template SDK (v2) — Comprehensive Developer API & Data Reference Manual
 
-> **Last Updated:** November 9, 2026 | **SDK Version:** `@storio/template-sdk@1.0.1` | **Platform:** Storio CMS v2
+> **Last Updated:** November 26, 2026 | **SDK Version:** `@storio/template-sdk@1.0.1` | **Platform:** Storio CMS v2
 
-Welcome 3rd-party template developers! 
+Welcome 3rd-party template developers!
 
-This is the **complete, official API and Data Payload reference manual** for `@storio/template-sdk` (bundled in your starter template under `packages/storio-template-sdk-1.0.1.tgz`).
-
-Every single SDK method, backend V2 endpoint path, method signature, parameter, TypeScript type interface, and exact JSON data payload structure from `packages/template-sdk/src/index.ts` is documented below.
+This is the **complete, official API and Data Payload reference manual** for `@storio/template-sdk`. Because third-party template repositories do not include the Storio backend source code, every SDK method, backend endpoint, query parameter, TypeScript interface, and verified JSON payload structure is documented in full below.
 
 ---
 
@@ -17,34 +15,28 @@ Every single SDK method, backend V2 endpoint path, method signature, parameter, 
   - [Key SDK Capabilities](#key-sdk-capabilities)
   - [Fetching Live Database Data with Storio CLI](#fetching-live-database-data-with-storio-cli)
   - [Mandatory Rules for Template Developers](#mandatory-rules-for-template-developers)
-    - [Rule 1: Tenant DB vs. Standalone Preview Mock Data Rule](#rule-1-tenant-db-vs-standalone-preview-mock-data-rule)
-    - [Rule 2: Strict Typing Rule (No any Types Allowed)](#rule-2-strict-typing-rule-no-any-types-allowed)
-- [2. Complete SDK Method & Endpoint Index (44 Methods)](#2-complete-sdk-method--endpoint-index-44-methods)
+- [2. Complete SDK Method & Endpoint Index (58 Methods)](#2-complete-sdk-method--endpoint-index-58-methods)
 - [3. Detailed Method & Data Payload Reference](#3-detailed-method--data-payload-reference)
-  - [Section 1: Site Identity & Layout Configs (Methods 1–5)](#section-1-site-identity--layout-configs)
-  - [Section 2: Hero Carousel Banners (Method 6)](#section-2-hero-carousel-banners)
-  - [Section 3: Public Notice Board & Announcements (Methods 7–8)](#section-3-public-notice-board--announcements)
-  - [Section 4: Blogs & News Articles (Methods 9–10)](#section-4-blogs--news-articles)
-  - [Section 5: Faculty, Staff & Board Directory (Methods 11–12)](#section-5-faculty-staff--board-directory)
-  - [Section 6: Media Gallery & Photo Albums (Methods 13–14)](#section-6-media-gallery--photo-albums)
-  - [Section 7: School Activities & Events (Methods 15–18)](#section-7-school-activities--events)
-  - [Section 8: Dynamic CMS Custom Builder Pages (Method 19)](#section-8-dynamic-cms-custom-builder-pages)
-  - [Section 9: Social Proof, Leadership & Promotions (Methods 20–22)](#section-9-social-proof-leadership--promotions)
-  - [Section 10: Quick Links, FAQs, Videos & Exam Results (Methods 23–27)](#section-10-quick-links-faqs-videos--exam-results)
-  - [Section 11: Careers & Recruitment (Methods 28–29)](#section-11-careers--recruitment)
-  - [Section 12: National Education Board Notice Sync (Method 30)](#section-12-national-education-board-notice-sync)
-  - [Section 13: Online Admission Portal & Interactive Forms (Methods 31–35)](#section-13-online-admission-portal--interactive-forms)
-  - [Section 14: Academics (Class Routines, Syllabuses, Student Stats, Academic Programs) (Methods 36–39)](#section-14-academics)
-  - [Section 15: Citizen Charter & Institutional Compliance (Methods 40–43)](#section-15-citizen-charter--institutional-compliance)
-  - [Section 16: Core API Fetcher (Method 44)](#section-16-core-api-fetcher-apifetch)
-- [4. Complete TypeScript Type Interfaces (46 Interfaces)](#4-complete-typescript-type-interfaces)
-- [5. Architectural Best Practices & Error Handling](#5-architectural-best-practices--error-handling)
+  - [Section 1: Site Identity, Layout, Profile & Feature Cards (Methods 1–6)](#section-1-site-identity-layout-profile--feature-cards)
+  - [Section 2: Hero Carousel Banners (Method 7)](#section-2-hero-carousel-banners)
+  - [Section 3: Public Notice Board & Announcements (Methods 8–9)](#section-3-public-notice-board--announcements)
+  - [Section 4: Blogs, Categories & News Articles (Methods 10–12)](#section-4-blogs-categories--news-articles)
+  - [Section 5: Faculty, Staff & Board Directory (Methods 13–14)](#section-5-faculty-staff--board-directory)
+  - [Section 6: Media Gallery & Photo Albums (Methods 15–16)](#section-6-media-gallery--photo-albums)
+  - [Section 7: School Activities, Events & Categories (Methods 17–22)](#section-7-school-activities-events--categories)
+  - [Section 8: Dynamic CMS Custom Builder Pages (Methods 23–24)](#section-8-dynamic-cms-custom-builder-pages)
+  - [Section 9: Social Proof, Leadership & Promotions (Methods 25–29)](#section-9-social-proof-leadership--promotions)
+  - [Section 10: Quick Links, FAQs, Videos, Calendar & Exam Results (Methods 30–35)](#section-10-quick-links-faqs-videos-calendar--exam-results)
+  - [Section 11: Careers & Recruitment (Methods 36–37)](#section-11-careers--recruitment)
+  - [Section 12: National Education Board Notice Sync (Method 38)](#section-12-national-education-board-notice-sync)
+  - [Section 13: Online Admission Portal & Contact Form (Methods 39–43)](#section-13-online-admission-portal--contact-form)
+  - [Section 14: Dynamic Form Builder (Methods 44–47)](#section-14-dynamic-form-builder)
+  - [Section 15: Academics (Methods 48–51)](#section-15-academics)
+  - [Section 16: Citizen Charter & Institutional Compliance (Methods 52–55)](#section-16-citizen-charter--institutional-compliance)
+  - [Section 17: Dynamic Custom Collections & Core Fetcher (Methods 56–58)](#section-17-dynamic-custom-collections--core-fetcher)
+- [4. Complete TypeScript Type Definitions](#4-complete-typescript-type-definitions)
+- [5. Architectural Best Practices, Caching & Error Handling](#5-architectural-best-practices-caching--error-handling)
 - [6. Next.js App Router Implementation Guide & Examples](#6-nextjs-app-router-implementation-guide--examples)
-  - [Example 1: Complete Server Homepage (`src/app/page.tsx`)](#example-1-complete-server-homepage-srcapppagetsx)
-  - [Example 2: Dynamic Blog Detail Server Page (`src/app/blog/[slug]/page.tsx`)](#example-2-dynamic-blog-detail-server-page-srcappblogslugpagetsx)
-  - [Example 3: Client Form Submission Component (`src/components/ContactForm.tsx`)](#example-3-client-form-submission-component-srccomponentscontactformtsx)
-  - [Example 4: Academics Routine & Syllabus Page (`src/app/academics/page.tsx`)](#example-4-academics-routine--syllabus-page-srcappacademicspagetsx)
-  - [Example 5: Citizen Charter & Compliance Page (`src/app/compliance/page.tsx`)](#example-5-citizen-charter--compliance-page-srcappcompliancepagetsx)
 
 ---
 
@@ -52,7 +44,7 @@ Every single SDK method, backend V2 endpoint path, method signature, parameter, 
 
 ### Importing the SDK
 
-Install the `@storio/template-sdk` package in your template repository:
+Install the `@storio/template-sdk` package in your template repository (from your starter template tarball or registry):
 
 ```bash
 npm install @storio/template-sdk
@@ -66,47 +58,31 @@ import { storio, StorioLayoutResponse, StorioNotice, StorioBlogPost } from '@sto
 
 ### Key SDK Capabilities
 
-- **Automatic Multi-Tenant Resolution:** Detects tenant context automatically from `NEXT_PUBLIC_STORIO_TENANT_HOST` or incoming HTTP request headers (`x-tenant-host`, `host`).
-- **Edge & Next.js ISR/SSR Ready:** Built on native web standards (`fetch`), allowing seamless use inside Server Components, Server Actions, Route Handlers, and Edge Middleware with full Next.js cache revalidation support (`next: { revalidate: 60 }`).
-- **Comprehensive Backend Coverage:** 43 specialized methods covering layout, navigation, notices, blogs, staff, events, admissions, academics, and regulatory compliance.
-- **Fail-Safe Typing:** Fully written in strict TypeScript with zero implicit `any` types.
+- **Automatic Multi-Tenant Resolution:** Detects tenant context automatically from `NEXT_PUBLIC_STORIO_TENANT_HOST` / `STORIO_TENANT_HOST` or incoming HTTP request headers (`x-tenant-host`, `Host`).
+- **Environment-Aware Routing:** In browser production, routes requests to `window.location.origin` so `/api/*` goes through the Storio gateway; on the server, uses `BACKEND_INTERNAL_URL` / `NEXT_PUBLIC_API_URL` / `http://127.0.0.1:8000`.
+- **Edge & Next.js ISR/SSR Ready:** Built on native web `fetch`, defaulting `GET` requests to `{ next: { revalidate: 60 } }` (customizable per call via `StorioFetchOptions`).
+- **Error Handling Control:** Returns `null` cleanly by default on HTTP/network errors, or throws a typed `StorioAPIError` when `{ throwOnError: true }` is passed.
+- **Complete Coverage:** 58 public methods covering layout, theme customization, navigation, notices, blogs, activities, events, pages, dynamic forms, admissions, academics, compliance, and custom collections.
 
 ---
 
 ### Fetching Live Database Data with Storio CLI
 
-Template developers can connect their local preview environment to live production or development tenant databases using the official Storio CLI tool.
+Template developers can connect their local preview environment to live production or development tenant databases using the Storio CLI:
 
-#### 1. Authenticate with Storio
 ```bash
-# Connect to production cloud:
+# 1. Authenticate with Storio
 storio login
+# (Local backend: storio login --api-url http://localhost:8000)
 
-# Or connect to local development backend:
-storio login --api-url http://localhost:8000
-```
-
-#### 2. Link Template to a Tenant Database
-```bash
-# Select from accessible cloud tenants:
+# 2. Link template to a tenant database (writes NEXT_PUBLIC_STORIO_TENANT_HOST to .env.local)
 storio link
+# (Local backend: storio link --api-url http://localhost:8000)
 
-# Or select from local backend tenants:
-storio link --api-url http://localhost:8000
-```
-*This command writes `NEXT_PUBLIC_STORIO_TENANT_HOST=<tenant-host>` directly to your `.env.local` file.*
-
-#### 3. Launch Development Server with Live Database Data
-```bash
-# Automatically injects linked tenant context and starts Next.js:
+# 3. Start Next.js with linked tenant context
 storio dev
 
-# Or with local backend:
-storio dev --api-url http://localhost:8000
-```
-
-#### 4. Disconnect & Return to Mock Data
-```bash
+# 4. Return to unlinked standalone preview mode
 storio unlink
 ```
 
@@ -116,154 +92,153 @@ storio unlink
 
 #### Rule 1: Tenant DB vs. Standalone Preview Mock Data Rule
 
-When a customer installs a template into their live tenant, the database starts empty or contains only their populated records. 
+When a customer installs a template into their live tenant, their database starts empty or contains only their own populated records.
 
 > [!IMPORTANT]
 > **The Golden Data Fallback Rule:**
-> 1. When running on a live tenant domain (or when linked via `storio link` / `NEXT_PUBLIC_STORIO_TENANT_HOST`), the template **MUST render actual database data**. If a database table is empty (e.g. 0 notices, 0 blogs), render a clean empty state or gracefully hide the section. **NEVER fallback to mock demo data in live tenant mode.**
-> 2. When running in unlinked local preview mode (`localhost` without `NEXT_PUBLIC_STORIO_TENANT_HOST`), the template **MUST fallback to default demo data** so prospective buyers can preview the template design.
+> 1. When running on a live tenant domain (or linked via `storio link` / `NEXT_PUBLIC_STORIO_TENANT_HOST`), the template **MUST render actual database data**. If a database table is empty (e.g. `0` notices or `[]`), render a clean empty state or hide the section gracefully. **NEVER fall back to demo/mock data in live tenant mode.**
+> 2. When running in unlinked local preview mode (`localhost` / `127.0.0.1` without `NEXT_PUBLIC_STORIO_TENANT_HOST`), the template **MUST fall back to default demo data** so prospective buyers can preview the template design.
 
-#### Golden Code Pattern for Data Fetching:
+#### Rule 2: Strict Typing & Paginated List Handling
+
+- Always import exported interfaces from `@storio/template-sdk` rather than using `any`.
+- **Important Note on Paginated Endpoints:** A small number of backend ViewSets (`/api/events/`, `/api/event-categories/`, `/api/institution-profile/cards/`) return DRF paginated objects `{ count, next, previous, results: [...] }` rather than a flat JSON array `[...]`. Always unwrap list responses defensively using a helper:
 
 ```typescript
-import { headers } from 'next/headers';
-import { storio, StorioLayoutResponse, StorioNotice } from '@storio/template-sdk';
-import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
-
-export default async function Page() {
-  // 1. Resolve Host from Next.js Headers
-  const headersList = await headers();
-  const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host = rawHost.split(':')[0];
-
-  // 2. Determine Mode
-  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const isStandalone = isLocalHost && !linkedTenant;
-  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
-
-  // 3. Fetch Real Tenant Data via SDK
-  const [rawLayout, rawNotices] = await Promise.all([
-    storio.getLayout(tenantHost),
-    storio.getNotices(tenantHost),
-  ]);
-
-  // 4. Apply the Golden Rule
-  const layout: StorioLayoutResponse | null = rawLayout || (isStandalone ? DEFAULT_DEMO_DATA.layout : null);
-  const notices: StorioNotice[] = (Array.isArray(rawNotices) && rawNotices.length > 0)
-    ? rawNotices
-    : (isStandalone ? DEFAULT_DEMO_DATA.notices : []);
-
-  return (
-    <main>
-      <h1>{layout?.settings?.site_title || "Campus Portal"}</h1>
-      {notices.length > 0 ? (
-        <ul>{notices.map(n => <li key={n.id}>{n.title}</li>)}</ul>
-      ) : (
-        <p>No notices currently published.</p>
-      )}
-    </main>
-  );
+export function unwrapList<T>(res: T[] | { results?: T[] } | null | undefined): T[] {
+  if (Array.isArray(res)) return res;
+  if (res && Array.isArray(res.results)) return res.results;
+  return [];
 }
 ```
 
-### Rule 2: Strict Typing Rule (No `any` Types Allowed)
-Every component, utility, and state hook must use the exported TypeScript interfaces provided by `@storio/template-sdk`. The use of `any`, `unknown` casts without guards, or loose objects is strictly prohibited.
+#### Rule 3: Passing Filter Parameters + Fetch Options
+
+Filterable list methods (`getNotices`, `getBlogs`, `getActivities`, `getCareers`, `getEvents`, `getExamResults`) support all three calling styles for full backward compatibility:
+
+```typescript
+// 1. No filters, host string
+await storio.getNotices('school.localhost');
+
+// 2. Filters + host string (or StorioFetchOptions)
+await storio.getNotices({ search: 'exam', status: 'published' }, { tenantHost: 'school.localhost', next: { revalidate: 0 } });
+
+// 3. Combined object
+await storio.getNotices({ search: 'exam', tenantHost: 'school.localhost', next: { revalidate: 0 } });
+```
 
 ---
 
-## 2. Complete SDK Method & Endpoint Index (44 Methods)
+## 2. Complete SDK Method & Endpoint Index (58 Methods)
 
 | # | SDK Method Signature | HTTP | Endpoint Path | Query Parameters / Body | Return Type |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| 1 | `storio.getSettings(host?)` | `GET` | `/api/v2/template/settings/` | None | `Promise<StorioSettingsResponse \| null>` |
-| 2 | `storio.getCustomization(host?)` | `GET` | `/api/v2/template/customization/` | None | `Promise<StorioCustomizationResponse \| null>` |
-| 3 | `storio.getNavigation(host?)` | `GET` | `/api/v2/template/navigation/` | None | `Promise<StorioNavigationResponse \| null>` |
-| 4 | `storio.getLayout(host?)` | `GET` | `/api/v2/template/layout/` | None | `Promise<StorioLayoutResponse \| null>` |
-| 5 | `storio.getInstitutionProfile(host?)` | `GET` | `/api/v2/template/institution-profile/` | None | `Promise<StorioInstitutionProfile \| null>` |
-| 6 | `storio.getHeroSlides(host?)` | `GET` | `/api/v2/template/hero-slides/` | None | `Promise<StorioHeroSlide[] \| null>` |
-| 7 | `storio.getNotices(host?)` | `GET` | `/api/v2/template/notices/` | `search`, `status` | `Promise<StorioNotice[] \| null>` |
-| 8 | `storio.getNoticeDetail(id, host?)` | `GET` | `/api/v2/template/notices/${id}/` | None | `Promise<StorioNotice \| null>` |
-| 9 | `storio.getBlogs(host?)` | `GET` | `/api/v2/template/blogs/` | `search`, `category` | `Promise<StorioBlogPost[] \| null>` |
-| 10 | `storio.getBlogDetail(slug, host?)` | `GET` | `/api/v2/template/blogs/${slug}/` | None | `Promise<StorioBlogPost \| null>` |
-| 11 | `storio.getStaff(host?)` | `GET` | `/api/v2/template/staff/` | None | `Promise<StorioStaffMember[] \| null>` |
-| 12 | `storio.getTeam(host?)` | `GET` | `/api/v2/template/team/` | `section` | `Promise<StorioTeamMember[] \| null>` |
-| 13 | `storio.getGallery(host?)` | `GET` | `/api/v2/template/gallery/` | None | `Promise<StorioGalleryItem[] \| null>` |
-| 14 | `storio.getAlbums(host?)` | `GET` | `/api/v2/template/albums/` | None | `Promise<StorioAlbum[] \| null>` |
-| 15 | `storio.getActivities(host?)` | `GET` | `/api/v2/template/activities/` | `search`, `category` | `Promise<StorioActivityItem[] \| null>` |
-| 16 | `storio.getActivityDetail(slug, host?)` | `GET` | `/api/v2/template/activities/${slug}/` | None | `Promise<StorioActivityItem \| null>` |
-| 17 | `storio.getEvents(host?)` | `GET` | `/api/events/` | `search`, `status`, `categories`, `is_featured`, `ordering` | `Promise<StorioEvent[] \| null>` |
-| 18 | `storio.getEventDetail(slugOrId, host?)` | `GET` | `/api/events/${slugOrId}/` | None | `Promise<StorioEvent \| null>` |
-| 19 | `storio.getPageBySlug(slug, host?)` | `GET` | `/api/v2/template/pages/by-slug/${slug}/` | None | `Promise<StorioCustomPage \| null>` |
-| 20 | `storio.getTestimonials(host?)` | `GET` | `/api/v2/template/testimonials/` | None | `Promise<Record<string, unknown>[] \| null>` |
-| 21 | `storio.getLeadershipMessages(host?)` | `GET` | `/api/v2/template/leadership-messages/` | None | `Promise<Record<string, unknown>[] \| null>` |
-| 22 | `storio.getPromotions(host?)` | `GET` | `/api/v2/template/promotions/` | `type`, `target` | `Promise<StorioPromotion[] \| null>` |
-| 23 | `storio.getImportantLinks(host?)` | `GET` | `/api/v2/template/important-links/` | None | `Promise<StorioImportantLink[] \| null>` |
-| 24 | `storio.getFaqs(host?)` | `GET` | `/api/v2/template/faqs/` | None | `Promise<StorioFaq[] \| null>` |
-| 25 | `storio.getVideos(host?)` | `GET` | `/api/v2/template/reels/` | None | `Promise<StorioVideoItem[] \| null>` |
-| 26 | `storio.getCalendarEvents(host?)` | `GET` | `/api/v2/template/calendar/` | None | `Promise<StorioCalendarEvent[] \| null>` |
-| 27 | `storio.getExamResults(host?)` | `GET` | `/api/v2/template/exam-results/` | `exam_type` | `Promise<StorioExamResult[] \| null>` |
-| 28 | `storio.getCareers(host?)` | `GET` | `/api/v2/template/careers/jobs/` | `location` | `Promise<Record<string, unknown>[] \| null>` |
-| 29 | `storio.getJobDetail(slug, host?)` | `GET` | `/api/v2/template/careers/jobs/${slug}/` | None | `Promise<Record<string, unknown> \| null>` |
-| 30 | `storio.getBoardNotices(host?)` | `GET` | `/api/v2/template/board-notices/` | None | `Promise<StorioBoardNotice[] \| null>` |
-| 31 | `storio.getAdmissionFormConfig(host?)` | `GET` | `/api/v2/template/admission/form-config/current/` | None | `Promise<StorioAdmissionFormConfig \| null>` |
-| 32 | `storio.sendAdmissionOTP(email, phone?, host?)` | `POST` | `/api/v2/template/admission/send-otp/` | Body: `{ email, phone? }` | `Promise<StorioAdmissionOTPResponse \| null>` |
-| 33 | `storio.verifyAdmissionOTP(email, otpCode, host?)` | `POST` | `/api/v2/template/admission/verify-otp/` | Body: `{ email, otp_code }` | `Promise<StorioAdmissionOTPResponse \| null>` |
-| 34 | `storio.submitAdmissionApplication(formData, otpCode, host?)` | `POST` | `/api/v2/template/admission/applications/` | Body: `{ form_data, otp_code }` | `Promise<StorioAdmissionApplicationResponse \| null>` |
-| 35 | `storio.submitContactMessage(formData, host?)` | `POST` | `/api/v2/template/contact/` | Body: `{ name, email, mobile, subject, message, recaptcha_token? }` | `Promise<StorioContactFormResponse \| null>` |
-| 36 | `storio.getClassRoutines(host?)` | `GET` | `/api/v2/template/academic/class-routines/` | `class_name`, `section`, `shift`, `year` | `Promise<StorioClassRoutine[] \| null>` |
-| 37 | `storio.getSyllabuses(host?)` | `GET` | `/api/v2/template/academic/syllabuses/` | `class_name`, `exam_type`, `year` | `Promise<StorioSyllabus[] \| null>` |
-| 38 | `storio.getStudentStats(params?, host?)` | `GET` | `/api/v2/template/student-stats/` | `year`, `program` | `Promise<StorioStudentStatsResponse \| null>` |
-| 39 | `storio.getAcademicPrograms(host?)` | `GET` | `/api/v2/template/academic/programs/` | None | `Promise<StorioAcademicProgram[]>` |
-| 40 | `storio.getMpoInfo(host?)` | `GET` | `/api/v2/template/mpo-info/` | None | `Promise<StorioMpoInfo \| null>` |
-| 41 | `storio.getInformationService(host?)` | `GET` | `/api/v2/template/information-service/` | None | `Promise<StorioInformationService \| null>` |
-| 42 | `storio.getComplaintOfficer(host?)` | `GET` | `/api/v2/template/complaint-officer/` | None | `Promise<StorioComplaintOfficer \| null>` |
-| 43 | `storio.getHotlines(host?)` | `GET` | `/api/v2/template/hotlines/` | None | `Promise<StorioHotline[] \| null>` |
-| 44 | `storio.apiFetch<T>(endpoint, options?)` | `GET/POST` | `*` | Custom Options | `Promise<T \| null>` |
+| 1 | `storio.getSettings(hostOrOpts?)` | `GET` | `/api/v2/template/settings/` | None | `Promise<StorioSettingsResponse \| null>` |
+| 2 | `storio.getCustomization(hostOrOpts?)` | `GET` | `/api/v2/template/customization/` | None *(recommend `revalidate: 0`)* | `Promise<StorioCustomizationResponse \| null>` |
+| 3 | `storio.getNavigation(hostOrOpts?)` | `GET` | `/api/v2/template/navigation/` | None *(recommend `revalidate: 0`)* | `Promise<StorioNavigationResponse \| null>` |
+| 4 | `storio.getLayout(hostOrOpts?)` | `GET` | `/api/v2/template/layout/` | None *(recommend `revalidate: 0`)* | `Promise<StorioLayoutResponse \| null>` |
+| 5 | `storio.getInstitutionProfile(hostOrOpts?)` | `GET` | `/api/v2/template/institution-profile/` | None | `Promise<StorioInstitutionProfile \| null>` |
+| 6 | `storio.getInstitutionCards(hostOrOpts?)` | `GET` | `/api/institution-profile/cards/` | None *(paginated `.results`)* | `Promise<StorioInstitutionCard[] \| null>` |
+| 7 | `storio.getHeroSlides(hostOrOpts?)` | `GET` | `/api/v2/template/hero-slides/` | None | `Promise<StorioHeroSlide[] \| null>` |
+| 8 | `storio.getNotices(paramsOrOpts?, opts?)` | `GET` | `/api/v2/template/notices/` | `search`, `status` | `Promise<StorioNotice[] \| null>` |
+| 9 | `storio.getNoticeDetail(id, hostOrOpts?)` | `GET` | `/api/v2/template/notices/${id}/` | None | `Promise<StorioNotice \| null>` |
+| 10 | `storio.getBlogs(paramsOrOpts?, opts?)` | `GET` | `/api/v2/template/blogs/` | `search`, `category` | `Promise<StorioBlogPost[] \| null>` |
+| 11 | `storio.getBlogCategories(hostOrOpts?)` | `GET` | `/api/v2/template/blogs/categories/` | None | `Promise<StorioBlogCategory[] \| null>` |
+| 12 | `storio.getBlogDetail(slug, hostOrOpts?)` | `GET` | `/api/v2/template/blogs/${slug}/` | None | `Promise<StorioBlogPost \| null>` |
+| 13 | `storio.getStaff(hostOrOpts?)` | `GET` | `/api/v2/template/staff/` | None | `Promise<StorioStaffMember[] \| null>` |
+| 14 | `storio.getTeam(hostOrOpts?)` | `GET` | `/api/v2/template/team/` | None | `Promise<StorioTeamMember[] \| null>` |
+| 15 | `storio.getGallery(hostOrOpts?)` | `GET` | `/api/v2/template/gallery/` | None | `Promise<StorioGalleryItem[] \| null>` |
+| 16 | `storio.getAlbums(hostOrOpts?)` | `GET` | `/api/v2/template/albums/` | None | `Promise<StorioAlbum[] \| null>` |
+| 17 | `storio.getActivities(paramsOrOpts?, opts?)` | `GET` | `/api/v2/template/activities/` | `search`, `category` | `Promise<StorioActivityItem[] \| null>` |
+| 18 | `storio.getActivityCategories(hostOrOpts?)` | `GET` | `/api/v2/template/activities/categories/` | None | `Promise<StorioActivityCategory[] \| null>` |
+| 19 | `storio.getActivityDetail(slug, hostOrOpts?)` | `GET` | `/api/v2/template/activities/${slug}/` | None | `Promise<StorioActivityItem \| null>` |
+| 20 | `storio.getEvents(paramsOrOpts?, opts?)` | `GET` | `/api/events/` | `status`, `categories`, `is_featured`, `search`, `ordering` *(paginated `.results`)* | `Promise<StorioEvent[] \| null>` |
+| 21 | `storio.getEventCategories(hostOrOpts?)` | `GET` | `/api/event-categories/` | None *(paginated `.results`)* | `Promise<StorioEventCategory[] \| null>` |
+| 22 | `storio.getEventDetail(slugOrId, hostOrOpts?)` | `GET` | `/api/events/${slugOrId}/` | None | `Promise<StorioEvent \| null>` |
+| 23 | `storio.getPages(hostOrOpts?)` | `GET` | `/api/v2/template/pages/` | None | `Promise<StorioCustomPage[] \| null>` |
+| 24 | `storio.getPageBySlug(slug, hostOrOpts?)` | `GET` | `/api/v2/template/pages/by-slug/${slug}/` | None | `Promise<StorioCustomPage \| null>` |
+| 25 | `storio.getTestimonials(hostOrOpts?)` | `GET` | `/api/v2/template/testimonials/` | None | `Promise<StorioTestimonial[] \| null>` |
+| 26 | `storio.getLeadershipMessages(hostOrOpts?)` | `GET` | `/api/v2/template/leadership-messages/` | None | `Promise<StorioLeadershipMessage[] \| null>` |
+| 27 | `storio.getPromotions(hostOrOpts?)` | `GET` | `/api/v2/template/promotions/` | None | `Promise<StorioPromotion[] \| null>` |
+| 28 | `storio.getPromotionDetail(id, hostOrOpts?)` | `GET` | `/api/v2/template/promotions/${id}/` | None | `Promise<StorioPromotion \| null>` |
+| 29 | `storio.trackPromotionClick(id, hostOrOpts?)` | `POST` | `/api/promotions/${id}/click/` | None | `Promise<StorioPromotionClickResponse \| null>` |
+| 30 | `storio.getImportantLinks(hostOrOpts?)` | `GET` | `/api/v2/template/important-links/` | None | `Promise<StorioImportantLink[] \| null>` |
+| 31 | `storio.getFaqs(hostOrOpts?)` | `GET` | `/api/v2/template/faqs/` | None | `Promise<StorioFaq[] \| null>` |
+| 32 | `storio.getVideos(hostOrOpts?)` | `GET` | `/api/v2/template/reels/` | None | `Promise<StorioVideoItem[] \| null>` |
+| 33 | `storio.getCalendarEvents(hostOrOpts?)` | `GET` | `/api/v2/template/calendar/` | None | `Promise<StorioCalendarEvent[] \| null>` |
+| 34 | `storio.getCalendarSettings(hostOrOpts?)` | `GET` | `/api/calendar/settings/` | None | `Promise<StorioCalendarSetting \| null>` |
+| 35 | `storio.getExamResults(paramsOrOpts?, opts?)` | `GET` | `/api/v2/template/exam-results/` | `exam_type` | `Promise<StorioExamResult[] \| null>` |
+| 36 | `storio.getCareers(paramsOrOpts?, opts?)` | `GET` | `/api/v2/template/careers/jobs/` | `location` | `Promise<StorioCareer[] \| null>` |
+| 37 | `storio.getJobDetail(slug, hostOrOpts?)` | `GET` | `/api/v2/template/careers/jobs/${slug}/` | None | `Promise<StorioCareer \| null>` |
+| 38 | `storio.getBoardNotices(hostOrOpts?)` | `GET` | `/api/v2/template/board-notices/` | None | `Promise<StorioBoardNotice[] \| null>` |
+| 39 | `storio.getAdmissionFormConfig(hostOrOpts?)` | `GET` | `/api/v2/template/admission/form-config/current/` | None | `Promise<StorioAdmissionFormConfig \| null>` |
+| 40 | `storio.sendAdmissionOTP(email, phone?, opts?)` | `POST` | `/api/v2/template/admission/send-otp/` | Body: `{ email, phone? }` | `Promise<StorioAdmissionOTPResponse \| null>` |
+| 41 | `storio.verifyAdmissionOTP(email, otp, opts?)` | `POST` | `/api/v2/template/admission/verify-otp/` | Body: `{ email, otp_code }` | `Promise<StorioAdmissionOTPResponse \| null>` |
+| 42 | `storio.submitAdmissionApplication(data, otp, opts?)` | `POST` | `/api/v2/template/admission/applications/` | Body: `{ form_data, otp_code }` | `Promise<StorioAdmissionApplicationResponse \| null>` |
+| 43 | `storio.submitContactMessage(data, hostOrOpts?)` | `POST` | `/api/v2/template/contact/` | Body: `{ name, email, mobile, subject, message, recaptcha_token? }` | `Promise<StorioContactFormResponse \| null>` |
+| 44 | `storio.getForms(hostOrOpts?)` | `GET` | `/api/v2/template/forms/` | None | `Promise<StorioForm[] \| null>` |
+| 45 | `storio.getForm(code, hostOrOpts?)` | `GET` | `/api/v2/template/forms/${code}/` | None *(defaults `revalidate: 0`)* | `Promise<StorioForm \| null>` |
+| 46 | `storio.uploadFormFile(code, file, fieldId?, opts?)` | `POST` | `/api/v2/template/forms/${code}/upload/` | `multipart/form-data` (`file`, `field_id?`) | `Promise<StorioFormUploadResponse \| null>` |
+| 47 | `storio.submitFormResponse(payload, hostOrOpts?)` | `POST` | `/api/v2/template/forms/submit/` | Body: `{ form, answers }` | `Promise<StorioFormSubmitResponse \| null>` |
+| 48 | `storio.getClassRoutines(hostOrOpts?)` | `GET` | `/api/v2/template/academic/class-routines/` | None | `Promise<StorioClassRoutine[] \| null>` |
+| 49 | `storio.getSyllabuses(hostOrOpts?)` | `GET` | `/api/v2/template/academic/syllabuses/` | None | `Promise<StorioSyllabus[] \| null>` |
+| 50 | `storio.getStudentStats(params?, hostOrOpts?)` | `GET` | `/api/v2/template/student-stats/` | `year`, `program` | `Promise<StorioStudentStatsResponse \| null>` |
+| 51 | `storio.getAcademicPrograms(hostOrOpts?)` | `GET` | `/api/v2/template/academic/programs/` | None | `Promise<StorioAcademicProgram[]>` |
+| 52 | `storio.getMpoInfo(hostOrOpts?)` | `GET` | `/api/v2/template/mpo-info/` | None | `Promise<StorioMpoInfo \| null>` |
+| 53 | `storio.getInformationService(hostOrOpts?)` | `GET` | `/api/v2/template/information-service/` | None | `Promise<StorioInformationService \| null>` |
+| 54 | `storio.getComplaintOfficer(hostOrOpts?)` | `GET` | `/api/v2/template/complaint-officer/` | None | `Promise<StorioComplaintOfficer \| null>` |
+| 55 | `storio.getHotlines(hostOrOpts?)` | `GET` | `/api/v2/template/hotlines/` | None | `Promise<StorioHotline[] \| null>` |
+| 56 | `storio.getCollection<T>(slug, options?)` | `GET` | `/api/v2/collections/${slug}/` | `page`, `pageSize`, `sortBy`, `expand` | `Promise<StorioCollectionResponse<T> \| null>` |
+| 57 | `storio.getCollectionItem<T>(slug, itemId, opts?)` | `GET` | `/api/v2/collections/${slug}/${itemId}/` | `expand` | `Promise<StorioCollectionItem<T> \| null>` |
+| 58 | `storio.apiFetch<T>(endpoint, options?)` | `ANY` | `*` | Custom `StorioFetchOptions` | `Promise<T \| null>` |
 
 ---
 
 ## 3. Detailed Method & Data Payload Reference
 
-### Section 1: Site Identity & Layout Configs
+### Section 1: Site Identity, Layout, Profile & Feature Cards
 
 #### 1. `storio.getSettings(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/settings/`
 - **Method Signature:** `storio.getSettings(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioSettingsResponse | null>`
-- **Description:** Returns general site identity metadata like site title, tagline, branding logos, contact info, and social media links.
-- **Data Payload Obtained:**
+- **Description:** Returns public site settings (title, tagline, logo, favicon, contact info, analytics IDs, hCaptcha site key, and social links).
+- **Verified JSON Response Shape:**
   ```json
   {
-    "site_title": "Emerald International Academy",
-    "site_tagline": "Empowering Future Innovators",
-    "logo_url": "https://tenant.storio.app/media/branding/logo.png",
-    "favicon_url": "https://tenant.storio.app/media/branding/favicon.ico",
-    "contact_email": "admissions@emeraldacademy.edu",
-    "phone_number": "+880 1711-000000",
-    "mailing_address": "House 14, Road 5, Dhanmondi, Dhaka-1205",
-    "hcaptcha_site_key": "10000000-ffff-ffff-ffff-000000000001",
+    "site_title": "Greenwood International Academy",
+    "site_tagline": "Excellence in Education",
+    "logo_url": "https://tenant.storio.cloud/media/branding/logo.png",
+    "favicon_url": "https://tenant.storio.cloud/media/branding/favicon.ico",
+    "contact_email": "info@example.edu",
+    "phone_number": "+880 1700-000000",
+    "mobile_number": "+880 1800-000000",
     "social_links": [
-      { "platform": "facebook", "url": "https://facebook.com/emeraldacademy" },
-      { "platform": "youtube", "url": "https://youtube.com/@emeraldacademy" },
-      { "platform": "linkedin", "url": "https://linkedin.com/school/emeraldacademy" }
-    ]
+      { "platform": "facebook", "url": "https://facebook.com/exampleacademy" },
+      { "platform": "youtube", "url": "https://youtube.com/@exampleacademy" }
+    ],
+    "mailing_address": "123 Academic Road, Dhaka-1205",
+    "google_analytics_id": "G-XXXXXXXXXX",
+    "google_tag_manager_id": "GTM-XXXXXXX",
+    "hcaptcha_site_key": "10000000-ffff-ffff-ffff-000000000001"
   }
   ```
 
 #### 2. `storio.getCustomization(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/customization/`
 - **Method Signature:** `storio.getCustomization(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioCustomizationResponse | null>`
-- **Description:** Returns tenant-configured theme settings that define the active color scheme, typography tokens, layout preferences, and custom CSS variables declared in the template manifest.
-- **Data Payload Obtained:**
+- **Description:** Returns the active theme configuration object (`config`) defined by your template's `public/storio.template.json` manifest (colors, fonts, layout flags, and `navbarLinks`).
+- **Caching Tip:** Pass `{ tenantHost, next: { revalidate: 0 } }` so published dashboard theme/menu updates reflect immediately.
+- **Verified JSON Response Shape:**
   ```json
   {
     "config": {
-      "primary_color": "#059669",
-      "accent_color": "#d97706",
-      "font_family": "Inter, sans-serif",
-      "header_style": "sticky",
-      "footer_columns": 4,
-      "enable_dark_mode": false
+      "primaryColor": "#0e704b",
+      "secondaryColor": "#1e293b",
+      "headingFont": "Plus Jakarta Sans",
+      "showHero": true,
+      "navbarLinks": [
+        { "id": "1", "name": "Home", "href": "/" }
+      ]
     }
   }
   ```
@@ -271,26 +246,25 @@ Every component, utility, and state hook must use the exported TypeScript interf
 #### 3. `storio.getNavigation(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/navigation/`
 - **Method Signature:** `storio.getNavigation(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioNavigationResponse | null>`
-- **Description:** Returns the institutional navigation menu hierarchy (Header, Footer, Mobile Drawer menus), including nested dropdown children.
-- **Data Payload Obtained:**
+- **Description:** Returns the header/navigation links configured in **Menu Management** or **Theme Settings → Navigation Menu**.
+- **Field Compatibility Tip:** Dashboard Menu Management saves items using `name`, `href`, and `subLinks` (with optional `isVisible`). Support `item.name || item.label`, `item.href || item.url`, and `item.subLinks || item.children`.
+- **Verified JSON Response Shape:**
   ```json
   {
     "items": [
+      { "id": "1", "name": "Home", "href": "/" },
       {
-        "id": "nav-1",
-        "label": "About Us",
-        "url": "/about",
-        "target": "_self",
-        "children": [
-          { "id": "nav-1-1", "label": "Leadership Messages", "url": "/about/leadership", "target": "_self" },
-          { "id": "nav-1-2", "label": "Faculty Directory", "url": "/about/faculty", "target": "_self" },
-          { "id": "nav-1-3", "label": "Campus Infrastructure", "url": "/about/infrastructure", "target": "_self" }
+        "id": "2",
+        "name": "About Us",
+        "href": "#",
+        "isVisible": true,
+        "subLinks": [
+          { "id": "2-1", "name": "Institution Profile", "href": "/about/institution" },
+          { "id": "2-2", "name": "Administrators", "href": "/about/administrator" }
         ]
       },
-      { "id": "nav-2", "label": "Academics", "url": "/academics", "target": "_self" },
-      { "id": "nav-3", "label": "Admissions", "url": "/admissions", "target": "_self" },
-      { "id": "nav-4", "label": "Notice Board", "url": "/notices", "target": "_self" },
-      { "id": "nav-5", "label": "Contact Us", "url": "/contact", "target": "_self" }
+      { "id": "3", "name": "Notice", "href": "/notice" },
+      { "id": "4", "name": "Contact", "href": "/contact" }
     ]
   }
   ```
@@ -298,31 +272,33 @@ Every component, utility, and state hook must use the exported TypeScript interf
 #### 4. `storio.getLayout(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/layout/`
 - **Method Signature:** `storio.getLayout(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioLayoutResponse | null>`
-- **Description:** Aggregation endpoint combining `settings`, `customization`, and `navigation` into a single high-performance payload. Highly recommended for root Next.js `layout.tsx` files.
-- **Data Payload Obtained:**
+- **Description:** Combined endpoint returning `settings`, `customization`, and `navigation` in one request — ideal for root `layout.tsx`.
+- **Verified JSON Response Shape:**
   ```json
   {
     "settings": {
-      "site_title": "Emerald International Academy",
-      "site_tagline": "Empowering Future Innovators",
-      "logo_url": "https://tenant.storio.app/media/branding/logo.png",
-      "contact_email": "admissions@emeraldacademy.edu",
-      "phone_number": "+880 1711-000000",
+      "site_title": "Greenwood International Academy",
+      "site_tagline": "Excellence in Education",
+      "logo_url": "https://tenant.storio.cloud/media/branding/logo.png",
+      "favicon_url": "https://tenant.storio.cloud/media/branding/favicon.ico",
+      "contact_email": "info@example.edu",
+      "phone_number": "+880 1700-000000",
       "social_links": [
-        { "platform": "facebook", "url": "https://facebook.com/emeraldacademy" }
-      ]
+        { "platform": "facebook", "url": "https://facebook.com/exampleacademy" }
+      ],
+      "mailing_address": "123 Academic Road, Dhaka-1205"
     },
     "customization": {
       "config": {
-        "primary_color": "#059669",
-        "accent_color": "#d97706"
+        "primaryColor": "#0e704b",
+        "navbarLinks": [
+          { "id": "1", "name": "Home", "href": "/" }
+        ]
       }
     },
     "navigation": {
       "items": [
-        { "id": "nav-1", "label": "Home", "url": "/" },
-        { "id": "nav-2", "label": "Academics", "url": "/academics" },
-        { "id": "nav-3", "label": "Notices", "url": "/notices" }
+        { "id": "1", "name": "Home", "href": "/" }
       ]
     }
   }
@@ -331,38 +307,75 @@ Every component, utility, and state hook must use the exported TypeScript interf
 #### 5. `storio.getInstitutionProfile(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/institution-profile/`
 - **Method Signature:** `storio.getInstitutionProfile(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioInstitutionProfile | null>`
-- **Description:** Institutional identity details, including ministry EIN/EIIN registration codes, founding year, academic recognitions, and legal accreditation certificates.
-- **Data Payload Obtained:**
+- **Description:** Returns institutional profile metadata (EIIN, school code, shift, location hierarchy, mission, vision, metrics, and board recognition details).
+- **Verified JSON Response Shape:**
   ```json
   {
     "id": 1,
-    "name": "Emerald International Academy",
-    "short_name": "EIA",
-    "eiin": "130456",
-    "institute_code": "EI-9921",
-    "established_year": 1994,
-    "motto": "Knowledge, Character, Innovation",
-    "email": "info@emeraldacademy.edu",
-    "phone": "+880 2 99887766",
-    "address": "Dhanmondi Campus, Dhaka-1205, Bangladesh",
-    "about_text": "A premier English-medium educational institution serving over 2,500 students.",
-    "recognitions": [
+    "institution_image": 5,
+    "institution_image_url": "/media/uploads/campus.webp",
+    "eiin": 123456,
+    "school_code": "SCH-1001",
+    "school_shift": "Morning & Day",
+    "school_type": "Boys & Girls",
+    "division": "Dhaka",
+    "district": "Dhaka",
+    "upazila": "Dhanmondi",
+    "ward_no": "15",
+    "school_details": "Founded in 1995 to deliver modern academic excellence.",
+    "additional_info": [
+      { "label": "Campus Area", "value": "3.5 Acres" },
+      { "label": "Science Labs", "value": "4" }
+    ],
+    "important_links": [
+      { "id": 1, "title": "Education Board Portal", "url": "https://dhakaeducationboard.gov.bd", "order": 1 }
+    ],
+    "key_metrics": [
+      { "label": "Pass Rate", "value": "99.5%" }
+    ],
+    "metrics_title": "Our Key Achievements",
+    "total_students": 1850,
+    "total_teachers": 92,
+    "total_students_label": "Total Students",
+    "total_teachers_label": "Total Teachers",
+    "mission": "To nurture curious minds and strong character.",
+    "vision": "To empower students for global leadership.",
+    "education_board": "Dhaka",
+    "recognition_levels": ["Junior Secondary", "Secondary", "Higher Secondary"],
+    "academic_recognition": [
+      { "id": 1, "level": "Secondary", "recognition_type": "Permanent", "valid_until": "2030-12-31", "order_number": "GOV-2026-101" }
+    ],
+    "recognition_documents": [
+      { "id": 1, "title": "Recognition Certificate", "file_url": "/media/uploads/recognition.pdf", "issue_date": "2024-06-15" }
+    ],
+    "created_at": "2026-01-10T09:00:00Z",
+    "updated_at": "2026-11-20T12:00:00Z"
+  }
+  ```
+
+#### 6. `storio.getInstitutionCards(tenantHostOrOptions?)` *(New)*
+- **Endpoint:** `GET /api/institution-profile/cards/`
+- **Method Signature:** `storio.getInstitutionCards(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioInstitutionCard[] | null>`
+- **Description:** Returns institutional highlight/feature cards configured under Dashboard → Institution Profile → Cards.
+- **Note:** This endpoint returns a DRF paginated object `{ count, next, previous, results: [...] }`. Use `unwrapList(res)` before mapping.
+- **Verified JSON Response Shape:**
+  ```json
+  {
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
       {
         "id": 1,
-        "title": "Cambridge Assessment International Education Affiliation",
-        "issuing_authority": "Cambridge International Education",
-        "issue_date": "2008-05-12",
-        "expiry_date": null,
-        "is_lifetime": true,
-        "description": "Accredited British Curriculum Center BD-042",
-        "documents": [
-          {
-            "id": 10,
-            "title": "Cambridge Accreditation Certificate",
-            "document_file": "https://tenant.storio.app/media/accreditations/cambridge_cert.pdf",
-            "uploaded_at": "2024-01-15T09:00:00Z"
-          }
-        ]
+        "institution_profile": 1,
+        "title": "Modern ICT Laboratory",
+        "description": "Equipped with 60 high-speed workstations and robotics kits.",
+        "icon": "laptop",
+        "image": 12,
+        "image_url": "/media/uploads/ict_lab.webp",
+        "order": 0,
+        "created_at": "2026-08-01T10:00:00Z",
+        "updated_at": "2026-08-01T10:00:00Z"
       }
     ]
   }
@@ -372,30 +385,43 @@ Every component, utility, and state hook must use the exported TypeScript interf
 
 ### Section 2: Hero Carousel Banners
 
-#### 6. `storio.getHeroSlides(tenantHostOrOptions?)`
+#### 7. `storio.getHeroSlides(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/hero-slides/`
 - **Method Signature:** `storio.getHeroSlides(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioHeroSlide[] | null>`
-- **Description:** Carousel slider banners displayed on the home page hero section, complete with CTA buttons, headlines, and responsive background images.
-- **Data Payload Obtained (Array):**
+- **Description:** Returns active homepage hero carousel slides sorted by `order`.
+- **Field Note:** Live backend responses use `heading`, `subheading`, `buttonText`, `buttonLink`, `bgType`, `bgImage_data`, and `bgImage_url`.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
-      "title": "Admissions Open for Academic Session 2026–2027",
-      "subtitle": "Join a vibrant community of scholars, athletes, and future innovators.",
-      "image_url": "https://tenant.storio.app/media/hero/banner_admissions_2026.jpg",
-      "button_text": "Apply Online",
-      "button_url": "/admissions/apply",
-      "order": 1
-    },
-    {
-      "id": 2,
-      "title": "State-of-the-Art Science & Robotics Facilities",
-      "subtitle": "Inspiring hands-on learning from Grade 1 through A-Levels.",
-      "image_url": "https://tenant.storio.app/media/hero/banner_robotics_lab.jpg",
-      "button_text": "Explore Campus",
-      "button_url": "/about/infrastructure",
-      "order": 2
+      "heading": "Admissions Open 2026",
+      "subheading": "Discover a future-ready curriculum built for holistic growth.",
+      "buttonText": "Apply Now",
+      "buttonLink": "/admission",
+      "bgType": "image",
+      "bgImage": 36,
+      "bgImage_data": {
+        "id": 36,
+        "file": "/media/uploads/hero_banner.webp",
+        "file_name": "hero_banner.webp",
+        "title": "Main Campus",
+        "alt_text": "Campus courtyard view"
+      },
+      "bgImage_url": null,
+      "bgColor": "#0e704b",
+      "gradientFrom": "#0e704b",
+      "gradientTo": "#064e3b",
+      "gradientDir": "to right",
+      "textPosition": "center",
+      "headingColor": "#ffffff",
+      "subheadingColor": "#e2e8f0",
+      "buttonColor": "#f59e0b",
+      "buttonTextColor": "#0f172a",
+      "status": "active",
+      "order": 1,
+      "create_date": "2026-07-09T09:52:03Z",
+      "update_date": "2026-07-09T09:52:03Z"
     }
   ]
   ```
@@ -404,220 +430,212 @@ Every component, utility, and state hook must use the exported TypeScript interf
 
 ### Section 3: Public Notice Board & Announcements
 
-#### 7. `storio.getNotices(tenantHostOrOptions?)`
+#### 8. `storio.getNotices(paramsOrOptions?, tenantHostOrOptions?)` *(Updated with Query Filters)*
 - **Endpoint:** `GET /api/v2/template/notices/`
-- **Method Signature:** `storio.getNotices(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioNotice[] | null>`
-- **Description:** List of public notices, circulars, and announcements with optional filtering.
+- **Method Signature:** `storio.getNotices(paramsOrOptions?: ({ search?: string; status?: string } & StorioFetchOptions) | string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioNotice[] | null>`
+- **Description:** Returns published announcements and circulars.
 - **Query Parameters Supported:**
-  - `search` (`string`): Search across title and notice content.
-  - `status` (`string`): Filter by notice status (`published`).
-- **Data Payload Obtained (Array):**
+  - `search` (`string`): Case-insensitive match against `title` and `content`.
+  - `status` (`string`): Notice status (`published`, `draft`, `schedule`, `archived`, `binned`; unauthenticated public calls only expose `published`).
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
-      "id": 101,
-      "title": "Annual Sports Meet & Schedule Guidelines 2026",
-      "slug": "annual-sports-meet-schedule-guidelines-2026",
-      "published_date": "2026-02-20T08:00:00Z",
-      "is_urgent": true,
-      "attachment_url": "https://tenant.storio.app/media/notices/sports_guidelines_2026.pdf"
-    },
-    {
-      "id": 102,
-      "title": "First Term Examination Routine 2026",
-      "slug": "first-term-examination-routine-2026",
-      "published_date": "2026-02-18T10:00:00Z",
-      "is_urgent": false,
-      "attachment_url": "https://tenant.storio.app/media/notices/exam_routine_t1.pdf"
+      "id": 1,
+      "title": "Annual Sports Meet Schedule 2026",
+      "content": "<p>All students are requested to assemble by 8:30 AM.</p>",
+      "status": "published",
+      "publish_date": "2026-08-25T07:07:13Z",
+      "pdf_view_mode": false,
+      "attachments": [12],
+      "attachments_detail": [
+        {
+          "id": 12,
+          "file": "/media/uploads/sports_schedule.pdf",
+          "file_type": "document",
+          "file_name": "sports_schedule.pdf",
+          "file_size": 245760,
+          "file_size_display": "240.00 KB",
+          "alt_text": "Sports Meet Circular",
+          "uploaded_by": "admin",
+          "create_date": "2026-08-25T07:05:00Z",
+          "update_date": "2026-08-25T07:05:00Z"
+        }
+      ],
+      "created_by": "admin",
+      "deleted_at": null,
+      "create_date": "2026-08-25T07:06:00Z",
+      "update_date": "2026-08-25T07:07:13Z"
     }
   ]
   ```
 
-#### 8. `storio.getNoticeDetail(id, tenantHostOrOptions?)`
+#### 9. `storio.getNoticeDetail(id, tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/notices/${id}/`
 - **Method Signature:** `storio.getNoticeDetail(id: number | string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioNotice | null>`
-- **Description:** Single notice detail view containing full sanitized HTML/markdown content, document attachment details, view modes, and publishing metadata.
-- **Parameters:**
-  - `id` (`number | string`): The unique numeric ID of the notice.
-  - `tenantHostOrOptions` (`string | StorioFetchOptions`, optional): Target tenant hostname or fetch options.
-- **Data Payload Obtained:**
-  ```json
-  {
-    "id": 101,
-    "title": "Annual Sports Meet & Schedule Guidelines 2026",
-    "content": "<p>All students, faculty members, and guardians are hereby informed that the Annual Sports Competition 2026 will be held across three phases from March 5th to March 8th at the Central Stadium...</p>",
-    "status": "published",
-    "publish_date": "2026-02-20T08:00:00Z",
-    "create_date": "2026-02-18T10:15:30Z",
-    "update_date": "2026-02-19T14:30:00Z",
-    "deleted_at": null,
-    "created_by": "admin",
-    "pdf_view_mode": true,
-    "attachments": [12],
-    "attachments_detail": [
-      {
-        "id": 12,
-        "file": "https://tenant.storio.app/media/notices/sports_guidelines_2026.pdf",
-        "file_type": "document",
-        "file_name": "sports_guidelines_2026.pdf",
-        "file_size": 2457600,
-        "file_size_display": "2.34 MB",
-        "alt_text": "Annual Sports Meet Official Guidelines PDF",
-        "uploaded_by": "admin",
-        "create_date": "2026-02-18T10:14:00Z",
-        "update_date": "2026-02-18T10:14:00Z"
-      }
-    ]
-  }
-  ```
+- **Description:** Returns a single published notice object matching the schema above.
 
 ---
 
-### Section 4: Blogs & News Articles
+### Section 4: Blogs, Categories & News Articles
 
-#### 9. `storio.getBlogs(tenantHostOrOptions?)`
+#### 10. `storio.getBlogs(paramsOrOptions?, tenantHostOrOptions?)` *(Updated with Query Filters)*
 - **Endpoint:** `GET /api/v2/template/blogs/`
-- **Method Signature:** `storio.getBlogs(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioBlogPost[] | null>`
-- **Description:** List of published blog articles, news stories, and press releases.
+- **Method Signature:** `storio.getBlogs(paramsOrOptions?: ({ search?: string; category?: number | string } & StorioFetchOptions) | string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioBlogPost[] | null>`
+- **Description:** Returns published blog articles ordered by `-publish_date`.
 - **Query Parameters Supported:**
-  - `search` (`string`): Search across title, excerpt, and body content.
-  - `category` (`string`): Filter by category slug or ID.
-- **Data Payload Obtained (Array):**
+  - `search` (`string`): Case-insensitive match against `title`, `content`, and `author`.
+  - `category` (`number | string`): Numeric category ID to filter by (`categories__id`).
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 14,
-      "title": "Modern Approaches in Digital Education & Interactive Classrooms",
+      "title": "Modern Approaches in Digital Education",
       "slug": "modern-approaches-digital-education",
-      "summary": "Exploring pedagogical shifts and smart classroom technologies transforming student collaboration.",
-      "featured_image_url": "https://tenant.storio.app/media/blogs/digital_classroom.jpg",
-      "category_name": "Academic Insights",
-      "published_at": "2026-02-15T09:00:00Z"
-    },
-    {
-      "id": 15,
-      "title": "Students Triumph at Regional Robotics Championship",
-      "slug": "students-triumph-robotics-championship",
-      "summary": "Our middle school robotics squad secured first place in autonomous navigation.",
-      "featured_image_url": "https://tenant.storio.app/media/blogs/robotics_win.jpg",
-      "category_name": "Student Life",
-      "published_at": "2026-02-12T14:30:00Z"
+      "content": "<p>Full HTML article body...</p>",
+      "excerpt": "Exploring smart classroom tools for better student engagement.",
+      "author": "Editorial Team",
+      "status": "published",
+      "status_display": "Published",
+      "tags": ["education", "technology"],
+      "publish_date": "2026-02-15T09:00:00Z",
+      "deleted_at": null,
+      "created_by": 1,
+      "featured_image": 42,
+      "featured_image_data": {
+        "id": 42,
+        "file": "/media/uploads/classroom.webp",
+        "file_type": "image",
+        "file_name": "classroom.webp",
+        "file_size": 154000,
+        "file_size_display": "150.39 KB",
+        "alt_text": "Smart classroom",
+        "uploaded_by": "admin",
+        "create_date": "2026-02-15T08:45:00Z",
+        "update_date": "2026-02-15T08:45:00Z"
+      },
+      "seo_title": "Modern Digital Education",
+      "seo_description": "Discover how digital tools support learning.",
+      "view_count": 328,
+      "is_featured": true,
+      "categories": [3],
+      "categories_data": [
+        {
+          "id": 3,
+          "name": "Academic Insights",
+          "slug": "academic-insights",
+          "description": "Curriculum and educational insights",
+          "parent": null,
+          "parent_name": null,
+          "posts_count": 8,
+          "create_date": "2026-01-10T12:00:00Z",
+          "update_date": "2026-01-10T12:00:00Z"
+        }
+      ],
+      "create_date": "2026-02-15T08:50:00Z",
+      "update_date": "2026-02-16T11:20:00Z"
     }
   ]
   ```
 
-#### 10. `storio.getBlogDetail(slug, tenantHostOrOptions?)`
+#### 11. `storio.getBlogCategories(tenantHostOrOptions?)` *(Added)*
+- **Endpoint:** `GET /api/v2/template/blogs/categories/`
+- **Method Signature:** `storio.getBlogCategories(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioBlogCategory[] | null>`
+- **Description:** Returns all blog categories with published post counts for filter tabs and sidebars. Pass the returned `id` to `storio.getBlogs({ category: id })`.
+- **Verified JSON Response Shape (Array):**
+  ```json
+  [
+    {
+      "id": 3,
+      "name": "Academic Insights",
+      "slug": "academic-insights",
+      "description": "Curriculum and educational insights",
+      "parent": null,
+      "parent_name": null,
+      "posts_count": 8,
+      "create_date": "2026-01-10T12:00:00Z",
+      "update_date": "2026-01-10T12:00:00Z"
+    }
+  ]
+  ```
+
+#### 12. `storio.getBlogDetail(slug, tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/blogs/${slug}/`
 - **Method Signature:** `storio.getBlogDetail(slug: string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioBlogPost | null>`
-- **Description:** Full article details by slug for single blog post pages, including rich-text HTML content, featured media file details, author attribution, categorization, and SEO tags.
-- **Parameters:**
-  - `slug` (`string`): The URL slug identifier of the blog post.
-  - `tenantHostOrOptions` (`string | StorioFetchOptions`, optional): Target tenant hostname or fetch options.
-- **Data Payload Obtained:**
-  ```json
-  {
-    "id": 14,
-    "title": "Modern Approaches in Digital Education & Interactive Classrooms",
-    "slug": "modern-approaches-digital-education",
-    "content": "<p>Integrating interactive smart boards and modular project-based learning into secondary curricula fosters deeper analytical thinking. Recent studies demonstrate a 35% increase in comprehension when students engage with peer-led collaborative modules...</p>",
-    "excerpt": "Exploring pedagogical shifts and smart classroom technologies transforming student collaboration.",
-    "author": "Dr. Sarah Jenkins",
-    "status": "published",
-    "status_display": "Published",
-    "tags": "education, technology, innovation",
-    "publish_date": "2026-02-15T09:00:00Z",
-    "deleted_at": null,
-    "created_by": 1,
-    "featured_image": 42,
-    "featured_image_data": {
-      "id": 42,
-      "file": "https://tenant.storio.app/media/blogs/digital_classroom.jpg",
-      "file_type": "image",
-      "file_name": "digital_classroom.jpg",
-      "file_size": 1540000,
-      "file_size_display": "1.47 MB",
-      "alt_text": "Students collaborating in a smart interactive classroom",
-      "uploaded_by": "admin",
-      "create_date": "2026-02-15T08:45:00Z",
-      "update_date": "2026-02-15T08:45:00Z"
-    },
-    "seo_title": "Modern Digital Education Trends | Storio",
-    "seo_description": "Discover how interactive digital tools elevate student performance and retention.",
-    "view_count": 328,
-    "is_featured": true,
-    "categories": [3],
-    "categories_data": [
-      {
-        "id": 3,
-        "name": "Academic Insights",
-        "slug": "academic-insights",
-        "description": "Pedagogical research and educational technology trends",
-        "parent": null,
-        "parent_name": null,
-        "posts_count": 8,
-        "create_date": "2026-01-10T12:00:00Z",
-        "update_date": "2026-01-10T12:00:00Z"
-      }
-    ],
-    "create_date": "2026-02-15T08:50:00Z",
-    "update_date": "2026-02-16T11:20:00Z"
-  }
-  ```
+- **Description:** Returns a single published blog post by `slug` (same object shape as `getBlogs` items).
 
 ---
 
 ### Section 5: Faculty, Staff & Board Directory
 
-#### 11. `storio.getStaff(tenantHostOrOptions?)`
+#### 13. `storio.getStaff(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/staff/`
 - **Method Signature:** `storio.getStaff(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioStaffMember[] | null>`
-- **Description:** Complete staff roster including teachers, department heads, and administrative staff.
-- **Data Payload Obtained (Array):**
+- **Description:** Returns the teachers and administrative staff directory ordered by `order`.
+- **Field Note:** Live responses use `role`, `department_name`, `department_id`, `phone`, and `profile_pic_data.file_url`.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
-      "name": "Prof. Arthur Pendelton",
-      "designation": "Principal & Head of Academics",
-      "department": "Administration",
-      "email": "principal@emeraldacademy.edu",
-      "phone": "+880 1711-111111",
-      "photo_url": "https://tenant.storio.app/media/staff/principal.jpg",
-      "qualification": "Ph.D. in Educational Leadership, Oxford University",
-      "order": 1
-    },
-    {
-      "id": 2,
-      "name": "Dr. Eleanor Vance",
-      "designation": "Head of Natural Sciences",
-      "department": "Science",
-      "email": "e.vance@emeraldacademy.edu",
-      "phone": "+880 1711-222222",
-      "photo_url": "https://tenant.storio.app/media/staff/dr_vance.jpg",
-      "qualification": "M.Sc. Physics (Distinction), Imperial College London",
-      "order": 2
+      "name": "Prof. Jane Doe",
+      "role": "Senior Physics Lecturer",
+      "department": 3,
+      "department_name": "Science",
+      "department_id": 3,
+      "email": "faculty@example.edu",
+      "phone": "+880 1700-000001",
+      "is_mpo": true,
+      "joining_date": "2020-01-15",
+      "bio": "M.Sc. in Applied Physics with 12 years of teaching experience.",
+      "profile_pic": 14,
+      "profile_pic_data": {
+        "id": 14,
+        "file_url": "/media/uploads/faculty_1.webp",
+        "alt_text": "Prof. Jane Doe",
+        "file_type": "image"
+      },
+      "status": "active",
+      "order": 1,
+      "create_date": "2026-08-09T06:07:50Z",
+      "update_date": "2026-08-09T06:07:50Z"
     }
   ]
   ```
 
-#### 12. `storio.getTeam(tenantHostOrOptions?)`
+#### 14. `storio.getTeam(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/team/`
 - **Method Signature:** `storio.getTeam(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioTeamMember[] | null>`
-- **Description:** Executive leadership, Governing Body, Board of Trustees, and Managing Committee members.
-- **Query Parameters Supported:**
-  - `section` (`string`): Filter by governance section (`governing_body`, `board_of_trustees`, `executive_committee`).
-- **Data Payload Obtained (Array):**
+- **Description:** Returns visible governing body, board of trustees, and committee members.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
-      "name": "Dr. Tariq Ahmed",
-      "role": "Chairman, Board of Governors",
-      "designation": "Senior Educationist & Former Vice-Chancellor",
-      "bio": "Distinguished academic leader guiding educational policy and institutional modernization.",
-      "photo_url": "https://tenant.storio.app/media/team/chairman.jpg",
-      "section": "governing_body",
-      "order": 1
+      "fullname": "Dr. Robert Smith",
+      "designation": "Chairman, Governing Body",
+      "role": "Chairman",
+      "experience": "25 years in academic leadership.",
+      "section": 1,
+      "section_name": "Governing Body",
+      "phone": "+880 1700-000002",
+      "address": "Dhaka, Bangladesh",
+      "tenure_start": "2024-01-01",
+      "tenure_end": "2027-12-31",
+      "image": 20,
+      "image_data": {
+        "id": 20,
+        "file_url": "/media/uploads/chairman.webp",
+        "alt_text": "Dr. Robert Smith",
+        "caption": "Chairman"
+      },
+      "image_shape": "circle",
+      "image_shape_display": "Circle",
+      "is_visible": true,
+      "order": 1,
+      "create_date": "2026-07-10T08:00:00Z",
+      "update_date": "2026-07-10T08:00:00Z"
     }
   ]
   ```
@@ -626,449 +644,540 @@ Every component, utility, and state hook must use the exported TypeScript interf
 
 ### Section 6: Media Gallery & Photo Albums
 
-#### 13. `storio.getGallery(tenantHostOrOptions?)`
+#### 15. `storio.getGallery(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/gallery/`
 - **Method Signature:** `storio.getGallery(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioGalleryItem[] | null>`
-- **Description:** Standalone photo gallery showcase items with titles and album associations.
-- **Data Payload Obtained (Array):**
+- **Description:** Returns visible gallery photos along with `media_data` and album IDs.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
-      "title": "Annual Science Fair 2026",
-      "image_url": "https://tenant.storio.app/media/gallery/science_fair_1.jpg",
-      "thumbnail_url": "https://tenant.storio.app/media/gallery/thumbs/science_fair_1.jpg",
-      "album_id": 3,
-      "album_title": "Campus Exhibitions",
-      "created_at": "2026-02-10T12:00:00Z"
+      "media": 36,
+      "media_data": {
+        "id": 36,
+        "file": "/media/uploads/science_fair.webp",
+        "file_type": "image",
+        "file_name": "science_fair.webp",
+        "file_size": 124000,
+        "file_size_display": "121.09 KB",
+        "title": null,
+        "alt_text": "Science exhibition booth",
+        "caption": "Annual Science Fair",
+        "uploaded_by": "admin",
+        "create_date": "2026-07-09T09:52:03Z",
+        "update_date": "2026-07-09T09:52:03Z"
+      },
+      "image_title": "Annual Science Fair 2026",
+      "caption": "Students presenting robotics models",
+      "alt_text": "Science exhibition booth",
+      "album": 3,
+      "tags": "science, fair",
+      "is_visible": true,
+      "create_date": "2026-07-09T09:53:00Z",
+      "update_date": "2026-07-09T09:53:00Z"
     }
   ]
   ```
 
-#### 14. `storio.getAlbums(tenantHostOrOptions?)`
+#### 16. `storio.getAlbums(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/albums/`
 - **Method Signature:** `storio.getAlbums(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioAlbum[] | null>`
-- **Description:** Photo albums with cover photos and total photo count.
-- **Data Payload Obtained (Array):**
+- **Description:** Returns gallery albums used to group photos from `getGallery()`.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 3,
-      "title": "Campus Exhibitions & Fairs",
+      "name": "Campus Exhibitions & Fairs",
       "slug": "campus-exhibitions-fairs",
-      "description": "Snapshots from student exhibitions, robotics contests, and art showcases.",
-      "cover_image_url": "https://tenant.storio.app/media/gallery/science_fair_cover.jpg",
-      "total_photos": 48
+      "description": "Snapshots from annual science fairs and cultural events.",
+      "parent": null,
+      "parent_name": null,
+      "total_images": 12,
+      "create_date": "2026-07-01T10:00:00Z",
+      "update_date": "2026-07-01T10:00:00Z"
     }
   ]
   ```
 
 ---
 
-### Section 7: School Activities & Events
+### Section 7: School Activities, Events & Categories
 
-#### 15. `storio.getActivities(tenantHostOrOptions?)`
+#### 17. `storio.getActivities(paramsOrOptions?, tenantHostOrOptions?)` *(Updated with Query Filters)*
 - **Endpoint:** `GET /api/v2/template/activities/`
-- **Method Signature:** `storio.getActivities(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioActivityItem[] | null>`
-- **Description:** List of co-curricular student activities, workshops, sports clubs, and robotics sessions.
+- **Method Signature:** `storio.getActivities(paramsOrOptions?: ({ search?: string; category?: number | string } & StorioFetchOptions) | string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioActivityItem[] | null>`
+- **Description:** Returns published co-curricular activity posts with gallery images and categories.
 - **Query Parameters Supported:**
-  - `search` (`string`): Search across activity titles and descriptions.
-  - `category` (`string`): Filter by activity category slug or ID.
-- **Data Payload Obtained (Array):**
+  - `search` (`string`): Case-insensitive match against `title`, `content`, and `author`.
+  - `category` (`number | string`): Numeric category ID (`categories__id`).
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 9,
       "title": "Robotics & STEM Innovation Workshop 2026",
       "slug": "robotics-stem-innovation-workshop-2026",
-      "summary": "Over 120 students built autonomous rovers and prototyped microcontrollers in our annual STEM workshop.",
-      "featured_image_url": "https://tenant.storio.app/media/activities/stem_rover_demo.jpg",
-      "published_at": "2026-02-22T09:30:00Z"
-    },
-    {
-      "id": 10,
-      "title": "Debate Club National Championship Preparation",
-      "slug": "debate-club-national-championship-prep",
-      "summary": "Intensive parliamentary debate sparring sessions focusing on economics and ethics.",
-      "featured_image_url": "https://tenant.storio.app/media/activities/debate_club.jpg",
-      "published_at": "2026-02-18T11:00:00Z"
+      "content": "<p>Over 120 students built autonomous rovers...</p>",
+      "excerpt": "Hands-on robotics and microcontroller prototyping workshop.",
+      "author": "Computer Science Dept",
+      "status": "published",
+      "status_display": "Published",
+      "deleted_at": null,
+      "created_by": 1,
+      "gallery_images": [
+        {
+          "id": 18,
+          "image_details": {
+            "id": 105,
+            "file": "/media/uploads/rover_demo.webp",
+            "file_type": "image",
+            "file_name": "rover_demo.webp",
+            "alt_text": "Autonomous rover prototype"
+          },
+          "caption": "Testing rovers on competition track",
+          "order": 1
+        }
+      ],
+      "featured_image_data": {
+        "id": 105,
+        "file": "/media/uploads/rover_demo.webp",
+        "file_type": "image",
+        "file_name": "rover_demo.webp",
+        "alt_text": "Autonomous rover prototype"
+      },
+      "seo_title": "Robotics & STEM Workshop 2026",
+      "seo_description": "Highlights from our STEM workshop.",
+      "view_count": 512,
+      "is_featured": true,
+      "categories": [4],
+      "categories_data": [
+        {
+          "id": 4,
+          "name": "STEM & Robotics",
+          "slug": "stem-robotics",
+          "description": "Engineering and technology clubs",
+          "parent": null,
+          "parent_name": null,
+          "activities_count": 6,
+          "create_date": "2026-01-15T09:00:00Z",
+          "update_date": "2026-01-15T09:00:00Z"
+        }
+      ],
+      "create_date": "2026-02-22T09:30:00Z",
+      "update_date": "2026-02-23T11:00:00Z"
     }
   ]
   ```
 
-#### 16. `storio.getActivityDetail(slug, tenantHostOrOptions?)`
-- **Endpoint:** `GET /api/v2/template/activities/${slug}/`
-- **Method Signature:** `storio.getActivityDetail(slug: string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioActivityItem | null>`
-- **Description:** Fetches complete activity details for workshops, sports clubs, arts exhibitions, and extracurricular programs by slug, including full gallery photos, categories, and HTML description.
-- **Parameters:**
-  - `slug` (`string`): The URL slug identifier of the activity.
-  - `tenantHostOrOptions` (`string | StorioFetchOptions`, optional): Target tenant hostname or custom fetch options.
-- **Data Payload Obtained:**
-  ```json
-  {
-    "id": 9,
-    "title": "Robotics & STEM Innovation Workshop 2026",
-    "slug": "robotics-stem-innovation-workshop-2026",
-    "content": "<p>Our annual STEM Innovation Workshop brought together over 120 aspiring junior engineers to design, build, and program autonomous obstacle-avoidance rovers. Highlights included live microcontroller coding demonstrations and circuit prototyping competitions...</p>",
-    "excerpt": "Over 120 students built autonomous rovers and prototyped microcontrollers in our annual STEM workshop.",
-    "author": "Department of Computer Science",
-    "status": "published",
-    "status_display": "Published",
-    "deleted_at": null,
-    "created_by": 2,
-    "gallery_images": [
-      {
-        "id": 18,
-        "image_id": 105,
-        "image_details": {
-          "id": 105,
-          "file": "https://tenant.storio.app/media/activities/stem_rover_demo.jpg",
-          "file_type": "image",
-          "file_name": "stem_rover_demo.jpg",
-          "file_size": 2100000,
-          "file_size_display": "2.00 MB",
-          "alt_text": "Students testing autonomous rover prototypes",
-          "uploaded_by": "admin",
-          "create_date": "2026-02-22T10:00:00Z",
-          "update_date": "2026-02-22T10:00:00Z"
-        },
-        "caption": "Students testing autonomous rover prototypes on competition track",
-        "order": 1
-      },
-      {
-        "id": 19,
-        "image_id": 106,
-        "image_details": {
-          "id": 106,
-          "file": "https://tenant.storio.app/media/activities/stem_award_ceremony.jpg",
-          "file_type": "image",
-          "file_name": "stem_award_ceremony.jpg",
-          "file_size": 1850000,
-          "file_size_display": "1.76 MB",
-          "alt_text": "Robotics workshop awards presentation",
-          "uploaded_by": "admin",
-          "create_date": "2026-02-22T14:30:00Z",
-          "update_date": "2026-02-22T14:30:00Z"
-        },
-        "caption": "Awards presentation for top innovation teams",
-        "order": 2
-      }
-    ],
-    "featured_image_data": {
-      "id": 105,
-      "file": "https://tenant.storio.app/media/activities/stem_rover_demo.jpg",
-      "file_type": "image",
-      "file_name": "stem_rover_demo.jpg",
-      "file_size": 2100000,
-      "file_size_display": "2.00 MB",
-      "alt_text": "Students testing autonomous rover prototypes",
-      "uploaded_by": "admin",
-      "create_date": "2026-02-22T10:00:00Z",
-      "update_date": "2026-02-22T10:00:00Z"
-    },
-    "seo_title": "Robotics & STEM Workshop 2026 | Storio",
-    "seo_description": "Highlights and project showcases from our annual school robotics workshop.",
-    "view_count": 512,
-    "is_featured": true,
-    "categories": [4],
-    "categories_data": [
-      {
-        "id": 4,
-        "name": "STEM & Robotics",
-        "slug": "stem-robotics",
-        "description": "Technology clubs and engineering workshops",
-        "parent": null,
-        "parent_name": null,
-        "activities_count": 6,
-        "create_date": "2026-01-15T09:00:00Z",
-        "update_date": "2026-01-15T09:00:00Z"
-      }
-    ],
-    "create_date": "2026-02-22T09:30:00Z",
-    "update_date": "2026-02-23T11:00:00Z"
-  }
-  ```
-
-#### 17. `storio.getEvents(tenantHostOrOptions?)`
-- **Endpoint:** `GET /api/events/`
-- **Method Signature:** `storio.getEvents(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioEvent[] | null>`
-- **Description:** Institutional events list with dates, map locations, categories, and event status.
-- **Query Parameters Supported:**
-  - `status` (`string`): Filter by status (`draft`, `published`, `cancelled`). Defaults to `published`.
-  - `categories` (`number`): Filter by category ID.
-  - `is_featured` (`boolean`): Filter featured flagship events (`true` / `false`).
-  - `search` (`string`): Search across event title, content, and location.
-  - `ordering` (`string`): Sort order (e.g. `start_date`, `-start_date`).
-- **Data Payload Obtained (Array):**
+#### 18. `storio.getActivityCategories(tenantHostOrOptions?)` *(Added)*
+- **Endpoint:** `GET /api/v2/template/activities/categories/`
+- **Method Signature:** `storio.getActivityCategories(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioActivityCategory[] | null>`
+- **Description:** Returns co-curricular activity categories and counts. Pass `id` to `storio.getActivities({ category: id })`.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 4,
-      "title": "Annual Inter-School Science Olympiad 2026",
-      "slug": "annual-inter-school-science-olympiad-2026",
-      "content": "<p>A 2-day science exhibition, project showcase, and robotics tournament for division schools.</p>",
-      "excerpt": "A 2-day science exhibition, project showcase, and robotics tournament for division schools.",
-      "location": "Central Auditorium & Science Complex, Main Campus",
-      "start_date": "2026-04-10T09:00:00Z",
-      "end_date": "2026-04-11T17:00:00Z",
-      "status": "published",
-      "is_featured": true,
-      "featured_image": 28,
-      "featured_image_detail": {
-        "id": 28,
-        "file": "https://tenant.storio.app/media/events/science_olympiad.jpg",
-        "file_type": "image",
-        "file_name": "science_olympiad.jpg",
-        "file_size": 1820000,
-        "file_size_display": "1.74 MB",
-        "alt_text": "Science Olympiad Main Banner"
-      },
-      "categories": [1],
-      "categories_detail": [
-        {
-          "id": 1,
-          "name": "Science & Innovation",
-          "slug": "science-innovation",
-          "events_count": 5
-        }
-      ],
-      "view_count": 450,
-      "created_at": "2026-02-18T10:05:00Z",
-      "updated_at": "2026-02-19T14:20:00Z"
+      "name": "STEM & Robotics",
+      "slug": "stem-robotics",
+      "description": "Engineering and technology clubs",
+      "parent": null,
+      "parent_name": null,
+      "activities_count": 6,
+      "create_date": "2026-01-15T09:00:00Z",
+      "update_date": "2026-01-15T09:00:00Z"
     }
   ]
   ```
 
-#### 18. `storio.getEventDetail(slugOrId, tenantHostOrOptions?)`
-- **Endpoint:** `GET /api/events/${slugOrId}/`
-- **Method Signature:** `storio.getEventDetail(slugOrId: string | number, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioEvent | null>`
-- **Description:** Fetches complete event details by either numeric ID or URL slug string, including full event descriptions, location, start and end dates, category breakdown, and media attachments.
-- **Parameters:**
-  - `slugOrId` (`string | number`): Unique numeric ID or URL slug string of the event.
-  - `tenantHostOrOptions` (`string | StorioFetchOptions`, optional): Target tenant hostname or custom fetch options.
-- **Data Payload Obtained:**
+#### 19. `storio.getActivityDetail(slug, tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/activities/${slug}/`
+- **Method Signature:** `storio.getActivityDetail(slug: string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioActivityItem | null>`
+- **Description:** Returns a single published activity item by `slug` (same shape as `getActivities` items).
+
+#### 20. `storio.getEvents(paramsOrOptions?, tenantHostOrOptions?)` *(Updated with Query Filters)*
+- **Endpoint:** `GET /api/events/`
+- **Method Signature:** `storio.getEvents(paramsOrOptions?: ({ status?: string; categories?: number | string; is_featured?: boolean; search?: string; ordering?: string } & StorioFetchOptions) | string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioEvent[] | null>`
+- **Description:** Institutional events list with dates, locations, featured image, and category breakdown.
+- **Note:** Returns a DRF paginated object `{ count, next, previous, results: [...] }`. Use `unwrapList(res)` before mapping.
+- **Query Parameters Supported:**
+  - `status` (`string`): `published`, `draft`, or `archived` (unauthenticated requests default to `published`).
+  - `categories` (`number | string`): Event category ID returned by `getEventCategories()`.
+  - `is_featured` (`boolean`): Filter flagship events (`true` / `false`).
+  - `search` (`string`): Case-insensitive match against `title`, `content`, and `location`.
+  - `ordering` (`string`): `start_date`, `-start_date`, `created_at`, `-created_at`, `view_count`, or `-view_count`.
+- **Verified JSON Response Shape:**
   ```json
   {
-    "id": 4,
-    "title": "Annual Inter-School Science Olympiad 2026",
-    "slug": "annual-inter-school-science-olympiad-2026",
-    "content": "<p>Join regional schools across the division for a 2-day science exhibition, project showcase, and robotics tournament. Keynote lectures by distinguished university professors will accompany student exhibition booths...</p>",
-    "excerpt": "A 2-day science exhibition, project showcase, and robotics tournament for division schools.",
-    "location": "Central Auditorium & Science Complex, Main Campus",
-    "start_date": "2026-04-10T09:00:00Z",
-    "end_date": "2026-04-11T17:00:00Z",
-    "status": "published",
-    "featured_image": 28,
-    "featured_image_detail": {
-      "id": 28,
-      "file": "https://tenant.storio.app/media/events/science_olympiad.jpg",
-      "file_type": "image",
-      "file_name": "science_olympiad.jpg",
-      "file_size": 1820000,
-      "file_size_display": "1.74 MB",
-      "alt_text": "Science Olympiad Main Banner",
-      "uploaded_by": "admin",
-      "create_date": "2026-02-18T10:00:00Z",
-      "update_date": "2026-02-18T10:00:00Z"
-    },
-    "categories": [1],
-    "categories_detail": [
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+      {
+        "id": 4,
+        "title": "Annual Science Olympiad 2026",
+        "slug": "annual-science-olympiad-2026",
+        "content": "<p>2-day regional science exhibition and robotics tournament.</p>",
+        "excerpt": "Regional science exhibition and robotics tournament.",
+        "location": "Main Auditorium, Campus",
+        "start_date": "2026-04-10T09:00:00Z",
+        "end_date": "2026-04-11T17:00:00Z",
+        "status": "published",
+        "view_count": 450,
+        "is_featured": true,
+        "seo_title": "Annual Science Olympiad 2026",
+        "seo_description": "Schedule and registration details.",
+        "featured_image": 28,
+        "featured_image_detail": {
+          "id": 28,
+          "file": "/media/uploads/science_olympiad.webp",
+          "file_type": "image",
+          "file_name": "science_olympiad.webp",
+          "file_size": 182000,
+          "file_size_display": "177.73 KB",
+          "alt_text": "Science Olympiad Banner"
+        },
+        "categories": [1],
+        "categories_detail": [
+          {
+            "id": 1,
+            "name": "Science & Innovation",
+            "slug": "science-innovation",
+            "description": "Science fairs and robotics competitions",
+            "events_count": 5,
+            "created_at": "2026-01-10T12:00:00Z",
+            "updated_at": "2026-01-10T12:00:00Z"
+          }
+        ],
+        "created_at": "2026-02-18T10:05:00Z",
+        "updated_at": "2026-02-19T14:20:00Z",
+        "created_by": 1
+      }
+    ]
+  }
+  ```
+
+#### 21. `storio.getEventCategories(tenantHostOrOptions?)` *(New)*
+- **Endpoint:** `GET /api/event-categories/`
+- **Method Signature:** `storio.getEventCategories(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioEventCategory[] | null>`
+- **Description:** Returns all event categories and their published event counts. Pass `id` to `storio.getEvents({ categories: id })`.
+- **Note:** Returns a DRF paginated object `{ count, next, previous, results: [...] }`. Use `unwrapList(res)` before mapping.
+- **Verified JSON Response Shape:**
+  ```json
+  {
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
       {
         "id": 1,
         "name": "Science & Innovation",
         "slug": "science-innovation",
-        "description": "Exhibitions, science fairs, and robotics competitions",
+        "description": "Science fairs and robotics competitions",
         "events_count": 5,
         "created_at": "2026-01-10T12:00:00Z",
         "updated_at": "2026-01-10T12:00:00Z"
       }
-    ],
-    "view_count": 450,
-    "is_featured": true,
-    "seo_title": "Annual Science Olympiad 2026 | Storio",
-    "seo_description": "Schedule, venues, and registration guidelines for the 2026 Inter-School Science Olympiad.",
-    "created_at": "2026-02-18T10:05:00Z",
-    "updated_at": "2026-02-19T14:20:00Z",
-    "created_by": 1
+    ]
   }
   ```
+
+#### 22. `storio.getEventDetail(slugOrId, tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/events/${slugOrId}/`
+- **Method Signature:** `storio.getEventDetail(slugOrId: string | number, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioEvent | null>`
+- **Description:** Fetches a single event by numeric `id` (recommended with the default DRF router) or `slug`, and increments `view_count`.
 
 ---
 
 ### Section 8: Dynamic CMS Custom Builder Pages
 
-#### 19. `storio.getPageBySlug(slug, tenantHostOrOptions?)`
+#### 23. `storio.getPages(tenantHostOrOptions?)` *(Added)*
+- **Endpoint:** `GET /api/v2/template/pages/`
+- **Method Signature:** `storio.getPages(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioCustomPage[] | null>`
+- **Description:** Lists all published pages built in **Dashboard → Page Management** (`content` may be HTML or structured `StorioCustomPageSection[]`, with embedded `Form` sections automatically enriched with `form_data`).
+- **Verified JSON Response Shape (Array):**
+  ```json
+  [
+    {
+      "id": 3,
+      "title": "Admissions Info",
+      "slug": "info",
+      "featured_image": null,
+      "is_published": true,
+      "meta_title": "Admissions Information",
+      "meta_description": "Everything you need to know about joining our campus.",
+      "content": [
+        {
+          "id": "sec_1",
+          "type": "Hero",
+          "title": "Welcome Banner",
+          "content": { "url": "/media/uploads/campus.webp", "overlayText": "Admissions 2026" }
+        },
+        {
+          "id": "sec_2",
+          "type": "Form",
+          "title": "Inquiry Form",
+          "layout": { "colSpan": 8, "minHeight": 260 },
+          "content": {
+            "formCode": "aa8a2a13-d6e4-41d5-9054-3f3803a5f68d",
+            "form_data": {
+              "code": "aa8a2a13-d6e4-41d5-9054-3f3803a5f68d",
+              "title": "Inquiry Form",
+              "status": "active",
+              "elements": []
+            }
+          }
+        }
+      ],
+      "created_at": "2026-09-01T10:00:00Z",
+      "updated_at": "2026-09-10T11:30:00Z"
+    }
+  ]
+  ```
+
+#### 24. `storio.getPageBySlug(slug, tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/pages/by-slug/${slug}/`
 - **Method Signature:** `storio.getPageBySlug(slug: string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioCustomPage | null>`
-- **Description:** Fetches custom dynamic pages constructed via CMS page builder.
-- **Data Payload Obtained:**
-  ```json
-  {
-    "id": 45,
-    "title": "History & Heritage",
-    "slug": "history-and-heritage",
-    "content": "<div class="history-timeline"><p>Founded in 1994, our institution began with just 80 pupils and 6 dedicated teachers...</p></div>",
-    "meta_title": "Our History & Heritage | Emerald Academy",
-    "meta_description": "Learn about the heritage and milestones of Emerald Academy since 1994.",
-    "featured_image": "https://tenant.storio.app/media/pages/campus_history.jpg"
-  }
-  ```
+- **Description:** Fetches a single published custom page by slug (leading/trailing slashes are stripped automatically; supports nested slugs like `"about/history"`). Any `Form` sections (including inside `Split` or `SideList` slots) automatically include `form_data` (`StorioForm`). Returns `null` (404) if unpublished or missing.
 
 ---
 
 ### Section 9: Social Proof, Leadership & Promotions
 
-#### 20. `storio.getTestimonials(tenantHostOrOptions?)`
+#### 25. `storio.getTestimonials(tenantHostOrOptions?)` *(Strongly Typed)*
 - **Endpoint:** `GET /api/v2/template/testimonials/`
-- **Method Signature:** `storio.getTestimonials(tenantHostOrOptions?: string | StorioFetchOptions): Promise<Record<string, unknown>[] | null>`
-- **Description:** Testimonials from parents, alumni, university counselors, and community leaders.
-- **Data Payload Obtained (Array):**
+- **Method Signature:** `storio.getTestimonials(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioTestimonial[] | null>`
+- **Description:** Returns published parent, student, and alumni testimonials ordered by `order`.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
-      "author_name": "Mrs. Nusrat Jahan",
-      "author_title": "Guardian of Grade 10 Scholar",
+      "name": "Sarah Ahmed",
+      "designation": "Parent of Grade 8 Student",
+      "organization": null,
+      "message": "The teachers are attentive and the STEM clubs have helped my child thrive.",
       "rating": 5,
-      "content": "The holistic focus on character, academic rigour, and extracurricular robotics changed my child's outlook entirely.",
-      "avatar_url": "https://tenant.storio.app/media/testimonials/guardian_1.jpg",
-      "order": 1
+      "photo": 19,
+      "photo_data": {
+        "id": 19,
+        "file_url": "/media/uploads/testimonial_1.webp",
+        "alt_text": "Sarah Ahmed",
+        "file_type": "image"
+      },
+      "status": "published",
+      "order": 1,
+      "create_date": "2026-07-10T10:00:00Z",
+      "update_date": "2026-07-10T10:00:00Z"
     }
   ]
   ```
 
-#### 21. `storio.getLeadershipMessages(tenantHostOrOptions?)`
+#### 26. `storio.getLeadershipMessages(tenantHostOrOptions?)` *(Strongly Typed)*
 - **Endpoint:** `GET /api/v2/template/leadership-messages/`
-- **Method Signature:** `storio.getLeadershipMessages(tenantHostOrOptions?: string | StorioFetchOptions): Promise<Record<string, unknown>[] | null>`
-- **Description:** Official statements and welcome remarks from the Founder, Chairman, and Principal.
-- **Data Payload Obtained (Array):**
+- **Method Signature:** `storio.getLeadershipMessages(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioLeadershipMessage[] | null>`
+- **Description:** Returns published speeches and welcome messages from the Principal, Chairman, or Founder.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
-      "title": "Message from the Principal",
-      "author_name": "Prof. Arthur Pendelton",
-      "author_role": "Principal & Academic Dean",
-      "content": "<p>Welcome to our vibrant academic family where curiosity and integrity guide all endeavors...</p>",
-      "photo_url": "https://tenant.storio.app/media/leadership/principal_message.jpg",
-      "signature_url": "https://tenant.storio.app/media/leadership/signature_principal.png",
-      "order": 1
+      "section_title": "Principal's Welcome",
+      "name": "Dr. A. K. Rahman",
+      "role": "Principal",
+      "company": "Greenwood International Academy",
+      "message": "<p>Welcome to our campus community where curiosity meets character.</p>",
+      "image": 37,
+      "image_data": {
+        "id": 37,
+        "file_url": "/media/uploads/principal.webp",
+        "alt_text": "Principal portrait",
+        "file_type": "image"
+      },
+      "signature": 38,
+      "signature_data": {
+        "id": 38,
+        "file_url": "/media/uploads/principal_sig.png",
+        "alt_text": "Signature",
+        "file_type": "image"
+      },
+      "status": "published",
+      "display_order": 1,
+      "create_date": "2026-07-11T09:00:00Z",
+      "update_date": "2026-07-11T09:00:00Z"
     }
   ]
   ```
 
-#### 22. `storio.getPromotions(tenantHostOrOptions?)`
+#### 27. `storio.getPromotions(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/promotions/`
 - **Method Signature:** `storio.getPromotions(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioPromotion[] | null>`
-- **Description:** Active promotion popups, top notification bars, and admission campaign alerts.
-- **Query Parameters Supported:**
-  - `type` (`string`): Filter by banner type (`top_bar`, `popup_modal`, `floating_card`).
-  - `target` (`string`): Target audience (`all`, `students`, `parents`).
-- **Data Payload Obtained (Array):**
+- **Description:** Returns currently live promotional banners, popups, and announcements (published and within `start_date`–`end_date` window).
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
-      "title": "Early Bird Admission Discount – Fall 2026",
-      "message": "Register before March 31st to waive the institutional registration processing fee.",
-      "link": "/admissions/apply",
-      "button_text": "Register Now",
-      "is_active": true,
-      "display_type": "top_bar"
+      "title": "Spring Admission 2026 Open!",
+      "subtitle": "Enroll today for the upcoming academic year",
+      "description": "Admissions are now open from Nursery through Grade 12.",
+      "badge_text": "ADMISSIONS OPEN",
+      "image": 45,
+      "image_detail": {
+        "id": 45,
+        "file_url": "/media/uploads/promo_banner.webp",
+        "alt_text": "Admissions Banner",
+        "file_type": "image"
+      },
+      "promotion_type": "banner",
+      "target_audience": "all",
+      "cta_label": "Apply Now",
+      "cta_url": "/admission",
+      "cta_is_external": false,
+      "status": "published",
+      "start_date": "2026-01-01",
+      "end_date": "2026-12-31",
+      "priority": 10,
+      "view_count": 120,
+      "click_count": 18,
+      "is_live": true,
+      "deleted_at": null,
+      "created_by": "admin",
+      "create_date": "2026-01-01T08:00:00Z",
+      "update_date": "2026-01-01T08:00:00Z"
     }
   ]
+  ```
+
+#### 28. `storio.getPromotionDetail(id, tenantHostOrOptions?)` *(Added)*
+- **Endpoint:** `GET /api/v2/template/promotions/${id}/`
+- **Method Signature:** `storio.getPromotionDetail(id: number, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioPromotion | null>`
+- **Description:** Fetches a single live promotion by ID and increments its `view_count`.
+
+#### 29. `storio.trackPromotionClick(id, tenantHostOrOptions?)` *(New)*
+- **Endpoint:** `POST /api/promotions/${id}/click/`
+- **Method Signature:** `storio.trackPromotionClick(id: number | string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioPromotionClickResponse | null>`
+- **Description:** Increments `click_count` on a published promotion when a visitor clicks its CTA button (sends `POST` with `cache: 'no-store'`).
+- **Verified JSON Response (`200 OK`):**
+  ```json
+  {
+    "success": true
+  }
   ```
 
 ---
 
-### Section 10: Quick Links, FAQs, Videos & Exam Results
+### Section 10: Quick Links, FAQs, Videos, Calendar & Exam Results
 
-#### 23. `storio.getImportantLinks(tenantHostOrOptions?)`
+#### 30. `storio.getImportantLinks(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/important-links/`
 - **Method Signature:** `storio.getImportantLinks(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioImportantLink[] | null>`
-- **Description:** Curated government, ministerial, and educational resource links.
-- **Data Payload Obtained (Array):**
+- **Description:** Returns ordered institutional and external portal quick links.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
       "title": "Ministry of Education Portal",
       "url": "https://moedu.gov.bd",
-      "target": "_blank",
-      "category": "Government Portals",
       "order": 1
     }
   ]
   ```
 
-#### 24. `storio.getFaqs(tenantHostOrOptions?)`
+#### 31. `storio.getFaqs(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/faqs/`
 - **Method Signature:** `storio.getFaqs(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioFaq[] | null>`
-- **Description:** Frequently asked questions categorized by admissions, fees, transport, and curriculum.
-- **Data Payload Obtained (Array):**
+- **Description:** Returns visible Frequently Asked Questions ordered by latest update.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
-      "question": "What is the age requirement for Nursery admissions?",
-      "answer": "<p>Applicants must be 3+ years of age as of January 1st of the academic year.</p>",
-      "category": "Admissions",
-      "order": 1
+      "question": "How do I apply for admission?",
+      "answer": "<p>Visit the Online Admission page and complete the application form.</p>",
+      "is_visible": true
     }
   ]
   ```
 
-#### 25. `storio.getVideos(tenantHostOrOptions?)`
+#### 32. `storio.getVideos(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/reels/`
 - **Method Signature:** `storio.getVideos(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioVideoItem[] | null>`
-- **Description:** Campus tour reels, YouTube video embeddings, and commencement ceremony recordings.
-- **Data Payload Obtained (Array):**
+- **Description:** Returns active campus video reels and embeds.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
       "title": "Campus Virtual Tour 2026",
-      "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "thumbnail_url": "https://tenant.storio.app/media/videos/tour_thumb.jpg",
-      "duration": "4:15"
+      "description": "Guided tour of our science labs and library.",
+      "reel_type": "video",
+      "platform": "youtube",
+      "url": "https://www.youtube.com/watch?v=example123",
+      "thumbnail_url": "/media/uploads/tour_thumb.webp",
+      "views_count": 240,
+      "likes_count": 32,
+      "is_featured": true
     }
   ]
   ```
 
-#### 26. `storio.getCalendarEvents(tenantHostOrOptions?)`
+#### 33. `storio.getCalendarEvents(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/calendar/`
 - **Method Signature:** `storio.getCalendarEvents(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioCalendarEvent[] | null>`
-- **Description:** Institutional academic calendar schedule with term breaks, exam sessions, and holidays.
-- **Data Payload Obtained (Array):**
+- **Description:** Returns academic calendar dates, holidays, and festival schedules ordered by `start_date`.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
-      "id": 10,
-      "title": "Spring Mid-Term Recess",
-      "start": "2026-03-22",
-      "end": "2026-03-29",
-      "all_day": true,
-      "color": "#10b981",
-      "description": "School closed for spring holiday."
+      "id": 3,
+      "title": "Annual Sports Day",
+      "description": "Inter-house athletics events.",
+      "start_date": "2026-07-12T00:00:00Z",
+      "end_date": "2026-07-16T00:00:00Z",
+      "category": "festival",
+      "level": "college",
+      "is_all_day": true
     }
   ]
   ```
 
-#### 27. `storio.getExamResults(tenantHostOrOptions?)`
+#### 34. `storio.getCalendarSettings(tenantHostOrOptions?)` *(New)*
+- **Endpoint:** `GET /api/calendar/settings/`
+- **Method Signature:** `storio.getCalendarSettings(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioCalendarSetting | null>`
+- **Description:** Returns the configured weekly weekend day numbers as a comma-separated string (`0` = Sunday … `5` = Friday, `6` = Saturday) so calendar grids highlight weekends accurately.
+- **Verified JSON Response Shape:**
+  ```json
+  {
+    "weekend_days": "5,6"
+  }
+  ```
+
+#### 35. `storio.getExamResults(paramsOrOptions?, tenantHostOrOptions?)` *(Updated with Query Filter)*
 - **Endpoint:** `GET /api/v2/template/exam-results/`
-- **Method Signature:** `storio.getExamResults(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioExamResult[] | null>`
-- **Description:** Official published board and institutional examination result sheets.
+- **Method Signature:** `storio.getExamResults(paramsOrOptions?: ({ exam_type?: string } & StorioFetchOptions) | string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioExamResult[] | null>`
+- **Description:** Returns published board and internal exam result summaries (with automatic fallback to legacy endpoint if V2 returns empty).
 - **Query Parameters Supported:**
-  - `exam_type` (`string`): Filter by exam type (`hsc`, `ssc`, `cambridge_alevel`, `terminal`).
-- **Data Payload Obtained (Array):**
+  - `exam_type` (`string`): `'school'`, `'public'`, or `'admission'`.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 1,
-      "title": "Cambridge A-Level Examination Results 2025",
-      "exam_type": "cambridge_alevel",
-      "published_date": "2025-08-15",
-      "attachment_url": "https://tenant.storio.app/media/results/alevel_2025.pdf"
+      "exam_name": "SSC Public Examination",
+      "class_name": "Class 10",
+      "year": "2025",
+      "total_examinees": 240,
+      "passed": 238,
+      "failed": 2,
+      "aplus_count": 115,
+      "agrade_count": 82,
+      "pass_rate": "99.2%",
+      "exam_type": "public",
+      "file_url": "/media/exam_results/ssc_2025.pdf"
     }
   ]
   ```
@@ -1077,511 +1186,503 @@ Every component, utility, and state hook must use the exported TypeScript interf
 
 ### Section 11: Careers & Recruitment
 
-#### 28. `storio.getCareers(tenantHostOrOptions?)`
+#### 36. `storio.getCareers(paramsOrOptions?, tenantHostOrOptions?)` *(Strongly Typed + Filter)*
 - **Endpoint:** `GET /api/v2/template/careers/jobs/`
-- **Method Signature:** `storio.getCareers(tenantHostOrOptions?: string | StorioFetchOptions): Promise<Record<string, unknown>[] | null>`
-- **Description:** List of active recruitment circulars, job openings, and faculty positions.
+- **Method Signature:** `storio.getCareers(paramsOrOptions?: ({ location?: string } & StorioFetchOptions) | string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioCareer[] | null>`
+- **Description:** Returns active job circulars ordered by newest first.
 - **Query Parameters Supported:**
-  - `location` (`string`): Filter by branch or work location.
-- **Data Payload Obtained (Array):**
+  - `location` (`string`): Case-insensitive substring filter (`location__icontains`), e.g. `"Dhaka"`.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
-      "id": 5,
-      "title": "Senior Mathematics Faculty Member",
-      "slug": "senior-mathematics-faculty-member",
-      "company_name": "Emerald International Academy",
-      "location": "Dhaka, Bangladesh (On-site)",
-      "job_type": "full_time",
+      "id": 1,
+      "title": "Senior Mathematics Lecturer",
+      "slug": "senior-mathematics-lecturer",
+      "company_name": "Greenwood International Academy",
+      "location": "Dhaka",
+      "job_type": "Full-Time",
       "vacancy": 2,
-      "deadline": "2026-04-30",
-      "status": "active"
+      "deadline": "2026-10-01",
+      "description": "<p>Minimum 5 years teaching experience required.</p>",
+      "application_link": "https://apply.example.edu/math-lecturer",
+      "status": "active",
+      "attachments_data": [
+        {
+          "id": 53,
+          "type": "document",
+          "file_name": "job_circular.pdf",
+          "url": "/media/uploads/job_circular.pdf"
+        }
+      ],
+      "created_at": "2026-08-01T09:00:00Z",
+      "updated_at": "2026-08-01T09:00:00Z"
     }
   ]
   ```
 
-#### 29. `storio.getJobDetail(slug, tenantHostOrOptions?)`
+#### 37. `storio.getJobDetail(slug, tenantHostOrOptions?)` *(Strongly Typed)*
 - **Endpoint:** `GET /api/v2/template/careers/jobs/${slug}/`
-- **Method Signature:** `storio.getJobDetail(slug: string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<Record<string, unknown> | null>`
-- **Description:** Fetches complete job circular specification for a recruitment opening by slug, including full HTML description, vacancy count, application deadline, submission link, and downloadable circular PDFs.
-- **Parameters:**
-  - `slug` (`string`): The URL slug identifier of the job opening.
-  - `tenantHostOrOptions` (`string | StorioFetchOptions`, optional): Target tenant hostname or custom fetch options.
-- **Data Payload Obtained:**
-  ```json
-  {
-    "id": 5,
-    "title": "Senior Mathematics Faculty Member",
-    "slug": "senior-mathematics-faculty-member",
-    "company_name": "Emerald International Academy",
-    "location": "Dhaka, Bangladesh (On-site)",
-    "job_type": "full_time",
-    "vacancy": 2,
-    "deadline": "2026-04-30",
-    "description": "<p>We are seeking an experienced Mathematics Teacher for Cambridge A-Levels with at least 5 years of teaching experience. Candidates must demonstrate deep pedagogical competence in Pure Mathematics and Statistics.</p>",
-    "application_link": "https://recruitment.storio.app/apply/math-2026",
-    "status": "active",
-    "attachments_data": [
-      {
-        "id": 88,
-        "type": "document",
-        "file_name": "job_circular_math_faculty.pdf",
-        "url": "https://tenant.storio.app/media/careers/job_circular_math_faculty.pdf",
-        "alt_text": "Mathematics Faculty Recruitment Circular PDF"
-      }
-    ],
-    "created_at": "2026-02-12T09:00:00Z",
-    "updated_at": "2026-02-14T11:30:00Z"
-  }
-  ```
+- **Method Signature:** `storio.getJobDetail(slug: string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioCareer | null>`
+- **Description:** Fetches full circular details for an active job posting by `slug` (same object shape as `getCareers` items).
 
 ---
 
 ### Section 12: National Education Board Notice Sync
 
-#### 30. `storio.getBoardNotices(tenantHostOrOptions?)`
+#### 38. `storio.getBoardNotices(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/board-notices/`
 - **Method Signature:** `storio.getBoardNotices(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioBoardNotice[] | null>`
-- **Description:** Automated live notice feed synchronized with national and regional Education Boards (e.g. Dhaka Board, BISE, Cambridge International).
-- **Data Payload Obtained (Array):**
+- **Description:** Returns notices fetched from the institution's configured national/regional Education Boards when enabled in Dashboard → Board Settings.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
-      "id": 1,
-      "title": "SSC & Dakhil Examination Center Relocation Notice",
+      "title": "SSC Examination Center Notice",
+      "url": "https://dhakaeducationboard.gov.bd/notices/example.pdf",
       "publish_date": "2026-02-24",
-      "board_name": "Dhaka Education Board",
-      "pdf_url": "https://dhakaeducationboard.gov.bd/notices/center_relocation.pdf"
+      "board_name": "Dhaka Board"
     }
   ]
   ```
 
 ---
 
-### Section 13: Online Admission Portal & Interactive Forms
+### Section 13: Online Admission Portal & Contact Form
 
-#### 31. `storio.getAdmissionFormConfig(tenantHostOrOptions?)`
+#### 39. `storio.getAdmissionFormConfig(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/admission/form-config/current/`
 - **Method Signature:** `storio.getAdmissionFormConfig(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioAdmissionFormConfig | null>`
-- **Description:** Active admission intake configuration, eligibility criteria, and dynamic form schema.
-- **Data Payload Obtained:**
+- **Description:** Returns the current dynamic admission form fields, active flag, and deadline.
+- **Verified JSON Response Shape:**
   ```json
   {
     "id": 1,
-    "title": "Fall 2026 Admissions Intake",
+    "title": "Admission Form 2026",
+    "description": "Complete all required fields accurately.",
     "is_active": true,
-    "start_date": "2026-01-01",
-    "end_date": "2026-05-31",
-    "guidelines_html": "<p>Please ensure all previous grade transcripts are uploaded in PDF format.</p>",
-    "application_fee": 1500,
+    "deadline": "2026-05-31",
     "fields": [
-      { "name": "student_name", "label": "Full Name of Student", "type": "text", "required": true },
-      { "name": "dob", "label": "Date of Birth", "type": "date", "required": true },
-      { "name": "applying_for_grade", "label": "Grade Applying For", "type": "select", "required": true, "options": ["Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "A-Levels"] }
-    ]
+      { "id": "student_name", "label": "Student Name", "type": "text", "required": true, "order": 1 },
+      { "id": "email", "label": "Email Address", "type": "email", "required": true, "order": 2 },
+      { "id": "applying_grade", "label": "Applying For", "type": "select", "required": true, "options": ["Class 6", "Class 9"], "order": 3 }
+    ],
+    "created_at": "2026-01-01T08:00:00Z",
+    "updated_at": "2026-01-15T10:00:00Z"
   }
   ```
 
-#### 32. `storio.sendAdmissionOTP(email, phone?, tenantHostOrOptions?)`
+#### 40. `storio.sendAdmissionOTP(email, phone?, tenantHostOrOptions?)`
 - **Endpoint:** `POST /api/v2/template/admission/send-otp/`
-- **Method Signature:** `storio.sendAdmissionOTP(email: string, phone?: string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioAdmissionOTPResponse | null>`
-- **Description:** Dispatches a 6-digit verification code to the applicant's email address or mobile number.
-- **Payload Sent:** `{ "email": "applicant@example.com", "phone": "+8801711000000" }`
-- **Data Returned:**
+- **Method Signature:** `storio.sendAdmissionOTP(email: string, phoneOrTenantHost?: string | StorioFetchOptions, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioAdmissionOTPResponse | null>`
+- **Description:** Sends a 6-digit OTP to the applicant's `email` (and optional `phone` if SMS OTP is enabled on the tenant).
+- **Verified JSON Response (`200 OK`):**
   ```json
   {
     "success": true,
-    "message": "OTP verification code sent to your email and phone."
+    "message": "Verification code sent to your email."
   }
   ```
 
-#### 33. `storio.verifyAdmissionOTP(email, otpCode, tenantHostOrOptions?)`
+#### 41. `storio.verifyAdmissionOTP(email, otpCode, tenantHostOrOptions?)`
 - **Endpoint:** `POST /api/v2/template/admission/verify-otp/`
 - **Method Signature:** `storio.verifyAdmissionOTP(email: string, otpCode: string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioAdmissionOTPResponse | null>`
-- **Description:** Validates the applicant's entered OTP code prior to allowing final form submission.
-- **Payload Sent:** `{ "email": "applicant@example.com", "otp_code": "482910" }`
-- **Data Returned:**
+- **Description:** Verifies the applicant's 6-digit OTP before submitting the admission application.
+- **Verified JSON Response (`200 OK`):**
   ```json
   {
     "success": true,
-    "message": "OTP verified successfully."
+    "message": "Email verified successfully"
   }
   ```
 
-#### 34. `storio.submitAdmissionApplication(formData, otpCode, tenantHostOrOptions?)`
+#### 42. `storio.submitAdmissionApplication(formData, otpCode, tenantHostOrOptions?)`
 - **Endpoint:** `POST /api/v2/template/admission/applications/`
 - **Method Signature:** `storio.submitAdmissionApplication(formData: Record<string, unknown>, otpCode: string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioAdmissionApplicationResponse | null>`
-- **Description:** Submits the completed admission application payload to the tenant database.
-- **Payload Sent:**
+- **Description:** Submits the verified admission application (`{ form_data, otp_code }`) matching fields from `getAdmissionFormConfig()`.
+- **Verified JSON Response (`201 Created`):**
   ```json
   {
+    "id": 12,
+    "application_number": "APP-2026-00012",
     "form_data": {
       "student_name": "Zara Rahman",
-      "dob": "2010-06-15",
-      "applying_for_grade": "Grade 9"
+      "email": "applicant@example.com",
+      "applying_grade": "Class 9"
     },
-    "otp_code": "482910"
-  }
-  ```
-- **Data Returned:**
-  ```json
-  {
-    "success": true,
-    "application_number": "APP-2026-00421",
-    "message": "Application submitted successfully! Please check your email for payment instructions."
+    "submitted_at": "2026-03-10T11:15:00Z"
   }
   ```
 
-#### 35. `storio.submitContactMessage(formData, tenantHostOrOptions?)`
+#### 43. `storio.submitContactMessage(formData, tenantHostOrOptions?)`
 - **Endpoint:** `POST /api/v2/template/contact/`
-- **Headers Required:** `Content-Type: application/json`, `x-tenant-host: <tenant-domain>` (injected automatically by SDK)
 - **Method Signature:** `storio.submitContactMessage(formData: Record<string, unknown>, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioContactFormResponse | null>`
-- **Description:** Submits public contact messages and inquiry requests from the template contact page directly into the tenant admin mailbox.
-- **Payload Sent:**
-  ```json
-  {
-    "name": "Mahmudul Hasan",
-    "email": "student@example.com",
-    "mobile": "+8801700000000",
-    "subject": "Inquiry regarding lab facilities",
-    "message": "Testing contact message endpoint...",
-    "recaptcha_token": "10000000-aaaa-bbbb-cccc-000000000001"
-  }
-  ```
-  > `recaptcha_token` is **optional**. Pass `null` or omit entirely if your template design does not implement captcha.
-- **Success Response (`201 Created` — Real Live Response):**
-  ```json
-  {
-    "success": true,
-    "message": "Thank you for contacting us! We will get back to you soon."
-  }
-  ```
-- **Validation Error Response (`400 Bad Request` — Real Live Response):**
-  ```json
-  {
-    "email": ["Enter a valid email address."]
-  }
-  ```
-
-#### hCaptcha Integration Instructions for 3rd-Party Template Developers
-
-> **Architecture Overview:** Bot protection on `/api/v2/template/contact/` uses hCaptcha.
-> - **Zero Secret Key Exposure:** Third-party developers never need or handle the secret key. Verification occurs server-to-server on the backend.
-> - **Dynamic Public Site Key:** Retrieve the site key dynamically from `storio.getSettings(tenantHost)` &rarr; `settings?.hcaptcha_site_key`.
-> - **Optional:** If your custom template omits captcha, simply send `recaptcha_token: null` or omit the field. The backend processes the message without blocking.
-
-**1. Install the hCaptcha React Component:**
-```bash
-npm install @hcaptcha/react-hcaptcha
-```
-
-**2. Local Development & Testing Bypass:**
-During local development (`localhost`), you do not need to solve interactive challenges:
-- **Test Site Key:** `10000000-ffff-ffff-ffff-000000000001`
-- **Auto-generated Test Token:** `10000000-aaaa-bbbb-cccc-000000000001` (backend automatically accepts this token on development/preview instances).
-
-**3. Resolve Site Key in Your Component / Page:**
-```typescript
-const settings = await storio.getSettings(tenantHost);
-const isLocal = typeof window !== 'undefined' && 
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-
-const siteKey = settings?.hcaptcha_site_key || (isLocal ? '10000000-ffff-ffff-ffff-000000000001' : null);
-```
-
-**4. Form Submission Pattern:**
-```typescript
-const payload = {
-  name: formData.get('name'),
-  email: formData.get('email'),
-  mobile: formData.get('mobile'),
-  subject: formData.get('subject'),
-  message: formData.get('message'),
-  recaptcha_token: captchaToken || null, // from <HCaptcha onVerify={(token) => setCaptchaToken(token)} />
-};
-
-const res = await storio.submitContactMessage(payload, tenantHost);
-```
+- **Description:** Submits public contact inquiries (rate-limited for anonymous users at 5/hour).
+- **Payload Sent:** `{ name, email, mobile, subject, message, recaptcha_token? }` (`recaptcha_token` is optional; set to `null` or omit if not using hCaptcha).
+- **Verified JSON Responses:**
+  - `201 Created`: `{ "success": true, "message": "Thank you for contacting us! We will get back to you soon." }`
+  - `400 Bad Request`: `{ "email": ["Enter a valid email address."] }`
 
 ---
 
-### Section 14: Academics
+### Section 14: Dynamic Form Builder
 
-#### 36. `storio.getClassRoutines(tenantHostOrOptions?)`
-- **Endpoint:** `GET /api/v2/template/academic/class-routines/`
-- **Method Signature:** `storio.getClassRoutines(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioClassRoutine[] | null>`
-- **Description:** Retrieves weekly class routines, period schedules, and downloadable timetable documents.
-- **Query Parameters Supported:**
-  - `class_name` (`string`): Filter by class or grade (e.g. `Class 9`, `Class 10`).
-  - `section` (`string`): Filter by section (e.g. `Section A`, `Section B`).
-  - `shift` (`string`): Filter by shift (`Morning`, `Day`).
-  - `year` (`number`): Academic year filter (`2026`).
-- **Data Payload Obtained (Array):**
-  ```json
-  [
-    {
-      "id": 1,
-      "class_name": "Class 10",
-      "section": "A",
-      "shift": "Morning",
-      "academic_year": 2026,
-      "routine_file": "https://tenant.storio.app/media/routines/class_10_a_routine.pdf",
-      "schedule_json": {
-        "days": [
-          {
-            "day": "Sunday",
-            "periods": [
-              { "period": 1, "time": "08:00 AM - 08:45 AM", "subject": "Higher Mathematics", "teacher": "Dr. E. Vance", "room": "Room 302" },
-              { "period": 2, "time": "08:45 AM - 09:30 AM", "subject": "Physics Lab", "teacher": "Prof. A. Pendelton", "room": "Lab 2" }
-            ]
-          }
-        ]
-      }
-    }
-  ]
-  ```
+#### 44. `storio.getForms(tenantHostOrOptions?)` *(Added)*
+- **Endpoint:** `GET /api/v2/template/forms/`
+- **Method Signature:** `storio.getForms(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioForm[] | null>`
+- **Description:** Returns all active dynamic forms created in **Dashboard → Form Builder**.
 
-#### 37. `storio.getSyllabuses(tenantHostOrOptions?)`
-- **Endpoint:** `GET /api/v2/template/academic/syllabuses/`
-- **Method Signature:** `storio.getSyllabuses(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioSyllabus[] | null>`
-- **Description:** Term syllabuses, learning outcomes, curriculum overviews, and downloadable PDF course packs.
-- **Query Parameters Supported:**
-  - `class_name` (`string`): Filter by class name.
-  - `exam_type` (`string`): Filter by exam term (`Midterm`, `Final`, `Pre-Test`).
-  - `year` (`number`): Filter by academic year.
-- **Data Payload Obtained (Array):**
-  ```json
-  [
-    {
-      "id": 3,
-      "class_name": "Class 9",
-      "academic_year": 2026,
-      "exam_type": "Final Examination",
-      "description": "Comprehensive term syllabus including English Literature, General Science, and Pure Math.",
-      "file_url": "https://tenant.storio.app/media/syllabuses/class_9_final_syllabus.pdf"
-    }
-  ]
-  ```
-
-#### 38. `storio.getStudentStats(params?, tenantHostOrOptions?)`
-- **Endpoint:** `GET /api/v2/template/student-stats/`
-- **Method Signature:** `storio.getStudentStats(params?: { year?: number | string; program?: string }, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioStudentStatsResponse | null>`
-- **Description:** Institutional student demographics, gender breakdown, group distributions (Science, Commerce, Arts), program categories (e.g., General, Vocational), and grand enrollment totals for accreditation dashboards.
-- **Query Parameters Supported:**
-  - `year` (`number` | `string`): Specific academic year (e.g., `2026`). Defaults to latest present in database.
-  - `program` (`string`): Filter by academic program name (e.g., `General`, `Vocational`).
-- **Data Payload Obtained:**
+#### 45. `storio.getForm(code, tenantHostOrOptions?)` *(Added)*
+- **Endpoint:** `GET /api/v2/template/forms/${code}/`
+- **Method Signature:** `storio.getForm(code: string, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioForm | null>`
+- **Description:** Fetches a single active form definition by its UUID `code` (defaults to `next: { revalidate: 0 }`). Returns `403` if inactive or `404` if not found.
+- **Verified JSON Response Shape:**
   ```json
   {
-    "academic_year": 2026,
-    "grand_total_male": 1280,
-    "grand_total_female": 1340,
-    "grand_total": 2620,
-    "total_sections": 18,
-    "classes": [
+    "code": "aa8a2a13-d6e4-41d5-9054-3f3803a5f68d",
+    "title": "Scholarship Application",
+    "description": "Please upload supporting documents.",
+    "header_image": null,
+    "header_image_data": null,
+    "status": "active",
+    "elements": [
       {
-        "id": 101,
-        "academic_year": 2026,
-        "year": 2026,
-        "class_name": "Class 10",
-        "class_name_en": "Class Ten",
-        "program": "General",
-        "shift": "Morning",
-        "order": 1,
-        "total_male": 140,
-        "total_female": 150,
-        "total_students": 290,
-        "groups": [
-          { "group_name": "Science", "sections": ["A", "B"], "total_male": 90, "total_female": 95, "total_students": 185 },
-          { "group_name": "Commerce", "sections": ["C"], "total_male": 30, "total_female": 35, "total_students": 65 },
-          { "group_name": "Humanities", "sections": ["D"], "total_male": 20, "total_female": 20, "total_students": 40 }
-        ]
+        "id": "field-1",
+        "name": "full_name",
+        "type": "text",
+        "label": "Full Name",
+        "placeholder": "Enter your name",
+        "required": true,
+        "validation": { "minLength": 2, "maxLength": 100 }
+      },
+      {
+        "id": "field-2",
+        "name": "transcript",
+        "type": "file",
+        "label": "Academic Transcript",
+        "required": true,
+        "acceptedTypes": ["application/pdf"],
+        "maxSize": 5242880
       }
-    ]
+    ],
+    "settings": {
+      "submitButtonText": "Submit Application",
+      "successMessage": "Your application has been recorded."
+    },
+    "theme": {},
+    "created_at": "2026-09-01T10:00:00Z",
+    "updated_at": "2026-09-05T12:00:00Z"
   }
   ```
-- **Example Usage:**
-  ```typescript
-  // Fetch stats for default/current academic year
-  const stats = await storio.getStudentStats();
 
-  // Fetch stats filtered by year and program
-  const vocationalStats = await storio.getStudentStats({ year: 2026, program: 'Vocational' });
+#### 46. `storio.uploadFormFile(code, file, fieldIdOrOptions?, tenantHostOrOptions?)` *(Added)*
+- **Endpoint:** `POST /api/v2/template/forms/${code}/upload/`
+- **Method Signature:** `storio.uploadFormFile(formCode: string, file: File | Blob, fieldIdOrOptions?: string | StorioFetchOptions, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioFormUploadResponse | null>`
+- **Description:** Uploads a file/image attachment for a `file` or `image` field on an active form, enforcing that field's `maxSize` and `acceptedTypes`. Pass the returned `url` or `id` into `submitFormResponse()` `answers`.
+- **Verified JSON Response (`201 Created`):**
+  ```json
+  {
+    "id": 91,
+    "url": "https://tenant.storio.cloud/media/uploads/transcript.pdf",
+    "file_url": "/media/uploads/transcript.pdf",
+    "file_type": "document",
+    "file_name": "transcript.pdf"
+  }
   ```
 
-#### 39. `storio.getAcademicPrograms(tenantHostOrOptions?)`
-- **Endpoint:** `GET /api/v2/template/academic/programs/`
-- **Method Signature:** `storio.getAcademicPrograms(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioAcademicProgram[]>`
-- **Description:** Returns the list of academic programs configured for the institution, including both custom programs and standard curriculum programs. Each program includes the list of associated class names. Returns an empty array `[]` if no programs are configured.
-- **Query Parameters:** None.
-- **Data Payload Obtained (verified live response from `diu.storio.cloud`):**
+#### 47. `storio.submitFormResponse(payload, tenantHostOrOptions?)` *(Added)*
+- **Endpoint:** `POST /api/v2/template/forms/submit/`
+- **Method Signature:** `storio.submitFormResponse(payload: StorioFormSubmitPayload, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioFormSubmitResponse | null>`
+- **Description:** Submits user answers (`{ form: "<code>", answers: { "<fieldId>": value } }`) for an active form (`cache: 'no-store'`).
+- **Verified JSON Response (`201 Created`):**
+  ```json
+  {
+    "message": "Submitted successfully"
+  }
+  ```
+
+---
+
+### Section 15: Academics
+
+#### 48. `storio.getClassRoutines(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/academic/class-routines/`
+- **Method Signature:** `storio.getClassRoutines(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioClassRoutine[] | null>`
+- **Description:** Returns active weekly class routines with downloadable PDF (`routine_file_url`) and day-by-day `schedule` periods.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
       "id": 8,
-      "name": "Testing",
-      "classes": ["12", "sdsdsa"],
-      "is_custom": true
-    },
-    {
-      "id": null,
-      "name": "Pre-Primary",
-      "classes": ["Play", "Nursery", "KG", "Pre-Primary", "Class 10"],
-      "is_custom": false
-    },
-    {
-      "id": null,
-      "name": "Madrasa",
-      "classes": [
-        "Ebtedayee 1", "Ebtedayee 2", "Ebtedayee 3", "Ebtedayee 4", "Ebtedayee 5",
-        "Dakhil 6", "Dakhil 7", "Dakhil 8", "Dakhil 9", "Dakhil 10",
-        "Alim 1st Year", "Alim 2nd Year"
+      "class_name": "Class 10",
+      "section": "A",
+      "shift": "Morning",
+      "academic_year": 2026,
+      "effective_from": "2026-01-15",
+      "routine_file": 53,
+      "routine_file_url": "/media/uploads/class_10_routine.pdf",
+      "is_active": true,
+      "schedule": [
+        {
+          "day": "Sunday",
+          "periods": [
+            { "period": 1, "subject": "Mathematics", "teacher": "Dr. Doe", "room": "302", "start_time": "08:00", "end_time": "08:45" }
+          ]
+        }
       ],
-      "is_custom": false
-    },
-    {
-      "id": null,
-      "name": "THOR",
-      "classes": ["10"],
-      "is_custom": false
+      "created_at": "2026-01-10T09:00:00Z",
+      "updated_at": "2026-01-10T09:00:00Z"
     }
   ]
   ```
-  > **Note:** `id` is `null` for standard (system-defined) programs and a positive integer for custom programs added by the tenant admin. `is_custom: true` programs are institution-specific overrides.
-- **Example Usage:**
-  ```typescript
-  const programs = await storio.getAcademicPrograms(tenantHost);
-  // Always returns an array — empty [] if none configured
 
-  programs.forEach((program) => {
-    console.log(program.name, program.classes);
-  });
+#### 49. `storio.getSyllabuses(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/academic/syllabuses/`
+- **Method Signature:** `storio.getSyllabuses(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioSyllabus[] | null>`
+- **Description:** Returns active curriculum syllabus documents and downloadable PDFs.
+- **Verified JSON Response Shape (Array):**
+  ```json
+  [
+    {
+      "id": 3,
+      "title": "Final Term Syllabus",
+      "class_name": "Class 9",
+      "exam_type": "Final",
+      "academic_year": 2026,
+      "file": 60,
+      "file_url": "/media/uploads/class_9_syllabus.pdf",
+      "file_size": "1.2 MB",
+      "description": "Complete curriculum topics for Class 9.",
+      "uploaded_at": "2026-01-20T10:00:00Z",
+      "is_active": true
+    }
+  ]
   ```
-- **TypeScript Interface:** `StorioAcademicProgram` (see Section 4).
 
----
-
-### Section 15: Citizen Charter & Institutional Compliance
-
-#### 40. `storio.getMpoInfo(tenantHostOrOptions?)`
-- **Endpoint:** `GET /api/v2/template/mpo-info/`
-- **Method Signature:** `storio.getMpoInfo(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioMpoInfo | null>`
-- **Description:** Official government Monthly Pay Order (MPO) compliance details, committee approval resolutions, and institutional gazette certificates.
-- **Data Payload Obtained:**
+#### 50. `storio.getStudentStats(params?, tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/student-stats/`
+- **Method Signature:** `storio.getStudentStats(params?: { year?: number | string; program?: string }, tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioStudentStatsResponse | null>`
+- **Description:** Returns student enrollment statistics grouped by year, academic program, class, and stream.
+- **Query Parameters Supported:** `year`, `program`.
+- **Verified JSON Response Shape:**
   ```json
   {
-    "mpo_code": "MPO-883192",
-    "recognition_date": "2004-07-01",
-    "managing_committee_status": "Approved by Regional Board",
-    "committee_approved_date": "2024-03-10",
-    "committee_expire_date": "2027-03-09",
-    "documents": [
+    "academic_year": 2026,
+    "grand_total_male": 315,
+    "grand_total_female": 326,
+    "grand_total": 641,
+    "total_sections": 21,
+    "classes": [
       {
-        "id": 1,
-        "title": "Government Gazette Gazette Recognition Order",
-        "document_type": "order",
-        "file_url": "https://tenant.storio.app/media/compliance/mpo_order.pdf",
-        "uploaded_at": "2024-03-15T08:00:00Z"
+        "id": 23,
+        "academic_year": 2026,
+        "year": 2026,
+        "program": "General",
+        "class_name": "Class 10",
+        "class_name_en": "Class Ten",
+        "groups": [
+          { "group_name": "Science", "sections": ["A", "B"], "total_male": 60, "total_female": 65, "total_students": 125 }
+        ],
+        "total_male": 60,
+        "total_female": 65,
+        "total_students": 125,
+        "shift": "Morning",
+        "order": 1,
+        "created_at": "2026-02-01T08:00:00Z",
+        "updated_at": "2026-02-01T08:00:00Z"
       }
     ]
   }
   ```
 
-#### 41. `storio.getInformationService(tenantHostOrOptions?)`
+#### 51. `storio.getAcademicPrograms(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/academic/programs/`
+- **Method Signature:** `storio.getAcademicPrograms(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioAcademicProgram[]>`
+- **Description:** Returns configured academic programs (always resolves to an array `[]`, never `null`).
+- **Verified JSON Response Shape (Array):**
+  ```json
+  [
+    { "id": 8, "name": "Vocational", "classes": ["Class 9", "Class 10"], "is_custom": true },
+    { "id": null, "name": "Pre-Primary", "classes": ["Play", "Nursery", "KG"], "is_custom": false }
+  ]
+  ```
+
+---
+
+### Section 16: Citizen Charter & Institutional Compliance
+
+#### 52. `storio.getMpoInfo(tenantHostOrOptions?)`
+- **Endpoint:** `GET /api/v2/template/mpo-info/`
+- **Method Signature:** `storio.getMpoInfo(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioMpoInfo | null>`
+- **Description:** Returns government Monthly Pay Order (MPO) status, teacher counts, and gazette documents.
+- **Verified JSON Response Shape:**
+  ```json
+  {
+    "id": 1,
+    "is_mpo_enlisted": true,
+    "mpo_status": "MPO Enlisted",
+    "mpo_code": "MPO-2026-9999",
+    "mpo_date": "2026-01-01",
+    "mpo_order_number": "GOV-MPO-9876",
+    "subtitle": "Official MPO Accreditation",
+    "description": "Government subsidized institution status",
+    "total_mpo_teachers": 15,
+    "total_non_mpo_teachers": 10,
+    "documents": [
+      { "name": "MPO Gazette", "file_id": 53, "file_url": "/media/uploads/mpo_gazette.pdf" }
+    ],
+    "created_at": "2026-09-27T05:34:01Z",
+    "updated_at": "2026-09-28T10:24:36Z"
+  }
+  ```
+
+#### 53. `storio.getInformationService(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/information-service/`
 - **Method Signature:** `storio.getInformationService(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioInformationService | null>`
-- **Description:** Right to Information (RTI) designated officer profiles, appeals authority contact details, and citizen service procedures.
-- **Data Payload Obtained:**
+- **Description:** Returns the designated Right to Information (RTI) / Information Service Center desk details.
+- **Verified JSON Response Shape:**
   ```json
   {
-    "officer_name": "Mohammad Rafiqul Islam",
-    "designation": "Assistant Headmaster & Designated RTI Officer",
-    "phone": "+880 1711-445566",
-    "email": "rti@emeraldacademy.edu",
-    "room_no": "Administrative Building, Room 104",
-    "photo_url": "https://tenant.storio.app/media/staff/rti_officer.jpg",
-    "guidelines": "<p>Citizens may submit RTI queries using Form A available at the reception desk.</p>",
-    "appeals_authority_name": "Prof. Arthur Pendelton",
-    "appeals_authority_designation": "Principal & Chairman of Appeals",
-    "appeals_authority_phone": "+880 1711-111111",
-    "appeals_authority_email": "principal@emeraldacademy.edu"
+    "id": 1,
+    "title": "Information Service Center Desk",
+    "address": "Admin Building Room 101, Dhaka",
+    "responsible_person": "Designated Information Officer",
+    "designation": "Assistant Headmaster",
+    "mobile": "+880 1700-000001",
+    "phone": "+880 2-9990001",
+    "email": "info-desk@example.edu",
+    "photo": 1,
+    "photo_url": "/media/uploads/rti_officer.webp",
+    "office_hours": "09:00 AM - 04:00 PM (Sun - Thu)",
+    "description": "RTI Information Desk",
+    "services_offered": [
+      "Admissions Info",
+      "Transcript Inquiries",
+      "Citizen Right to Information (RTI)"
+    ],
+    "created_at": "2026-09-27T05:34:01Z",
+    "updated_at": "2026-09-28T10:17:32Z"
   }
   ```
 
-#### 42. `storio.getComplaintOfficer(tenantHostOrOptions?)`
+#### 54. `storio.getComplaintOfficer(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/complaint-officer/`
 - **Method Signature:** `storio.getComplaintOfficer(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioComplaintOfficer | null>`
-- **Description:** Grievance Redress System (GRS) compliance officer profile, formal grievance escalation steps, and appeal workflows.
-- **Data Payload Obtained:**
+- **Description:** Returns Grievance Redress System (GRS) focal officer details and `complaint_process` (may be a plain string or structured step array depending on tenant configuration).
+- **Verified JSON Response Shape:**
   ```json
   {
-    "officer_name": "Begum Rashida Khatun",
-    "designation": "Senior Counselor & Designated Grievance Officer",
-    "phone": "+880 1711-778899",
-    "email": "grievance@emeraldacademy.edu",
-    "room_no": "Student Welfare Annex, Room 201",
-    "photo_url": "https://tenant.storio.app/media/staff/grs_officer.jpg",
-    "steps": [
-      { "step_number": 1, "title": "Submission of Written Grievance", "description": "Lodge formal report via portal or drop-box." },
-      { "step_number": 2, "title": "Preliminary Review", "description": "Investigation begins within 3 working days." },
-      { "step_number": 3, "title": "Resolution & Notification", "description": "Official finding delivered within 14 working days." }
-    ]
+    "id": 1,
+    "name": "Grievance Focal Point",
+    "designation": "Senior Faculty & GRS Officer",
+    "address": "Room 205, Main Academic Building",
+    "mobile": "+880 1700-000002",
+    "phone": "+880 2-9990002",
+    "email": "grs@example.edu",
+    "photo": 48,
+    "photo_url": "/media/uploads/grs_officer.webp",
+    "description": "Handles student and guardian grievances.",
+    "complaint_process": "1. Submit written application\n2. Review within 7 working days",
+    "office_hours": "08:00 AM - 05:00 PM (Sunday to Thursday)",
+    "created_at": "2026-09-27T05:34:01Z",
+    "updated_at": "2026-09-28T10:12:44Z"
   }
   ```
 
-#### 43. `storio.getHotlines(tenantHostOrOptions?)`
+#### 55. `storio.getHotlines(tenantHostOrOptions?)`
 - **Endpoint:** `GET /api/v2/template/hotlines/`
 - **Method Signature:** `storio.getHotlines(tenantHostOrOptions?: string | StorioFetchOptions): Promise<StorioHotline[] | null>`
-- **Description:** Government, legal, and public safety emergency hotlines (e.g. 999 National Emergency, 1098 Child Helpline, 333 Government Services).
-- **Data Payload Obtained (Array):**
+- **Description:** Returns active government and emergency helpline contacts sorted by `order`.
+- **Verified JSON Response Shape (Array):**
   ```json
   [
     {
-      "id": 1,
-      "title": "National Emergency Service",
+      "id": 11,
+      "title": "Emergency Campus Service",
       "number": "999",
+      "description": "24/7 emergency response",
       "category": "emergency",
+      "is_emergency": true,
+      "order": 0,
       "is_active": true,
-      "order": 1
-    },
-    {
-      "id": 2,
-      "title": "Child Helpline",
-      "number": "1098",
-      "category": "child_helpline",
-      "is_active": true,
-      "order": 2
-    },
-    {
-      "id": 3,
-      "title": "National Information & Citizen Services",
-      "number": "333",
-      "category": "govt_service",
-      "is_active": true,
-      "order": 3
+      "created_at": "2026-09-28T10:26:21Z",
+      "updated_at": "2026-09-28T10:26:21Z"
     }
   ]
   ```
 
 ---
 
-### Section 16: Core API Fetcher (`apiFetch`)
+### Section 17: Dynamic Custom Collections & Core Fetcher
 
-#### 44. `storio.apiFetch<T>(endpoint, options?)`
-- **Signature:** `apiFetch<T>(endpoint: string, options?: StorioFetchOptions): Promise<T | null>`
-- **Description:** Low-level, generic fetch wrapper used internally by all SDK methods. Use this if you need to fetch a custom endpoint or send specialized HTTP headers not covered by built-in methods.
+#### 56. `storio.getCollection<T>(slug, options?)` *(Added)*
+- **Endpoint:** `GET /api/v2/collections/${slug}/`
+- **Method Signature:** `storio.getCollection<T = Record<string, unknown>>(slug: string, options?: StorioFetchOptions & { page?: number; pageSize?: number; sortBy?: string; expand?: string }): Promise<StorioCollectionResponse<T> | null>`
+- **Description:** Queries published items from a tenant's Custom Collection (Dashboard → Custom Collections), with pagination, sorting (`order`, `created_at`, `updated_at`, `id`), and optional batched relation expansion (`expand`).
+- **Verified JSON Response Shape:**
+  ```json
+  {
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "schema_version": 1,
+    "results": [
+      {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "data": { "title": "Computer Lab", "capacity": 40 },
+        "order": 0,
+        "is_published": true,
+        "created_at": "2026-10-01T10:00:00Z",
+        "updated_at": "2026-10-01T10:00:00Z"
+      }
+    ]
+  }
+  ```
+
+#### 57. `storio.getCollectionItem<T>(slug, itemId, options?)` *(Added)*
+- **Endpoint:** `GET /api/v2/collections/${slug}/${itemId}/`
+- **Method Signature:** `storio.getCollectionItem<T = Record<string, unknown>>(slug: string, itemId: string, options?: StorioFetchOptions & { expand?: string }): Promise<StorioCollectionItem<T> | null>`
+- **Description:** Fetches a single published item by UUID from a Custom Collection (with optional `expand`).
+
+#### 58. `storio.apiFetch<T>(endpoint, options?)`
+- **Method Signature:** `apiFetch<T>(endpoint: string, options?: StorioFetchOptions): Promise<T | null>`
+- **Description:** Low-level generic fetch wrapper used internally by all SDK methods. Automatically injects `x-tenant-host` (and server-side `Host`), handles `FormData` vs JSON headers, and supports `throwOnError: true` (throwing `StorioAPIError`).
 
 ---
 
-## 4. Complete TypeScript Type Interfaces
+## 4. Complete TypeScript Type Definitions
 
-Here are all 46 TypeScript interfaces exported directly by `@storio/template-sdk`:
+Below are the exact interfaces, union types, and error class exported by `@storio/template-sdk`:
 
 ```typescript
 export interface StorioFetchOptions extends RequestInit {
   tenantHost?: string;
   backendBaseUrl?: string;
   next?: { revalidate?: number | false; tags?: string[] };
+  throwOnError?: boolean;
+}
+
+export declare class StorioAPIError extends Error {
+  public readonly status: number;
+  public readonly data: unknown;
+  constructor(message: string, status: number, data?: unknown);
+}
+
+export interface StorioCollectionItem<T = Record<string, unknown>> {
+  id: string;
+  data: T;
+  order: number;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface StorioCollectionResponse<T = Record<string, unknown>> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: StorioCollectionItem<T>[];
+  schema_version: number;
 }
 
 export interface StorioSocialLink {
@@ -1596,8 +1697,11 @@ export interface StorioSettingsResponse {
   favicon_url?: string;
   contact_email?: string;
   phone_number?: string;
+  mobile_number?: string;
   social_links?: StorioSocialLink[];
   mailing_address?: string;
+  google_analytics_id?: string;
+  google_tag_manager_id?: string;
   hcaptcha_site_key?: string;
 }
 
@@ -1607,8 +1711,12 @@ export interface StorioCustomizationResponse {
 
 export interface StorioNavigationItem {
   id?: string | number;
-  label: string;
-  url: string;
+  name?: string;
+  href?: string;
+  isVisible?: boolean;
+  subLinks?: StorioNavigationItem[];
+  label?: string;
+  url?: string;
   target?: string;
   children?: StorioNavigationItem[];
 }
@@ -1617,51 +1725,75 @@ export interface StorioNavigationResponse {
   items: StorioNavigationItem[];
 }
 
-export interface RecognitionDocument {
-  id: number;
-  title: string;
-  document_file?: string;
-  file_url?: string;
-  uploaded_at: string;
+export interface AcademicRecognition {
+  id?: number;
+  level?: string;
+  recognition_type?: string;
+  valid_until?: string;
+  order_number?: string;
 }
 
-export interface AcademicRecognition {
-  id: number;
-  title: string;
-  issuing_authority: string;
-  issue_date: string;
-  expiry_date?: string | null;
-  is_lifetime: boolean;
-  description?: string;
-  documents?: RecognitionDocument[];
+export interface RecognitionDocument {
+  id?: number;
+  title?: string;
+  file_url?: string;
+  issue_date?: string;
 }
 
 export interface StorioInstitutionProfile {
-  id?: number;
-  name?: string;
-  short_name?: string;
-  eiin?: string;
-  institute_code?: string;
-  established_year?: number;
-  motto?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  about_text?: string;
-  recognitions?: AcademicRecognition[];
+  id: number;
+  institution_image_url?: string;
+  eiin?: number | string;
+  school_code?: string;
+  school_shift?: string;
+  school_type?: string;
+  division?: string;
+  district?: string;
+  upazila?: string;
+  ward_no?: string;
+  school_details?: string;
+  additional_info?: Array<{ label?: string; value?: string }>;
+  important_links?: Array<{ label?: string; url?: string }>;
+  key_metrics?: unknown[];
+  metrics_title?: string;
+  total_students?: number;
+  total_teachers?: number;
+  total_students_label?: string;
+  total_teachers_label?: string;
+  mission?: string;
+  vision?: string;
+  education_board?: string;
+  recognition_levels?: string[];
+  academic_recognition?: AcademicRecognition[];
+  recognition_documents?: RecognitionDocument[];
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface StorioInstitutionCard {
+  id: number;
+  institution_profile?: number | null;
+  title: string;
+  description?: string | null;
+  icon?: string | null;
+  image?: number | null;
+  image_url?: string | null;
+  order?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface StorioLayoutResponse {
-  settings?: StorioSettingsResponse;
-  customization?: StorioCustomizationResponse;
-  navigation?: StorioNavigationResponse;
+  settings: StorioSettingsResponse;
+  customization: StorioCustomizationResponse;
+  navigation: StorioNavigationResponse;
 }
 
 export interface StorioHeroSlide {
   id: number;
-  title: string;
+  title?: string;
   subtitle?: string;
-  image_url: string;
+  image_url?: string;
   button_text?: string;
   button_url?: string;
   order?: number;
@@ -1688,46 +1820,67 @@ export interface StorioBlogPost {
   published_at?: string;
 }
 
+export interface StorioBlogCategory {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  parent?: number | null;
+  parent_name?: string | null;
+  posts_count?: number;
+}
+
 export interface StorioStaffMember {
   id: number;
   name: string;
-  designation: string;
+  designation?: string;
   department?: string;
-  email?: string;
-  phone?: string;
   photo_url?: string;
-  qualification?: string;
-  order?: number;
+  email?: string;
+  phone_number?: string;
+  bio?: string;
+  is_mpo?: boolean;
 }
 
 export interface StorioTeamMember {
   id: number;
-  name: string;
-  role: string;
-  designation?: string;
-  bio?: string;
-  photo_url?: string;
-  section?: string;
+  fullname: string;
+  designation: string;
+  role?: string;
+  experience?: string;
+  section?: number;
+  section_name?: string;
+  phone?: string;
+  address?: string;
+  tenure_start?: string;
+  tenure_end?: string;
+  image?: number;
+  image_data?: {
+    id?: number;
+    file_url?: string;
+    alt_text?: string;
+    caption?: string;
+  } | null;
+  image_shape?: string;
+  image_shape_display?: string;
+  is_visible?: boolean;
   order?: number;
+  create_date?: string;
+  update_date?: string;
 }
 
 export interface StorioGalleryItem {
   id: number;
-  title: string;
+  title?: string;
   image_url: string;
-  thumbnail_url?: string;
-  album_id?: number;
-  album_title?: string;
-  created_at?: string;
+  caption?: string;
 }
 
 export interface StorioAlbum {
   id: number;
   title: string;
-  slug: string;
-  description?: string;
   cover_image_url?: string;
-  total_photos?: number;
+  images?: StorioGalleryItem[];
 }
 
 export interface StorioActivityItem {
@@ -1743,6 +1896,26 @@ export interface StorioActivityItem {
   date?: string;
 }
 
+export interface StorioActivityCategory {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  parent?: number | null;
+  parent_name?: string | null;
+  activities_count?: number;
+}
+
+export interface StorioEventCategory {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  events_count?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface StorioEvent {
   id: number;
   title: string;
@@ -1754,7 +1927,7 @@ export interface StorioEvent {
   end_date?: string;
   status?: string;
   is_featured?: boolean;
-  featured_image?: string | number;
+  featured_image?: string;
   featured_image_detail?: {
     id?: number;
     url?: string;
@@ -1772,33 +1945,141 @@ export interface StorioEvent {
   updated_at?: string;
 }
 
+export interface StorioPageSectionLayout {
+  colSpan?: number;
+  minHeight?: number;
+}
+
+export interface StorioPageSectionBase {
+  id: string;
+  title?: string;
+  titleColor?: string;
+  titleFont?: string;
+  titleWeight?: string;
+  cardColor?: string;
+  tableHeaderBg?: string;
+  tableHeaderColor?: string;
+  tableHeaderFont?: string;
+  tableHeaderWeight?: string;
+  tableBodyColor?: string;
+  tableBodyFont?: string;
+  animationType?: 'none' | 'float' | 'zoom' | 'slide' | string;
+  layout?: StorioPageSectionLayout;
+}
+
+export interface StorioPageFeatureItem {
+  title: string;
+  description: string;
+  icon?: string;
+  titleFont?: string;
+  titleWeight?: string;
+  titleColor?: string;
+  descFont?: string;
+  descColor?: string;
+}
+
+export interface StorioPageListItem {
+  id?: string;
+  title: string;
+  link: string;
+}
+
+export interface StorioPageImageItem {
+  url: string;
+  caption?: string;
+  altText?: string;
+}
+
+export interface StorioPageTableContent {
+  headers: string[];
+  rows: string[][];
+}
+
+export interface StorioPageImageContent {
+  images?: StorioPageImageItem[];
+  url?: string;
+  caption?: string;
+  altText?: string;
+}
+
+export interface StorioPageHeroContent {
+  url: string;
+  overlayText?: string;
+}
+
+export interface StorioPageSideListContent {
+  description: string;
+  list: StorioPageListItem[];
+  listPosition: 'left' | 'right';
+  sidebarWidth?: 'narrow' | 'standard' | 'wide';
+}
+
+export interface StorioPageFormContent {
+  formCode: string;
+  form_data?: StorioForm | null;
+}
+
+export type StorioPageSplitContent =
+  | string
+  | StorioPageTableContent
+  | StorioPageFeatureItem[]
+  | StorioPageListItem[]
+  | StorioPageImageContent
+  | StorioPageFormContent;
+
+export interface StorioPageSplitSlot {
+  type: 'RichText' | 'FeatureGrid' | 'CustomList' | 'CustomTable' | 'Image' | 'Form';
+  content: StorioPageSplitContent;
+}
+
+export interface StorioPageSplitContentWrapper {
+  left: StorioPageSplitSlot;
+  right: StorioPageSplitSlot;
+  sidebarWidth?: 'narrow' | 'standard' | 'wide';
+  listPosition?: 'left' | 'right';
+}
+
+export type StorioCustomPageSection =
+  | (StorioPageSectionBase & { type: 'Hero'; content: StorioPageHeroContent })
+  | (StorioPageSectionBase & { type: 'RichText'; content: string })
+  | (StorioPageSectionBase & { type: 'Image'; content: StorioPageImageContent })
+  | (StorioPageSectionBase & { type: 'FeatureGrid'; content: StorioPageFeatureItem[] })
+  | (StorioPageSectionBase & { type: 'CustomList'; content: StorioPageListItem[] })
+  | (StorioPageSectionBase & { type: 'CustomTable'; content: StorioPageTableContent })
+  | (StorioPageSectionBase & { type: 'SideList'; content: StorioPageSideListContent })
+  | (StorioPageSectionBase & { type: 'Split'; content: StorioPageSplitContentWrapper })
+  | (StorioPageSectionBase & { type: 'Form'; content: StorioPageFormContent });
+
 export interface StorioCustomPage {
   id: number;
   title: string;
   slug: string;
-  content: string;
+  content: string | StorioCustomPageSection[];
+  is_published?: boolean;
   meta_title?: string;
   meta_description?: string;
-  featured_image?: string;
+  keywords?: string;
+  featured_image?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface StorioAdmissionField {
-  name: string;
+  id: string;
   label: string;
-  type: string;
-  required: boolean;
+  type?: string;
+  required?: boolean;
+  order?: number;
   options?: string[];
+  logic?: Record<string, unknown>;
+  default?: unknown;
 }
 
 export interface StorioAdmissionFormConfig {
-  id: number;
-  title: string;
-  is_active: boolean;
-  start_date?: string;
-  end_date?: string;
-  guidelines_html?: string;
-  application_fee?: number;
-  fields: StorioAdmissionField[];
+  id?: number;
+  fields?: StorioAdmissionField[];
+  is_active?: boolean;
+  updated_at?: string;
 }
 
 export interface StorioAdmissionOTPResponse {
@@ -1807,9 +2088,10 @@ export interface StorioAdmissionOTPResponse {
 }
 
 export interface StorioAdmissionApplicationResponse {
-  success: boolean;
   application_number?: string;
+  success?: boolean;
   message?: string;
+  error?: string;
 }
 
 export interface StorioContactFormResponse {
@@ -1821,74 +2103,290 @@ export interface StorioImportantLink {
   id: number;
   title: string;
   url: string;
-  target?: string;
-  category?: string;
   order?: number;
 }
 
 export interface StorioBoardNotice {
+  id?: number;
+  title?: string;
+  publish_date?: string;
+  url?: string;
+  board?: string;
+}
+
+export interface StorioPromotionMedia {
   id: number;
-  title: string;
-  publish_date: string;
-  board_name?: string;
-  pdf_url?: string;
+  file_url: string;
+  alt_text?: string;
+  file_type?: string;
 }
 
 export interface StorioPromotion {
   id: number;
   title: string;
-  message?: string;
-  link?: string;
-  button_text?: string;
-  is_active: boolean;
-  display_type?: string;
+  subtitle?: string;
+  description?: string;
+  badge_text?: string;
+  image?: number | string | null;
+  image_detail?: StorioPromotionMedia | null;
+  promotion_type?: string;
+  target_audience?: string;
+  cta_label?: string;
+  cta_url?: string;
+  cta_is_external?: boolean;
+  status?: string;
+  start_date?: string | null;
+  end_date?: string | null;
+  priority?: number;
+  is_live?: boolean;
+}
+
+export interface StorioPromotionClickResponse {
+  success: boolean;
+}
+
+export interface StorioCareerAttachment {
+  id: number;
+  type: string;
+  file_name: string;
+  url: string;
+}
+
+export interface StorioCareer {
+  id: number;
+  title: string;
+  slug: string;
+  company_name: string;
+  location: string;
+  job_type: string;
+  vacancy: number;
+  deadline: string;
+  description: string;
+  application_link?: string | null;
+  status: string;
+  attachments_data?: StorioCareerAttachment[];
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface StorioLeadershipMedia {
+  id: number;
+  file_url: string;
+  alt_text?: string;
+  file_type?: string;
+}
+
+export interface StorioLeadershipMessage {
+  id: number;
+  section_title?: string;
+  name: string;
+  role: string;
+  company?: string;
+  message: string;
+  image_data?: StorioLeadershipMedia | null;
+  signature_data?: StorioLeadershipMedia | null;
+  status: string;
+  display_order?: number;
+}
+
+export interface StorioTestimonial {
+  id: number;
+  name: string;
+  designation?: string;
+  organization?: string;
+  message: string;
+  rating?: number;
+  photo_data?: {
+    id: number;
+    file_url: string;
+    alt_text?: string;
+    file_type?: string;
+  } | null;
+  status: string;
+  order?: number;
+}
+
+export interface StorioFormHeaderImage {
+  id: number;
+  file_url: string;
+  alt_text?: string;
+}
+
+export interface StorioFormOption {
+  label: string;
+  value: string;
+}
+
+export interface StorioFormValidation {
+  minLength?: number | null;
+  maxLength?: number | null;
+  pattern?: string | null;
+  min?: number | null;
+  max?: number | null;
+  step?: number | null;
+  minDate?: string | null;
+  maxDate?: string | null;
+  requireUppercase?: boolean;
+  requireLowercase?: boolean;
+  requireNumber?: boolean;
+  requireSpecial?: boolean;
+}
+
+export interface StorioFormConditionalLogic {
+  enabled?: boolean;
+  fieldId?: string;
+  operator?: 'equals' | 'notEquals' | 'contains' | 'notContains' | 'isEmpty' | 'isNotEmpty' | 'greaterThan' | 'lessThan' | string;
+  value?: string | number | boolean;
+}
+
+export type StorioFormFieldType =
+  | 'text'
+  | 'email'
+  | 'phone'
+  | 'password'
+  | 'number'
+  | 'textarea'
+  | 'select'
+  | 'radio'
+  | 'checkbox'
+  | 'date'
+  | 'file'
+  | 'image'
+  | 'header_image'
+  | 'hidden'
+  | string;
+
+export interface StorioFormElement {
+  id: string;
+  type: StorioFormFieldType;
+  label?: string;
+  name?: string;
+  placeholder?: string;
+  required?: boolean;
+  helpText?: string;
+  defaultValue?: string | number | boolean | string[];
+  value?: string;
+  options?: StorioFormOption[];
+  layout?: 'vertical' | 'horizontal' | string;
+  rows?: number;
+  allowMultiple?: boolean;
+  acceptedTypes?: string[];
+  maxSize?: number;
+  maxFiles?: number;
+  showPreview?: boolean;
+  imageUrl?: string;
+  altText?: string;
+  borderRadius?: string;
+  maxHeight?: string;
+  validation?: StorioFormValidation;
+  conditionalLogic?: StorioFormConditionalLogic;
+}
+
+export interface StorioFormSettings {
+  showProgressBar?: boolean;
+  allowMultipleSubmissions?: boolean;
+  allow_multiple_submissions?: boolean;
+  successMessage?: string;
+  confirmation_message?: string;
+  redirectUrl?: string;
+  submitButtonText?: string;
+  emailNotifications?: boolean;
+  notificationEmail?: string;
+  theme?: Record<string, unknown>;
+}
+
+export interface StorioForm {
+  code: string;
+  title: string;
+  description?: string;
+  header_image?: number | null;
+  header_image_data?: StorioFormHeaderImage | null;
+  status: string;
+  elements: StorioFormElement[];
+  settings?: StorioFormSettings;
+  theme?: Record<string, unknown>;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface StorioFormUploadResponse {
+  id: number;
+  url: string;
+  file_url: string;
+  file_type: string;
+  file_name: string;
+}
+
+export interface StorioFormSubmitPayload {
+  form: string;
+  answers: Record<string, string | number | boolean | string[] | null>;
+}
+
+export interface StorioFormSubmitResponse {
+  message: string;
 }
 
 export interface StorioFaq {
   id: number;
   question: string;
   answer: string;
-  category?: string;
-  order?: number;
+  is_visible?: boolean;
 }
 
 export interface StorioVideoItem {
   id: number;
   title: string;
-  video_url: string;
+  description?: string;
+  reel_type?: string;
+  platform?: string;
+  url?: string;
   thumbnail_url?: string;
-  duration?: string;
+  views_count?: number;
+  likes_count?: number;
+  is_featured?: boolean;
 }
 
 export interface StorioCalendarEvent {
   id: number;
   title: string;
-  start: string;
-  end?: string;
-  all_day?: boolean;
-  color?: string;
   description?: string;
+  start_date?: string;
+  end_date?: string;
+  category?: string;
+  level?: string;
+  is_all_day?: boolean;
+}
+
+export interface StorioCalendarSetting {
+  weekend_days: string;
 }
 
 export interface StorioExamResult {
   id: number;
-  title: string;
-  exam_type: string;
-  published_date: string;
-  attachment_url?: string;
+  exam_name?: string;
+  class_name?: string;
+  year?: number | string;
+  total_examinees?: number;
+  passed?: number;
+  failed?: number;
+  pass_rate?: string | number;
+  exam_type?: string;
+  file_url?: string;
 }
 
 export interface StorioClassRoutineScheduleItem {
-  period: number;
-  time: string;
-  subject: string;
+  period?: number;
+  subject?: string;
   teacher?: string;
   room?: string;
+  start_time?: string;
+  end_time?: string;
 }
 
 export interface StorioClassRoutineDaySchedule {
   day: string;
-  periods: StorioClassRoutineScheduleItem[];
+  periods?: StorioClassRoutineScheduleItem[];
+  slots?: StorioClassRoutineScheduleItem[];
 }
 
 export interface StorioClassRoutine {
@@ -1896,20 +2394,28 @@ export interface StorioClassRoutine {
   class_name: string;
   section?: string;
   shift?: string;
-  academic_year: number;
-  routine_file?: string;
-  schedule_json?: {
-    days?: StorioClassRoutineDaySchedule[];
-  };
+  academic_year?: number;
+  effective_from?: string;
+  routine_file?: number;
+  routine_file_url?: string;
+  is_active?: boolean;
+  schedule?: StorioClassRoutineDaySchedule[] | Record<string, unknown>;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface StorioSyllabus {
   id: number;
+  title: string;
   class_name: string;
-  academic_year: number;
-  exam_type: string;
-  description?: string;
+  exam_type?: string;
+  academic_year?: number;
+  file?: number;
   file_url?: string;
+  file_size?: string;
+  description?: string;
+  uploaded_at?: string;
+  is_active?: boolean;
 }
 
 export interface StorioStudentGroupStat {
@@ -1954,83 +2460,104 @@ export interface StorioAcademicProgram {
 }
 
 export interface StorioMpoDocument {
-  id: number;
-  title: string;
-  document_type: string;
+  title?: string;
   file_url?: string;
-  uploaded_at: string;
+  issue_date?: string;
 }
 
 export interface StorioMpoInfo {
+  id: number;
+  is_mpo_enlisted: boolean;
+  mpo_status?: string;
   mpo_code?: string;
-  recognition_date?: string;
-  managing_committee_status?: string;
-  committee_approved_date?: string;
-  committee_expire_date?: string;
+  mpo_date?: string;
+  mpo_order_number?: string;
+  subtitle?: string;
+  description?: string;
+  total_mpo_teachers?: number;
+  total_non_mpo_teachers?: number;
   documents?: StorioMpoDocument[];
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface StorioInformationService {
-  officer_name?: string;
+  id: number;
+  title?: string;
+  address?: string;
+  responsible_person?: string;
   designation?: string;
+  mobile?: string;
   phone?: string;
   email?: string;
-  room_no?: string;
+  photo?: number;
   photo_url?: string;
-  guidelines?: string;
-  appeals_authority_name?: string;
-  appeals_authority_designation?: string;
-  appeals_authority_phone?: string;
-  appeals_authority_email?: string;
+  office_hours?: string;
+  description?: string;
+  services_offered?: string[] | string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface StorioComplaintStep {
-  step_number: number;
-  title: string;
-  description: string;
+  step_number?: number;
+  title?: string;
+  description?: string;
 }
 
 export interface StorioComplaintOfficer {
-  officer_name?: string;
+  id: number;
+  name?: string;
   designation?: string;
+  address?: string;
+  mobile?: string;
   phone?: string;
   email?: string;
-  room_no?: string;
+  photo?: number;
   photo_url?: string;
-  steps?: StorioComplaintStep[];
+  description?: string;
+  complaint_process?: StorioComplaintStep[] | string;
+  office_hours?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface StorioHotline {
   id: number;
   title: string;
   number: string;
-  category: string;
-  is_active: boolean;
-  order: number;
+  description?: string;
+  category?: string;
+  is_emergency?: boolean;
+  order?: number;
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string;
 }
 ```
 
 ---
 
-## 5. Architectural Best Practices & Error Handling
+## 5. Architectural Best Practices, Caching & Error Handling
 
-1. **Parallel Server Fetching:** Always fetch independent layout, navigation, and section data in parallel via `Promise.all` to minimize Time to First Byte (TTFB):
+1. **Parallel Server Fetching:** Fetch independent layout, navigation, and page sections together with `Promise.all` to minimize Time to First Byte (TTFB).
+2. **Next.js Revalidation Strategy:**
+   - **Theme customization, menu & layout:** Use `next: { revalidate: 0 }` so dashboard publishes take effect immediately.
+   - **High-velocity content (notices, blogs, events):** Default `revalidate: 60` or `revalidate: 0` when instant search/filtering is needed.
+   - **Slow-changing profile data:** Use `next: { revalidate: 3600 }` or `86400`.
+3. **Structured Error Handling (`throwOnError` & `StorioAPIError`):**
+   By default, the SDK logs a warning and returns `null` on failure. When submitting forms or debugging, pass `throwOnError: true` and catch `StorioAPIError`:
    ```typescript
-   const [layout, notices, events] = await Promise.all([
-     storio.getLayout(tenantHost),
-     storio.getNotices(tenantHost),
-     storio.getEvents(tenantHost),
-   ]);
-   ```
-2. **Next.js Revalidation Strategy:** Configure appropriate ISR revalidation windows via the `next` options object:
-   ```typescript
-   // Static data (institution profile, customization): revalidate daily
-   const profile = await storio.getInstitutionProfile({ next: { revalidate: 86400 } });
+   import { storio, StorioAPIError } from '@storio/template-sdk';
 
-   // High-velocity data (notices, blogs): revalidate every 60 seconds
-   const notices = await storio.getNotices({ next: { revalidate: 60 } });
+   try {
+     await storio.submitFormResponse({ form: code, answers }, { tenantHost, throwOnError: true });
+   } catch (err) {
+     if (err instanceof StorioAPIError) {
+       console.error(`HTTP ${err.status}:`, err.message, err.data);
+     }
+   }
    ```
-3. **Graceful Degradation:** The SDK never throws uncaught exceptions on network errors; it returns `null` or empty collections and logs informative warnings in development. Always write clean null-check fallbacks.
 
 ---
 
@@ -2040,420 +2567,162 @@ export interface StorioHotline {
 
 ```tsx
 import { headers } from 'next/headers';
-import { storio, StorioLayoutResponse, StorioHeroSlide, StorioNotice } from '@storio/template-sdk';
+import { storio, StorioLayoutResponse, StorioNotice, StorioEvent } from '@storio/template-sdk';
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 
-export default async function HomePage() {
-  // 1. RESOLVE HOST FROM REQUEST HEADERS
-  const headersList = await headers();
-  const rawHost: string = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host: string = rawHost.split(':')[0];
+function unwrapList<T>(res: T[] | { results?: T[] } | null | undefined): T[] {
+  if (Array.isArray(res)) return res;
+  if (res && Array.isArray(res.results)) return res.results;
+  return [];
+}
 
-  // 2. CHECK FOR LINKED TENANT (CLI) VS STANDALONE PREVIEW MODE
+export default async function HomePage() {
+  const headersList = await headers();
+  const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
+  const host = rawHost.split(':')[0];
+
   const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
   const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
   const isStandalone = isLocalHost && !linkedTenant;
   const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
 
-  // 3. FETCH REAL TENANT DATA VIA SDK
-  const [rawLayout, rawHeroSlides, rawNotices] = await Promise.all([
-    storio.getLayout(tenantHost),
-    storio.getHeroSlides(tenantHost),
+  const [rawLayout, rawNotices, rawEvents] = await Promise.all([
+    storio.getLayout({ tenantHost, next: { revalidate: 0 } }),
     storio.getNotices(tenantHost),
+    storio.getEvents({ is_featured: true }, tenantHost),
   ]);
 
-  // 4. APPLY THE GOLDEN RULE (Standalone Demo Data vs Tenant DB Real Data)
   const layout: StorioLayoutResponse | null = rawLayout || (isStandalone ? DEFAULT_DEMO_DATA.layout : null);
-
-  const heroSlides: StorioHeroSlide[] = (Array.isArray(rawHeroSlides) && rawHeroSlides.length > 0)
-    ? rawHeroSlides
-    : (isStandalone ? DEFAULT_DEMO_DATA.heroSlides : []);
-
-  const notices: StorioNotice[] = (Array.isArray(rawNotices) && rawNotices.length > 0)
-    ? rawNotices
-    : (isStandalone ? DEFAULT_DEMO_DATA.notices : []);
+  const notices: StorioNotice[] = rawNotices?.length ? rawNotices : (isStandalone ? DEFAULT_DEMO_DATA.notices : []);
+  const events: StorioEvent[] = unwrapList(rawEvents);
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
-      {/* Header Bar */}
+    <div className="min-h-screen bg-gray-50 text-gray-900">
       <header className="p-4 bg-white shadow-sm flex items-center justify-between">
         <div className="flex items-center space-x-3">
           {layout?.settings?.logo_url && (
             <img src={layout.settings.logo_url} alt="Logo" className="h-10 w-auto" />
           )}
-          <h1 className="text-xl font-bold text-gray-900">
-            {layout?.settings?.site_title || "Emerald Campus"}
-          </h1>
+          <h1 className="text-xl font-bold">{layout?.settings?.site_title || 'Campus Portal'}</h1>
         </div>
         <nav className="flex space-x-4">
-          {layout?.navigation?.items?.map((item) => (
-            <a key={item.id || item.url} href={item.url} className="text-gray-700 hover:text-emerald-600 font-medium">
-              {item.label}
-            </a>
-          ))}
+          {layout?.navigation?.items
+            ?.filter((item) => item.isVisible !== false)
+            .map((item) => (
+              <a
+                key={item.id || item.href || item.url}
+                href={item.href || item.url || '/'}
+                className="text-gray-700 hover:text-emerald-600 font-medium"
+              >
+                {item.name || item.label}
+              </a>
+            ))}
         </nav>
       </header>
 
-      {/* Hero Carousel */}
-      <section className="bg-emerald-800 text-white p-12 text-center">
-        {heroSlides.length > 0 ? (
-          <div>
-            <h2 className="text-4xl font-extrabold">{heroSlides[0].title}</h2>
-            <p className="mt-2 text-lg text-emerald-100">{heroSlides[0].subtitle}</p>
-            {heroSlides[0].button_text && (
-              <a 
-                href={heroSlides[0].button_url || '#'} 
-                className="mt-6 inline-block bg-amber-500 text-black px-6 py-3 rounded-lg font-bold hover:bg-amber-400"
-              >
-                {heroSlides[0].button_text}
-              </a>
-            )}
-          </div>
-        ) : (
-          <div className="p-8 text-emerald-200">No banner slides configured.</div>
-        )}
-      </section>
+      <main className="max-w-4xl mx-auto p-6 space-y-8">
+        <section className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-2xl font-bold border-b pb-3 mb-4">Notice Board</h2>
+          {notices.length > 0 ? (
+            <ul className="divide-y divide-gray-200">
+              {notices.map((notice) => (
+                <li key={notice.id} className="py-3 font-medium">{notice.title}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No announcements posted at this time.</p>
+          )}
+        </section>
 
-      {/* Notice Board */}
-      <section className="max-w-4xl mx-auto p-6 mt-8 bg-white rounded-lg shadow">
-        <h3 className="text-2xl font-bold text-gray-900 border-b pb-3 mb-4">Notice Board</h3>
-        
-        {notices.length > 0 ? (
-          <ul className="divide-y divide-gray-200">
-            {notices.map((notice) => (
-              <li key={notice.id} className="py-4 flex justify-between items-center">
-                <div>
-                  <h4 className="font-semibold text-lg text-gray-900">{notice.title}</h4>
-                  <p className="text-sm text-gray-500">{notice.published_date}</p>
-                </div>
-                {notice.attachment_url && (
-                  <a 
-                    href={notice.attachment_url} 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded hover:bg-emerald-700"
-                  >
-                    Download PDF
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="p-6 text-center text-gray-500 bg-gray-50 rounded">
-            No announcements or notices posted at this time.
-          </div>
-        )}
-      </section>
+        <section className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-2xl font-bold border-b pb-3 mb-4">Featured Events</h2>
+          {events.length > 0 ? (
+            <ul className="space-y-2">
+              {events.map((evt) => (
+                <li key={evt.id} className="font-medium">{evt.title} — {evt.location}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No featured events.</p>
+          )}
+        </section>
+      </main>
     </div>
   );
 }
 ```
 
----
-
-### Example 2: Dynamic Blog Detail Server Page (`src/app/blog/[slug]/page.tsx`)
-
-```tsx
-import { storio, StorioBlogPost } from '@storio/template-sdk';
-import { headers } from 'next/headers';
-import { notFound } from 'next/navigation';
-import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
-
-interface BlogPageProps {
-  params: Promise<{ slug: string }>;
-}
-
-export default async function BlogDetailPage({ params }: BlogPageProps) {
-  const { slug } = await params;
-
-  // 1. Resolve Host from Request Headers
-  const headersList = await headers();
-  const rawHost: string = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host: string = rawHost.split(':')[0];
-
-  // 2. Check for Linked Tenant (CLI) vs Standalone Mode
-  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const isStandalone = isLocalHost && !linkedTenant;
-  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
-
-  // 3. Fetch Real Tenant Article via SDK
-  const rawArticle: StorioBlogPost | null = await storio.getBlogDetail(slug, tenantHost);
-
-  // 4. Apply Golden Rule (Fallback to Demo Data ONLY in Standalone Preview mode)
-  const article: StorioBlogPost | null = rawArticle || (
-    isStandalone 
-      ? DEFAULT_DEMO_DATA.blogs?.find((b: StorioBlogPost) => b.slug === slug) || DEFAULT_DEMO_DATA.blogs?.[0] || null
-      : null
-  );
-
-  if (!article) {
-    notFound();
-  }
-
-  return (
-    <article className="max-w-3xl mx-auto p-8">
-      <h1 className="text-4xl font-extrabold text-gray-900">{article.title}</h1>
-      <p className="mt-2 text-gray-500">{article.published_at}</p>
-      
-      {article.featured_image_url && (
-        <img 
-          src={article.featured_image_url} 
-          alt={article.title} 
-          className="my-6 w-full h-80 object-cover rounded-lg" 
-        />
-      )}
-
-      <div 
-        className="prose max-w-none mt-6" 
-        dangerouslySetInnerHTML={{ __html: article.content || article.summary || '' }} 
-      />
-    </article>
-  );
-}
-```
-
----
-
-### Example 3: Client Form Submission Component (`src/components/ContactForm.tsx`)
-
-Strict TypeScript client component with hCaptcha integration, mobile + subject fields, and correct tenant host forwarding:
-
-> **Note:** Install hCaptcha React package first: `npm install @hcaptcha/react-hcaptcha`
+### Example 2: Dynamic Form Upload & Submission (`src/components/DynamicForm.tsx`)
 
 ```tsx
 'use client';
 
-import React, { useRef, useState } from 'react';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { storio, StorioContactFormResponse } from '@storio/template-sdk';
+import React, { useState } from 'react';
+import { storio, StorioForm, StorioAPIError } from '@storio/template-sdk';
 
-interface ContactFormProps {
-  tenantHost: string;
-  hcaptchaSiteKey: string | null;
-}
-
-export default function ContactForm({ tenantHost, hcaptchaSiteKey }: ContactFormProps) {
+export default function DynamicForm({ form, tenantHost }: { form: StorioForm; tenantHost: string }) {
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const captchaRef = useRef<HCaptcha>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFileChange = async (fieldId: string, file?: File) => {
+    if (!file) return;
+    const uploaded = await storio.uploadFormFile(form.code, file, fieldId, tenantHost);
+    if (uploaded?.url) {
+      setAnswers((prev) => ({ ...prev, [fieldId]: uploaded.url }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setStatus(null);
-
-    const formData = new FormData(e.currentTarget);
-
-    // Strict typing — no `any` types
-    const payload: Record<string, unknown> = {
-      name:    formData.get('name') as string,
-      email:   formData.get('email') as string,
-      mobile:  formData.get('mobile') as string,
-      subject: formData.get('subject') as string,
-      message: formData.get('message') as string,
-      ...(captchaToken ? { recaptcha_token: captchaToken } : {}),
-    };
-
-    const res: StorioContactFormResponse | null =
-      await storio.submitContactMessage(payload, tenantHost);
-
-    setIsSubmitting(false);
-    captchaRef.current?.resetCaptcha();
-    setCaptchaToken(null);
-
-    if (res?.success) {
-      setStatus('Message sent successfully!');
-      (e.target as HTMLFormElement).reset();
-    } else {
-      setStatus(res?.message || 'Failed to send message. Please try again.');
+    try {
+      const res = await storio.submitFormResponse(
+        { form: form.code, answers },
+        { tenantHost, throwOnError: true }
+      );
+      setStatus(form.settings?.successMessage || res?.message || 'Submitted successfully.');
+    } catch (err) {
+      setStatus(err instanceof StorioAPIError ? err.message : 'Submission failed.');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto p-6 bg-white rounded shadow">
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Name</label>
-        <input name="name" type="text" required className="mt-1 w-full border p-2 rounded" />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Email</label>
-        <input name="email" type="email" required className="mt-1 w-full border p-2 rounded" />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Mobile</label>
-        <input name="mobile" type="tel" placeholder="+8801700000000" className="mt-1 w-full border p-2 rounded" />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Subject</label>
-        <input name="subject" type="text" required className="mt-1 w-full border p-2 rounded" />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Message</label>
-        <textarea name="message" rows={4} required className="mt-1 w-full border p-2 rounded" />
-      </div>
-
-      {/* hCaptcha widget — optional but recommended */}
-      {hcaptchaSiteKey && (
-        <HCaptcha
-          ref={captchaRef}
-          sitekey={hcaptchaSiteKey}
-          onVerify={(token) => setCaptchaToken(token)}
-          onExpire={() => setCaptchaToken(null)}
-        />
-      )}
-
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full bg-emerald-600 text-white font-medium py-2 rounded hover:bg-emerald-700 disabled:opacity-50"
-      >
-        {isSubmitting ? 'Sending...' : 'Send Message'}
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <h2 className="text-xl font-bold">{form.title}</h2>
+      {form.elements.map((el) => (
+        <div key={el.id} className="space-y-1">
+          {el.label && <label className="block text-sm font-medium">{el.label}</label>}
+          {el.type === 'file' || el.type === 'image' ? (
+            <input type="file" onChange={(e) => handleFileChange(el.id, e.target.files?.[0])} />
+          ) : (
+            <input
+              type={el.type === 'email' || el.type === 'number' || el.type === 'date' ? el.type : 'text'}
+              required={el.required}
+              placeholder={el.placeholder}
+              onChange={(e) => setAnswers((prev) => ({ ...prev, [el.id]: e.target.value }))}
+              className="w-full border px-3 py-2 rounded"
+            />
+          )}
+        </div>
+      ))}
+      <button type="submit" className="px-4 py-2 bg-emerald-600 text-white rounded">
+        {form.settings?.submitButtonText || 'Submit'}
       </button>
-
-      {status && (
-        <p className={`mt-2 text-sm text-center ${status.includes('successfully') ? 'text-green-600' : 'text-red-600'}`}>
-          {status}
-        </p>
-      )}
+      {status && <p className="text-sm text-emerald-700">{status}</p>}
     </form>
   );
 }
 ```
 
-**Usage in a Server Page (passes `tenantHost` and `hcaptchaSiteKey` as props):**
+### Example 3: Citizen Charter & Compliance Page (`src/app/compliance/page.tsx`)
 
 ```tsx
-// src/app/contact/page.tsx  (Server Component)
 import { headers } from 'next/headers';
 import { storio } from '@storio/template-sdk';
-import ContactForm from '@/components/ContactForm';
-
-export default async function ContactPage() {
-  const headersList = await headers();
-  const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host = rawHost.split(':')[0];
-  const tenantHost = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST || host;
-
-  const settings = await storio.getSettings(tenantHost);
-
-  // On localhost dev, fall back to official hCaptcha test site key
-  const isLocal = host === 'localhost' || host === '127.0.0.1';
-  const hcaptchaSiteKey =
-    settings?.hcaptcha_site_key ??
-    (isLocal ? '10000000-ffff-ffff-ffff-000000000001' : null);
-
-  return (
-    <main>
-      <h1>Contact Us</h1>
-      <ContactForm tenantHost={tenantHost} hcaptchaSiteKey={hcaptchaSiteKey} />
-    </main>
-  );
-}
-```
-
----
-
-### Example 4: Academics Routine & Syllabus Page (`src/app/academics/page.tsx`)
-
-```tsx
-import { headers } from 'next/headers';
-import { storio, StorioClassRoutine, StorioSyllabus } from '@storio/template-sdk';
-
-export default async function AcademicsPage() {
-  const headersList = await headers();
-  const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host = rawHost.split(':')[0];
-
-  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const isStandalone = isLocalHost && !linkedTenant;
-  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
-
-  const [routines, syllabuses] = await Promise.all([
-    storio.getClassRoutines(tenantHost),
-    storio.getSyllabuses(tenantHost),
-  ]);
-
-  return (
-    <div className="max-w-5xl mx-auto p-8">
-      <h1 className="text-3xl font-extrabold text-gray-900 mb-6">Academic Routines & Syllabuses</h1>
-
-      {/* Class Routines */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Class Timetables</h2>
-        {routines && routines.length > 0 ? (
-          <div className="grid md:grid-cols-2 gap-4">
-            {routines.map((r) => (
-              <div key={r.id} className="p-4 border rounded-lg bg-white shadow-sm flex justify-between items-center">
-                <div>
-                  <h3 className="font-semibold text-lg">{r.class_name} {r.section ? `(${r.section})` : ''}</h3>
-                  <p className="text-sm text-gray-500">Shift: {r.shift || 'General'} | Year: {r.academic_year}</p>
-                </div>
-                {r.routine_file && (
-                  <a href={r.routine_file} target="_blank" rel="noreferrer" className="px-3 py-1.5 bg-emerald-600 text-white rounded text-sm">
-                    PDF Routine
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-500">No class routines published yet.</p>
-        )}
-      </section>
-
-      {/* Syllabuses */}
-      <section>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Curriculum Syllabuses</h2>
-        {syllabuses && syllabuses.length > 0 ? (
-          <div className="divide-y border rounded-lg bg-white">
-            {syllabuses.map((s) => (
-              <div key={s.id} className="p-4 flex justify-between items-center">
-                <div>
-                  <h3 className="font-semibold">{s.class_name} — {s.exam_type}</h3>
-                  <p className="text-sm text-gray-500">{s.description || `Academic Session ${s.academic_year}`}</p>
-                </div>
-                {s.file_url && (
-                  <a href={s.file_url} target="_blank" rel="noreferrer" className="px-3 py-1.5 bg-gray-800 text-white rounded text-sm">
-                    Download
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-500">No syllabuses published yet.</p>
-        )}
-      </section>
-    </div>
-  );
-}
-```
-
----
-
-### Example 5: Citizen Charter & Compliance Page (`src/app/compliance/page.tsx`)
-
-```tsx
-import { headers } from 'next/headers';
-import { storio, StorioInformationService, StorioComplaintOfficer, StorioHotline } from '@storio/template-sdk';
 
 export default async function CompliancePage() {
   const headersList = await headers();
-  const rawHost = headersList.get('x-tenant-host') || headersList.get('host') || '';
-  const host = rawHost.split(':')[0];
-
-  const linkedTenant = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST;
-  const isLocalHost = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-  const isStandalone = isLocalHost && !linkedTenant;
-  const tenantHost = linkedTenant || (isStandalone ? 'demo.storio.cloud' : host);
+  const host = (headersList.get('x-tenant-host') || headersList.get('host') || '').split(':')[0];
+  const tenantHost = process.env.NEXT_PUBLIC_STORIO_TENANT_HOST || host;
 
   const [infoService, complaintOfficer, hotlines] = await Promise.all([
     storio.getInformationService(tenantHost),
@@ -2463,41 +2732,49 @@ export default async function CompliancePage() {
 
   return (
     <div className="max-w-4xl mx-auto p-8 space-y-8">
-      <h1 className="text-3xl font-extrabold text-gray-900">Institutional Governance & Citizen Charter</h1>
+      <h1 className="text-3xl font-extrabold">Institutional Governance & Citizen Charter</h1>
 
-      {/* RTI Officer */}
-      {infoService?.officer_name && (
-        <section className="p-6 bg-white border rounded-lg shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-2">Right to Information (RTI) Officer</h2>
-          <p className="font-medium text-gray-900">{infoService.officer_name}</p>
+      {infoService?.responsible_person && (
+        <section className="p-6 bg-white border rounded-lg space-y-1">
+          <h2 className="text-xl font-bold">{infoService.title || 'Information Service Center'}</h2>
+          <p className="font-medium">{infoService.responsible_person}</p>
           <p className="text-sm text-gray-600">{infoService.designation}</p>
-          <p className="text-sm text-gray-500 mt-2">Email: {infoService.email} | Phone: {infoService.phone}</p>
+          <p className="text-sm text-gray-500">Email: {infoService.email} | Mobile: {infoService.mobile}</p>
+          {Array.isArray(infoService.services_offered) && (
+            <ul className="list-disc pl-5 text-sm pt-2">
+              {infoService.services_offered.map((service) => (
+                <li key={service}>{service}</li>
+              ))}
+            </ul>
+          )}
         </section>
       )}
 
-      {/* Grievance Redress Officer */}
-      {complaintOfficer?.officer_name && (
-        <section className="p-6 bg-white border rounded-lg shadow-sm">
-          <h2 className="text-xl font-bold text-gray-800 mb-2">Grievance Redress System (GRS)</h2>
-          <p className="font-medium text-gray-900">{complaintOfficer.officer_name}</p>
+      {complaintOfficer?.name && (
+        <section className="p-6 bg-white border rounded-lg space-y-2">
+          <h2 className="text-xl font-bold">Grievance Redress Officer (GRS)</h2>
+          <p className="font-medium">{complaintOfficer.name}</p>
           <p className="text-sm text-gray-600">{complaintOfficer.designation}</p>
-          <div className="mt-4 space-y-2">
-            {complaintOfficer.steps?.map((step) => (
-              <div key={step.step_number} className="text-sm">
-                <span className="font-semibold">Step {step.step_number}: {step.title}</span> — {step.description}
-              </div>
-            ))}
-          </div>
+          {Array.isArray(complaintOfficer.complaint_process) ? (
+            <div className="space-y-1 text-sm">
+              {complaintOfficer.complaint_process.map((step, i) => (
+                <p key={step.step_number ?? i}>
+                  Step {step.step_number ?? i + 1}: <strong>{step.title}</strong> — {step.description}
+                </p>
+              ))}
+            </div>
+          ) : complaintOfficer.complaint_process ? (
+            <p className="text-sm whitespace-pre-line">{complaintOfficer.complaint_process}</p>
+          ) : null}
         </section>
       )}
 
-      {/* Emergency Hotlines */}
       {hotlines && hotlines.length > 0 && (
         <section className="p-6 bg-emerald-50 border border-emerald-200 rounded-lg">
-          <h2 className="text-xl font-bold text-emerald-900 mb-4">Emergency Hotlines</h2>
+          <h2 className="text-xl font-bold mb-4">Emergency Hotlines</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {hotlines.map((h) => (
-              <div key={h.id} className="p-3 bg-white rounded border border-emerald-100 shadow-sm text-center">
+              <div key={h.id} className="p-3 bg-white rounded border text-center">
                 <p className="text-2xl font-black text-emerald-700">{h.number}</p>
                 <p className="text-xs font-medium text-gray-600 mt-1">{h.title}</p>
               </div>
