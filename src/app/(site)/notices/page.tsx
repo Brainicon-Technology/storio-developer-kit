@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('template-10-starter-notices');
 }
 
-/** /notices?q=exam searches with storio.apiFetch; without ?q= it lists every notice (getNotices). */
+/** /notices?q=exam searches with getNotices({ search }); without ?q= it lists every notice (getNotices). */
 export default async function NoticesPage({ searchParams }: PageProps<'/notices'>) {
   const { q } = await searchParams;
   const query = typeof q === 'string' ? q : '';

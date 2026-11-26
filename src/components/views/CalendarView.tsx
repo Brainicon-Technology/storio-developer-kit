@@ -2,8 +2,10 @@
 
 /*
  * SDK data on this page (loaded on the server, passed in as props):
- *   storio.getCalendarEvents()  ->  StorioCalendarEvent[]
+ *   storio.getCalendarEvents()    ->  StorioCalendarEvent[]
  *     loadCalendarEvents() in src/lib/calendar.ts
+ *   storio.getCalendarSettings()  ->  StorioCalendarSetting ({ weekend_days: "5,6" }, shown as day names)
+ *     loadWeekendDays() in src/lib/calendar.ts
  */
 
 import type { StorioCalendarEvent } from '@storio/template-sdk';
@@ -15,7 +17,7 @@ import { formatDate } from '@/lib/format';
 const PAGE = 'template-10-starter-calendar';
 
 /** Academic calendar (getCalendarEvents), grouped by month on the server. */
-export function CalendarView({ months }: { months: { title: string; events: StorioCalendarEvent[] }[] }) {
+export function CalendarView({ months, weekendDays }: { months: { title: string; events: StorioCalendarEvent[] }[]; weekendDays: string[] }) {
   const { intro } = useCalendarText();
 
   return (
@@ -28,6 +30,14 @@ export function CalendarView({ months }: { months: { title: string; events: Stor
           <p className="opacity-80">
             <CmsField path="text" label="Text">{intro.text}</CmsField>
           </p>
+          {weekendDays.length > 0 && (
+            <p className="text-sm">
+              <span className="font-semibold">
+                <CmsField path="weekendLabel" label="Weekly holidays label">{intro.weekendLabel}</CmsField>
+              </span>{' '}
+              {weekendDays.join(', ')}
+            </p>
+          )}
         </header>
 
         {months.length === 0 ? (

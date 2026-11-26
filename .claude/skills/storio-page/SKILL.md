@@ -119,6 +119,15 @@ Reuse the existing loader if there is one (search `src/lib` for the SDK method).
 `withDemoFallback(real, DEFAULT_DEMO_DATA.x, ctx.isStandalone)`. Add demo data in
 `src/data/defaultDemoData.ts`. Demo data must never show on a real school.
 
+- **Filters** go in the first argument with the tenant host: `storio.getBlogs({ category: id, tenantHost })`.
+  Category tabs: copy `BlogsView.tsx` + `blogs/page.tsx` (`?category=<slug>`, `<CategoryTabs>`, an
+  editable `allText`).
+- **Paginated lists** (events, event categories, institution cards) come as `{ count, results }`:
+  unwrap with `listOf()` from `src/lib/normalize.ts`.
+- **Media paths** are relative: make them absolute with `mediaUrl()`.
+- **A form the school built** (Dynamic Form Builder): reuse `/forms/[code]` (`FormView.tsx`), don't
+  rebuild it.
+
 ## 7. Verify (required, do not finish before this passes)
 
 ```bash

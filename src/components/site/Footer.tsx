@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import type { StorioNavigationItem, StorioSettingsResponse } from '@storio/template-sdk';
+import type { StorioSettingsResponse } from '@storio/template-sdk';
 
 import ThemeField from '@/components/cms/ThemeField';
+import type { MenuLink } from '@/lib/site';
 import { themeText, type ThemeValues } from '@/lib/theme';
 
 /**
@@ -17,7 +18,7 @@ export function Footer({
 }: {
   settings: StorioSettingsResponse | null;
   theme: ThemeValues;
-  quickLinks: StorioNavigationItem[];
+  quickLinks: MenuLink[];
 }) {
   const siteName = settings?.site_title ?? '';
 

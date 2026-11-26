@@ -29,26 +29,18 @@ export const loadNotice = cache(async function loadNotice(id: string, ctx: Tenan
 });
 
 /**
- * Search notices with storio.apiFetch: the low-level call every SDK method is built on.
- * Use it when a named method can't send what you need. getNotices takes no query parameters,
- * but the endpoint supports ?search= (see docs/Storio_SDK_V2_Endpoints_and_Methods_Guide.md).
- * Pass the tenant host in the options, and type the result yourself.
+ * /notices?q=exam: storio.getNotices({ search }) filters by title and content on the server.
+ * List methods take their filters as the first argument and the tenant host in the same object
+ * (or as the second argument): getNotices({ search: 'exam', tenantHost }).
  */
 export async function searchNotices(query: string, ctx: TenantContext): Promise<StorioNotice[]> {
-  const q = query.trim().slice(0, 100);
-  if (!q) return loadNotices(ctx);
+  const search = query.trim().slice(0, 100);
+  if (!search) return loadNotices(ctx);
 
-  const real = await safely(
-    storio.apiFetch<unknown>(`/api/v2/template/notices/?search=${encodeURIComponent(q)}`, {
-      tenantHost: ctx.tenantHost,
-      next: { revalidate: 60 },
-    }),
-  );
-  const found = normalizeNotices(real);
-  if (found) return found;
+  const found = normalizeNotices(await safely(storio.getNotices({ search, tenantHost: ctx.tenantHost })));
+  if (!ctx.isStandalone) return found ?? [];
 
   // Standalone Preview: search the demo notices the same way.
-  const needle = q.toLowerCase();
-  const demo = DEFAULT_DEMO_DATA.notices.filter((n) => `${n.title} ${n.content ?? ''}`.toLowerCase().includes(needle));
-  return ctx.isStandalone ? demo : [];
+  const needle = search.toLowerCase();
+  return DEFAULT_DEMO_DATA.notices.filter((n) => `${n.title} ${n.content ?? ''}`.toLowerCase().includes(needle));
 }

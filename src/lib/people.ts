@@ -1,10 +1,9 @@
-import { storio, type StorioStaffMember, type StorioTeamMember } from '@storio/template-sdk';
+import { storio, type StorioLeadershipMessage, type StorioStaffMember, type StorioTeamMember } from '@storio/template-sdk';
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 import { byOrder, safely, withDemoFallback } from './data';
-import { normalizeStaff, normalizeTeam } from './normalize';
+import { normalizeLeadershipMessages, normalizeStaff, normalizeTeam } from './normalize';
 import type { TenantContext } from './tenant';
-import { narrowList, toLeadershipMessage, type LeadershipMessage } from './types';
 
 /** Teachers and staff (dashboard: Staff). */
 export async function loadStaff(ctx: TenantContext): Promise<StorioStaffMember[]> {
@@ -18,10 +17,12 @@ export async function loadTeam(ctx: TenantContext): Promise<StorioTeamMember[]> 
   return byOrder(withDemoFallback(real, DEFAULT_DEMO_DATA.team, ctx.isStandalone).filter((m) => m.is_visible !== false));
 }
 
-/** Messages from the principal, chairman... Loose records narrowed with toLeadershipMessage (Rule 2). */
-export async function loadLeadershipMessages(ctx: TenantContext): Promise<LeadershipMessage[]> {
-  const real = narrowList(await safely(storio.getLeadershipMessages(ctx.tenantHost)), toLeadershipMessage);
-  return byOrder(withDemoFallback(real, DEFAULT_DEMO_DATA.leadershipMessages, ctx.isStandalone));
+/** Messages from the principal, chairman... (dashboard: Leadership), in display_order. */
+export async function loadLeadershipMessages(ctx: TenantContext): Promise<StorioLeadershipMessage[]> {
+  const real = normalizeLeadershipMessages(await safely(storio.getLeadershipMessages(ctx.tenantHost)));
+  return withDemoFallback(real, DEFAULT_DEMO_DATA.leadershipMessages, ctx.isStandalone).sort(
+    (a, b) => (a.display_order ?? 0) - (b.display_order ?? 0),
+  );
 }
 
 /** Groups records by a label (staff by department, team by section), keeping first-seen order. */

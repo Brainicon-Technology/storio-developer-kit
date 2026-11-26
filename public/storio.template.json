@@ -360,6 +360,10 @@
           "label": "At a glance"
         },
         {
+          "key": "highlights",
+          "label": "Highlights"
+        },
+        {
           "key": "values",
           "label": "Values"
         },
@@ -392,6 +396,9 @@
           "boardLabel": "Education board",
           "typeLabel": "School type",
           "shiftLabel": "Shifts"
+        },
+        "highlights": {
+          "title": "Why families choose us"
         },
         "values": {
           "title": "Our values",
@@ -429,6 +436,53 @@
           "keywords": [
             "about",
             "school history"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-10-starter-forms",
+      "title": "Online forms",
+      "route": "/forms",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Intro"
+        },
+        {
+          "key": "detail",
+          "label": "Form page labels"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Online forms",
+          "text": "Applications, registrations and requests you can send us online.",
+          "openText": "Open the form",
+          "emptyText": "There are no open forms right now."
+        },
+        "detail": {
+          "backText": "Back to all forms",
+          "requiredText": "Required",
+          "submitText": "Send",
+          "sendingText": "Sending...",
+          "successText": "Thank you. We have received your answers.",
+          "errorText": "Something went wrong. Please check the form and try again.",
+          "missingText": "Please fill in every required field.",
+          "selectPlaceholder": "Choose..."
+        },
+        "seo": {
+          "title": "Online forms",
+          "description": "Applications and requests you can send to the school online.",
+          "keywords": [
+            "forms",
+            "online application",
+            "registration"
           ],
           "ogImage": ""
         }
@@ -551,7 +605,8 @@
           "title": "News and stories",
           "text": "Stories from our classrooms, clubs and community.",
           "readMoreText": "Read the story",
-          "emptyText": "No stories published yet."
+          "emptyText": "No stories published yet.",
+          "allText": "All"
         },
         "seo": {
           "title": "News",
@@ -603,7 +658,8 @@
           "text": "What is coming up on campus.",
           "featuredLabel": "Featured",
           "detailsText": "Event details",
-          "emptyText": "No upcoming events."
+          "emptyText": "No upcoming events.",
+          "allText": "All"
         },
         "seo": {
           "title": "Events",
@@ -659,7 +715,8 @@
           "title": "Activities",
           "text": "Sports, clubs and everything beyond the classroom.",
           "readMoreText": "Learn more",
-          "emptyText": "No activities listed yet."
+          "emptyText": "No activities listed yet.",
+          "allText": "All"
         },
         "detail": {
           "backText": "Back to all activities"
@@ -917,7 +974,8 @@
           "title": "Academic calendar",
           "text": "Term dates, exams and holidays for the school year.",
           "allDayLabel": "All day",
-          "emptyText": "The calendar is not published yet."
+          "emptyText": "The calendar is not published yet.",
+          "weekendLabel": "Weekly holidays:"
         },
         "seo": {
           "title": "Calendar",

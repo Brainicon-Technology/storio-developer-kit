@@ -2,11 +2,12 @@
 
 /*
  * SDK data on this page (loaded on the server, passed in as props):
- *   storio.getJobDetail(slug)  ->  Job | null (loose record, narrowed)
+ *   storio.getJobDetail(slug)  ->  StorioCareer | null
  *     loadJob() in src/lib/careers.ts
  */
 
 import Link from 'next/link';
+import type { StorioCareer } from '@storio/template-sdk';
 import { FileText } from 'lucide-react';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 
@@ -14,7 +15,6 @@ import { useCareersText } from '@/components/cms/useCareersText';
 import { RichText } from '@/components/site/RichText';
 import { jobTypeLabel } from '@/lib/careers';
 import { formatDate } from '@/lib/format';
-import type { Job } from '@/lib/types';
 
 /**
  * One job (getJobDetail). Like the activity page, this [slug] route is not an editor page:
@@ -22,7 +22,7 @@ import type { Job } from '@/lib/types';
  */
 const LIST_PAGE = 'template-10-starter-careers';
 
-export function JobDetailView({ job }: { job: Job }) {
+export function JobDetailView({ job }: { job: StorioCareer }) {
   const { intro, detail } = useCareersText();
 
   return (

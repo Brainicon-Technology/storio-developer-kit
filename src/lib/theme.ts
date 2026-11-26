@@ -46,7 +46,8 @@ function manifestDefaults(): ThemeValues {
 
 /** The school's Theme settings values, each falling back to its manifest default. */
 export const loadTheme = cache(async function loadTheme(ctx: TenantContext): Promise<ThemeValues> {
-  const saved = (await storio.getCustomization(ctx.tenantHost).catch(() => null))?.config ?? {};
+  // revalidate: 0, so a saved Theme setting shows right away (see loadLayout in ./site.ts).
+  const saved = (await storio.getCustomization({ tenantHost: ctx.tenantHost, next: { revalidate: 0 } }).catch(() => null))?.config ?? {};
   return themeFromConfig(saved);
 });
 

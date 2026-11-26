@@ -16,7 +16,20 @@ export interface SiteLayout {
   settings: StorioSettingsResponse | null;
   theme: ThemeValues;
   /** The dashboard's own menu (Settings > Navigation), shown as the footer's quick links. */
-  navigation: StorioNavigationItem[];
+  navigation: MenuLink[];
+}
+
+/**
+ * A menu link with its text and URL always present. StorioNavigationItem has every field optional
+ * (the API sends { name, href, subLinks }, older backends { label, url, children }), so
+ * normalizeNavigation() turns each item into this shape and drops items without a text or a link.
+ */
+export interface MenuLink {
+  id?: string | number;
+  label: string;
+  url: string;
+  target?: string;
+  children: MenuLink[];
 }
 
 /**
@@ -24,22 +37,24 @@ export interface SiteLayout {
  * the customization (Theme settings) and the navigation together.
  * If that fails (an older backend, a network error), the three single calls are used instead:
  * getSettings, getCustomization and getNavigation.
+ *
+ * Caching: SDK GET requests are cached for 60 seconds by default ({ next: { revalidate: 60 } }).
+ * Menus, Theme settings and settings change rarely but should show right after the school saves
+ * them, so these calls pass { tenantHost, next: { revalidate: 0 } } (every fetch option goes in the
+ * same object as the tenant host).
  */
 export const loadLayout = cache(async function loadLayout(ctx: TenantContext): Promise<SiteLayout> {
-  const layout = await safely(storio.getLayout(ctx.tenantHost));
+  const fresh = { tenantHost: ctx.tenantHost, next: { revalidate: 0 } };
+  const layout = await safely(storio.getLayout(fresh));
   const [settings, customization, navigation] = layout
     ? [layout.settings, layout.customization, layout.navigation]
-    : await Promise.all([
-        safely(storio.getSettings(ctx.tenantHost)),
-        safely(storio.getCustomization(ctx.tenantHost)),
-        safely(storio.getNavigation(ctx.tenantHost)),
-      ]);
+    : await Promise.all([safely(storio.getSettings(fresh)), safely(storio.getCustomization(fresh)), safely(storio.getNavigation(fresh))]);
 
   const hasSettings = !!settings && Object.keys(settings).length > 0;
   return {
     settings: withDemoRecord(hasSettings ? settings : null, DEFAULT_DEMO_DATA.settings, ctx.isStandalone),
     theme: themeFromConfig(customization?.config ?? {}),
-    navigation: withDemoFallback(quickLinks(normalizeNavigation(navigation?.items)), DEFAULT_DEMO_DATA.navigation, ctx.isStandalone),
+    navigation: quickLinks(withDemoFallback(normalizeNavigation(navigation?.items), normalizeNavigation(DEFAULT_DEMO_DATA.navigation), ctx.isStandalone)),
   };
 });
 
@@ -47,7 +62,7 @@ export const loadLayout = cache(async function loadLayout(ctx: TenantContext): P
  * Footer quick links: the dashboard menu's links that exist in this template (old URLs are mapped,
  * see ./routes.ts), each page once.
  */
-function quickLinks(items: StorioNavigationItem[]): StorioNavigationItem[] {
+function quickLinks(items: MenuLink[]): MenuLink[] {
   const seen = new Set<string>();
   return items.flatMap((item) => {
     const url = menuHref(item.url);
@@ -58,20 +73,17 @@ function quickLinks(items: StorioNavigationItem[]): StorioNavigationItem[] {
 }
 
 /**
- * The SDK types navigation items as { label, url, children }, but the backend sends the same
- * shape as Theme settings links: { name, href, subLinks }. Accept both, and drop items without
- * a text or a link, so a menu entry with a missing field can never break the page.
+ * storio.getNavigation().items -> StorioNavigationItem[]. The live API sends { name, href, subLinks }
+ * (the same shape as Theme settings links), older backends { label, url, children }. Accept both,
+ * skip hidden items, and drop items without a text or a link, so a menu entry with a missing field
+ * can never break the page.
  */
-export function normalizeNavigation(items: unknown): StorioNavigationItem[] {
+export function normalizeNavigation(items: StorioNavigationItem[] | null | undefined): MenuLink[] {
   if (!Array.isArray(items)) return [];
-  return items.flatMap((raw): StorioNavigationItem[] => {
-    if (!raw || typeof raw !== 'object') return [];
-    const r = raw as Record<string, unknown>;
-    const label = typeof r.label === 'string' ? r.label : typeof r.name === 'string' ? r.name : '';
-    const url = typeof r.url === 'string' ? r.url : typeof r.href === 'string' ? r.href : '';
-    if (!label || !url) return [];
-    const id = typeof r.id === 'string' || typeof r.id === 'number' ? r.id : undefined;
-    const target = typeof r.target === 'string' ? r.target : undefined;
-    return [{ id, label, url, target, children: normalizeNavigation(r.children ?? r.subLinks) }];
+  return items.flatMap((item): MenuLink[] => {
+    const label = item.name || item.label || '';
+    const url = item.href || item.url || '';
+    if (!label || !url || item.isVisible === false) return [];
+    return [{ id: item.id, label, url, target: item.target, children: normalizeNavigation(item.subLinks ?? item.children) }];
   });
 }

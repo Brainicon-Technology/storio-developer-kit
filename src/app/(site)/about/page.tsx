@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { AboutView } from '@/components/views/AboutView';
-import { loadInstitutionProfile } from '@/lib/institution';
+import { loadInstitutionCards, loadInstitutionProfile } from '@/lib/institution';
 import { groupBy, loadLeadershipMessages, loadTeam } from '@/lib/people';
 import { pageMetadata } from '@/lib/seo';
 import { resolveTenant } from '@/lib/tenant';
@@ -12,7 +12,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AboutPage() {
   const ctx = await resolveTenant();
-  const [profile, leadership, team] = await Promise.all([loadInstitutionProfile(ctx), loadLeadershipMessages(ctx), loadTeam(ctx)]);
+  const [profile, cards, leadership, team] = await Promise.all([
+    loadInstitutionProfile(ctx),
+    loadInstitutionCards(ctx),
+    loadLeadershipMessages(ctx),
+    loadTeam(ctx),
+  ]);
 
-  return <AboutView profile={profile} leadership={leadership} teamGroups={groupBy(team, (m) => m.section_name, '')} />;
+  return <AboutView profile={profile} cards={cards} leadership={leadership} teamGroups={groupBy(team, (m) => m.section_name, '')} />;
 }

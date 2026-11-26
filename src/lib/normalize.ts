@@ -2,25 +2,34 @@ import type {
   StorioActivityItem,
   StorioBlogPost,
   StorioBoardNotice,
+  StorioCareer,
   StorioClassRoutine,
   StorioEvent,
   StorioGalleryItem,
   StorioHeroSlide,
+  StorioInstitutionCard,
+  StorioLeadershipMedia,
+  StorioLeadershipMessage,
   StorioMpoInfo,
   StorioNotice,
   StorioPromotion,
   StorioStaffMember,
   StorioTeamMember,
+  StorioTestimonial,
 } from '@storio/template-sdk';
 
 /**
  * ============================================================================
  * Normalizers: real backend records -> the SDK types the pages use
  * ============================================================================
- * The live Storio API does not always match the SDK's TypeScript types: some
- * fields have other names (hero slide "heading" instead of "title"), images are
- * nested media objects with relative paths ("/media/uploads/x.webp"), and
- * events come paginated ({ count, results }).
+ * The live Storio API does not always match the SDK's TypeScript types (SDK 1.1.0):
+ * - some records use other field names (hero slide "heading" instead of "title",
+ *   staff "role" instead of "designation", notice "publish_date"...),
+ * - media paths are relative ("/media/uploads/x.webp"), even where the type matches,
+ * - events, event categories and institution cards come paginated ({ count, results })
+ *   although the SDK types them as arrays.
+ * Records whose type matches the API (testimonials, leadership, careers...) only get
+ * their media URLs made absolute and their unpublished entries dropped.
  *
  * Every loader in src/lib runs the SDK result through one of these functions
  * BEFORE the Rule 1 fallback, so views only ever see the SDK shape, and the
@@ -60,17 +69,45 @@ export function mediaUrl(value: unknown): string | undefined {
 /** "2026-11-25T00:00:00Z" stays as is; formatDate() in the views shows it. */
 const date = (...values: unknown[]) => values.map(str).find(Boolean);
 
-/** Plain text (with line breaks) as simple HTML, for fields <RichText> renders. HTML stays as is. */
-export function textToHtml(text: string): string {
-  if (/<[a-z][\s\S]*>/i.test(text)) return text;
-  const escape = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] ?? c);
-  return text
-    .split(/\n{2,}/)
-    .map((p) => `<p>${escape(p).replace(/\n/g, '<br>')}</p>`)
-    .join('');
+const active = (r: Loose) => r.status === undefined || ['active', 'published'].includes(String(r.status)) || r.status === true;
+
+/** A media object with an absolute file_url (null when there is no file). */
+function media<T extends { file_url: string }>(value: T | null | undefined): T | null {
+  const url = mediaUrl(value);
+  return value && url ? { ...value, file_url: url } : null;
 }
 
-const active = (r: Loose) => r.status === undefined || ['active', 'published'].includes(String(r.status)) || r.status === true;
+/** getTestimonials: the type matches the API; photos get absolute URLs, unpublished ones are dropped. */
+export function normalizeTestimonials(value: StorioTestimonial[] | null): StorioTestimonial[] | null {
+  return listOf(value)?.filter(active).map((r) => {
+    const t = r as unknown as StorioTestimonial;
+    return { ...t, photo_data: media(t.photo_data) };
+  }) ?? null;
+}
+
+/** getLeadershipMessages: the type matches the API; photo and signature get absolute URLs. */
+export function normalizeLeadershipMessages(value: StorioLeadershipMessage[] | null): StorioLeadershipMessage[] | null {
+  return listOf(value)?.filter(active).map((r) => {
+    const m = r as unknown as StorioLeadershipMessage;
+    return { ...m, image_data: media<StorioLeadershipMedia>(m.image_data), signature_data: media<StorioLeadershipMedia>(m.signature_data) };
+  }) ?? null;
+}
+
+function toCareer(r: Loose): StorioCareer {
+  const job = r as unknown as StorioCareer;
+  return { ...job, attachments_data: (job.attachments_data ?? []).map((a) => ({ ...a, url: mediaUrl(a.url) ?? '' })).filter((a) => a.url) };
+}
+/** getCareers / getJobDetail: the type matches the API; attachments get absolute URLs. */
+export const normalizeCareers = (value: StorioCareer[] | null): StorioCareer[] | null => listOf(value)?.filter(active).map(toCareer) ?? null;
+export const normalizeCareer = (value: StorioCareer | null): StorioCareer | null => (isObj(value) ? toCareer(value) : null);
+
+/** getInstitutionCards: paginated in the API; image_url made absolute. `icon` is a Material icon name. */
+export function normalizeInstitutionCards(value: unknown): StorioInstitutionCard[] | null {
+  return listOf(value)?.map((r) => {
+    const card = r as unknown as StorioInstitutionCard;
+    return { ...card, image_url: mediaUrl(card.image_url) ?? null };
+  }) ?? null;
+}
 
 export function normalizeHeroSlides(value: unknown): StorioHeroSlide[] | null {
   return listOf(value)?.filter(active).map((r) => ({
@@ -115,7 +152,11 @@ function toBlog(r: Loose): StorioBlogPost {
 export const normalizeBlogs = (value: unknown): StorioBlogPost[] | null => listOf(value)?.map(toBlog) ?? null;
 export const normalizeBlog = (value: unknown): StorioBlogPost | null => (isObj(value) && value.id !== undefined ? toBlog(value) : null);
 
-function toActivity(r: Loose): StorioActivityItem {
+/** An activity with its first category's name (the backend sends categories_data; the SDK type has none). */
+export type ActivityItem = StorioActivityItem & { category_name?: string };
+
+function toActivity(r: Loose): ActivityItem {
+  const categories = Array.isArray(r.categories_data) ? r.categories_data : [];
   return {
     id: num(r.id) ?? 0,
     title: str(r.title) ?? '',
@@ -127,10 +168,11 @@ function toActivity(r: Loose): StorioActivityItem {
     image: mediaUrl(r.image),
     published_at: date(r.published_at, r.publish_date),
     date: date(r.date, r.create_date),
+    category_name: str(loose(categories[0]).name),
   };
 }
-export const normalizeActivities = (value: unknown): StorioActivityItem[] | null => listOf(value)?.map(toActivity) ?? null;
-export const normalizeActivity = (value: unknown): StorioActivityItem | null => (isObj(value) && value.id !== undefined ? toActivity(value) : null);
+export const normalizeActivities = (value: unknown): ActivityItem[] | null => listOf(value)?.map(toActivity) ?? null;
+export const normalizeActivity = (value: unknown): ActivityItem | null => (isObj(value) && value.id !== undefined ? toActivity(value) : null);
 
 function toEvent(r: Loose): StorioEvent {
   const detail = loose(r.featured_image_detail);

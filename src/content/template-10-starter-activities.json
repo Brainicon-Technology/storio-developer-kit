@@ -3,7 +3,8 @@
     "title": "Activities",
     "text": "Sports, clubs and everything beyond the classroom.",
     "readMoreText": "Learn more",
-    "emptyText": "No activities listed yet."
+    "emptyText": "No activities listed yet.",
+    "allText": "All"
   },
   "detail": {
     "backText": "Back to all activities"

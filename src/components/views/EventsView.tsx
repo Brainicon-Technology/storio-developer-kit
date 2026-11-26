@@ -2,14 +2,18 @@
 
 /*
  * SDK data on this page (loaded on the server, passed in as props):
- *   storio.getEvents()  ->  StorioEvent[] (the API pages it: { count, results })
+ *   storio.getEvents({ categories })  ->  StorioEvent[] (the API pages it: { count, results })
  *     loadEvents() in src/lib/events.ts
+ *   storio.getEventCategories()       ->  StorioEventCategory[] (paginated too; filter tabs)
+ *     loadEventCategories() in src/lib/events.ts
  */
 
 import Link from 'next/link';
 import { CalendarDays, MapPin } from 'lucide-react';
-import type { StorioEvent } from '@storio/template-sdk';
+import type { StorioEvent, StorioEventCategory } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
+
+import { CategoryTabs } from '@/components/site/CategoryTabs';
 
 import { useEventsText } from '@/components/cms/useEventsText';
 import { eventImage, eventPath } from '@/lib/events';
@@ -21,7 +25,7 @@ const PAGE = 'template-10-starter-events';
  * Event list (getEvents). An event's title, excerpt and location are record fields
  * (collection="event"): the editor may change them, and the save changes the event itself.
  */
-export function EventsView({ events }: { events: StorioEvent[] }) {
+export function EventsView({ events, categories, activeCategory }: { events: StorioEvent[]; categories: StorioEventCategory[]; activeCategory?: string }) {
   const { intro } = useEventsText();
 
   return (
@@ -35,6 +39,13 @@ export function EventsView({ events }: { events: StorioEvent[] }) {
             <CmsField path="text" label="Text">{intro.text}</CmsField>
           </p>
         </header>
+
+        <CategoryTabs
+          path="/events"
+          categories={categories.map((c) => ({ id: c.id, name: c.name, slug: c.slug, count: c.events_count }))}
+          active={activeCategory}
+          allLabel={<CmsField path="allText" label="All tab">{intro.allText}</CmsField>}
+        />
 
         {events.length === 0 ? (
           <p className="rounded-xl border border-black/10 p-4 opacity-70">

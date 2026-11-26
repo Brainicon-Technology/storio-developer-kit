@@ -6,7 +6,7 @@ It comes ready to use:
 
 - **School data connected** with `@storio/template-sdk`: settings, notices, blogs, staff, events and more.
 - **Editable from the Storio dashboard** with the Storio editor kit (`src/lib/storio-editor/`, no library to install): every static text, image and icon, page SEO, theme colours, the menu and the header/footer texts.
-- **Sample pages for all 44 SDK methods** that already follow every rule: Home, About, Contact, Notices, News, Events, Activities, Staff, Gallery, FAQ, Academics, Results, Calendar, Careers, Board notices, Admission, Citizen charter and custom pages. Each page starts with a comment listing the SDK methods it uses and what they return. Keep the pages your design needs, delete the rest ([Editor Template Guide](./docs/Storio_Editor_Template_Guide.md#the-sample-pages)).
+- **Sample pages for the SDK's methods** (SDK 1.1.0) that already follow every rule: Home, About, Contact, Notices, News, Events, Activities, Staff, Gallery, FAQ, Academics, Results, Calendar, Careers, Board notices, Admission, Online forms, Citizen charter, custom pages and the sitemap. Each page starts with a comment listing the SDK methods it uses and what they return. Keep the pages your design needs, delete the rest ([Editor Template Guide](./docs/Storio_Editor_Template_Guide.md#the-sample-pages)).
 
 > Looking for the old starter kit (without the editor)? `npx degit Brainicon-Technology/storio-developer-kit#v1-legacy my-template`
 
@@ -47,7 +47,7 @@ Read them in this order:
 | :--- | :--- |
 | **[Editor Template Guide](./docs/Storio_Editor_Template_Guide.md)** | **Start here.** How editing works, project structure, adding an editable page step by step, naming and markup rules, header/footer/Theme settings, records, testing. |
 | **[Template Manifest Guide](./docs/Storio_Template_Manifest_Guide.md)** | Every field of `public/storio.template.json`: id, features, Theme settings, menu, editor pages. |
-| **[SDK V2 Guide](./docs/Storio_SDK_V2_Endpoints_and_Methods_Guide.md)** | All 44 SDK methods, their data and TypeScript types, and how to load school data. |
+| **[SDK V2 Guide](./docs/Storio_SDK_V2_Endpoints_and_Methods_Guide.md)** | All 58 SDK methods (SDK 1.1.0), their data and TypeScript types, and how to load school data. |
 
 ---
 

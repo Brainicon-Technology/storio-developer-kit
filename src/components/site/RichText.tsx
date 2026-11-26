@@ -23,3 +23,13 @@ export function cleanHtml(html: string): string {
 export function htmlToText(html: string | undefined | null): string {
   return (html ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
+
+/** Plain text (with line breaks) as simple HTML, for fields <RichText> renders. HTML stays as is. */
+export function textToHtml(text: string): string {
+  if (/<[a-z][\s\S]*>/i.test(text)) return text;
+  const escape = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] ?? c);
+  return text
+    .split(/\n{2,}/)
+    .map((p) => `<p>${escape(p).replace(/\n/g, '<br>')}</p>`)
+    .join('');
+}

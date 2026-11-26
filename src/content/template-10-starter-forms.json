@@ -1,0 +1,24 @@
+{
+  "intro": {
+    "title": "Online forms",
+    "text": "Applications, registrations and requests you can send us online.",
+    "openText": "Open the form",
+    "emptyText": "There are no open forms right now."
+  },
+  "detail": {
+    "backText": "Back to all forms",
+    "requiredText": "Required",
+    "submitText": "Send",
+    "sendingText": "Sending...",
+    "successText": "Thank you. We have received your answers.",
+    "errorText": "Something went wrong. Please check the form and try again.",
+    "missingText": "Please fill in every required field.",
+    "selectPlaceholder": "Choose..."
+  },
+  "seo": {
+    "title": "Online forms",
+    "description": "Applications and requests you can send to the school online.",
+    "keywords": ["forms", "online application", "registration"],
+    "ogImage": ""
+  }
+}

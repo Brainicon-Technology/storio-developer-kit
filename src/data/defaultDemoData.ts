@@ -1,6 +1,5 @@
 import type {
   StorioAlbum,
-  StorioActivityItem,
   StorioBlogPost,
   StorioEvent,
   StorioFaq,
@@ -28,9 +27,18 @@ import type {
   StorioInformationService,
   StorioMpoInfo,
   StorioNavigationItem,
+  StorioCareer,
+  StorioLeadershipMessage,
+  StorioTestimonial,
+  StorioActivityCategory,
+  StorioBlogCategory,
+  StorioCalendarSetting,
+  StorioEventCategory,
+  StorioForm,
+  StorioInstitutionCard,
 } from '@storio/template-sdk';
 
-import type { Job, LeadershipMessage, Testimonial } from '@/lib/types';
+import type { ActivityItem } from '@/lib/normalize';
 
 /**
  * DEFAULT_DEMO_DATA
@@ -52,15 +60,15 @@ export const DEFAULT_DEMO_DATA: {
   notices: StorioNotice[];
   heroSlides: StorioHeroSlide[];
   promotions: StorioPromotion[];
-  testimonials: Testimonial[];
+  testimonials: StorioTestimonial[];
   importantLinks: StorioImportantLink[];
   institutionProfile: StorioInstitutionProfile;
-  leadershipMessages: LeadershipMessage[];
+  leadershipMessages: StorioLeadershipMessage[];
   team: StorioTeamMember[];
   staff: StorioStaffMember[];
   blogs: StorioBlogPost[];
   events: StorioEvent[];
-  activities: StorioActivityItem[];
+  activities: ActivityItem[];
   gallery: StorioGalleryItem[];
   albums: StorioAlbum[];
   videos: StorioVideoItem[];
@@ -71,7 +79,7 @@ export const DEFAULT_DEMO_DATA: {
   studentStats: StorioStudentStatsResponse;
   examResults: StorioExamResult[];
   calendarEvents: StorioCalendarEvent[];
-  jobs: Job[];
+  jobs: StorioCareer[];
   boardNotices: StorioBoardNotice[];
   customPages: StorioCustomPage[];
   navigation: StorioNavigationItem[];
@@ -80,6 +88,12 @@ export const DEFAULT_DEMO_DATA: {
   informationService: StorioInformationService;
   complaintOfficer: StorioComplaintOfficer;
   hotlines: StorioHotline[];
+  institutionCards: StorioInstitutionCard[];
+  blogCategories: StorioBlogCategory[];
+  activityCategories: StorioActivityCategory[];
+  eventCategories: StorioEventCategory[];
+  calendarSettings: StorioCalendarSetting;
+  forms: StorioForm[];
 } = {
   settings: {
     site_title: 'Storio Model Academy',
@@ -138,9 +152,9 @@ export const DEFAULT_DEMO_DATA: {
   ],
 
   testimonials: [
-    { id: 1, author_name: 'Nusrat Jahan', author_title: 'Parent, grade 10', rating: 5, content: 'The teachers know my son by name and care about his progress.', avatar_url: AVATAR, order: 1 },
-    { id: 2, author_name: 'Rafiq Ahmed', author_title: 'Alumnus, class of 2019', rating: 5, content: 'The debate club gave me the confidence I use every day at university.', avatar_url: AVATAR, order: 2 },
-    { id: 3, author_name: 'Maria Lopez', author_title: 'Parent, grade 4', rating: 4, content: 'A safe, friendly school with excellent communication.', avatar_url: AVATAR, order: 3 },
+    { id: 1, name: 'Nusrat Jahan', designation: 'Parent, grade 10', rating: 5, message: 'The teachers know my son by name and care about his progress.', photo_data: { id: 1, file_url: AVATAR }, status: 'active', order: 1 },
+    { id: 2, name: 'Rafiq Ahmed', designation: 'Alumnus', organization: 'Class of 2019', rating: 5, message: 'The debate club gave me the confidence I use every day at university.', photo_data: { id: 2, file_url: AVATAR }, status: 'active', order: 2 },
+    { id: 3, name: 'Maria Lopez', designation: 'Parent, grade 4', rating: 4, message: 'A safe, friendly school with excellent communication.', photo_data: { id: 3, file_url: AVATAR }, status: 'active', order: 3 },
   ],
 
   importantLinks: [
@@ -168,12 +182,14 @@ export const DEFAULT_DEMO_DATA: {
   leadershipMessages: [
     {
       id: 1,
-      title: 'Message from the Principal',
-      author_name: 'Prof. Arthur Pendleton',
-      author_role: 'Principal',
-      content: '<p>Welcome to Storio Model Academy. Our teachers work every day so that each student leaves us ready for life.</p><p>We look forward to meeting you.</p>',
-      photo_url: AVATAR,
-      order: 1,
+      section_title: 'Message from the Principal',
+      name: 'Prof. Arthur Pendleton',
+      role: 'Principal',
+      company: 'Storio Model Academy',
+      message: 'Welcome to Storio Model Academy. Our teachers work every day so that each student leaves us ready for life.\n\nWe look forward to meeting you.',
+      image_data: { id: 1, file_url: AVATAR },
+      status: 'published',
+      display_order: 1,
     },
   ],
 
@@ -226,6 +242,7 @@ export const DEFAULT_DEMO_DATA: {
       end_date: '2026-12-05T15:00:00',
       is_featured: true,
       featured_image: photo(5),
+      categories_detail: [{ id: 1, name: 'Academic', slug: 'academic' }],
     },
     {
       id: 2,
@@ -236,6 +253,7 @@ export const DEFAULT_DEMO_DATA: {
       location: 'School field',
       start_date: '2027-01-15T08:00:00',
       featured_image: photo(2),
+      categories_detail: [{ id: 2, name: 'Sports', slug: 'sports' }],
     },
   ],
 
@@ -248,6 +266,7 @@ export const DEFAULT_DEMO_DATA: {
       content: '<p>The robotics club meets every Thursday. Members take part in national competitions.</p>',
       featured_image_url: photo(4),
       date: '2026-06-01',
+      category_name: 'Clubs',
     },
     {
       id: 2,
@@ -257,6 +276,7 @@ export const DEFAULT_DEMO_DATA: {
       content: '<p>The debate society trains students in public speaking and critical thinking.</p>',
       featured_image_url: photo(1),
       date: '2026-05-10',
+      category_name: 'Clubs',
     },
   ],
 
@@ -349,6 +369,7 @@ export const DEFAULT_DEMO_DATA: {
       id: 1,
       title: 'Senior Mathematics Teacher',
       slug: 'senior-mathematics-teacher',
+      company_name: 'Storio Model Academy',
       location: 'Main campus',
       job_type: 'full_time',
       vacancy: 2,
@@ -356,12 +377,13 @@ export const DEFAULT_DEMO_DATA: {
       status: 'active',
       description: '<p>We are looking for an experienced mathematics teacher for classes 9 and 10.</p><ul><li>Five years of teaching experience</li><li>A degree in mathematics</li></ul>',
       application_link: 'mailto:jobs@storiomodel.edu',
-      attachments_data: [{ id: 1, file_name: 'job-circular.pdf', url: '#' }],
+      attachments_data: [{ id: 1, type: 'document', file_name: 'job-circular.pdf', url: '#' }],
     },
     {
       id: 2,
       title: 'Librarian',
       slug: 'librarian',
+      company_name: 'Storio Model Academy',
       location: 'Main campus',
       job_type: 'part_time',
       vacancy: 1,
@@ -384,6 +406,20 @@ export const DEFAULT_DEMO_DATA: {
       content: '<p>Storio Model Academy opened in 1998 with 80 students and 6 teachers.</p><h2>Milestones</h2><ul><li>2005: new science building</li><li>2015: higher secondary section</li></ul>',
       meta_title: 'Our history',
       meta_description: 'How Storio Model Academy grew since 1998.',
+    },
+    {
+      id: 2,
+      title: 'Campus safety',
+      slug: 'campus-safety',
+      // A page built with the dashboard's page builder: a list of typed blocks (see CustomPageBlocks).
+      content: [
+        { id: 'b1', type: 'Hero', content: { url: photo(3), overlayText: 'A safe campus for every student' } },
+        { id: 'b2', type: 'RichText', title: 'Our approach', content: '<p>Every visitor signs in at the gate, and teachers supervise every break.</p>' },
+        { id: 'b3', type: 'FeatureGrid', content: [{ title: 'CCTV', description: 'Cameras at every entrance.' }, { title: 'First aid', description: 'A nurse on duty all day.' }, { title: 'Drills', description: 'Fire drills every term.' }] },
+        { id: 'b4', type: 'CustomTable', title: 'Gate hours', content: { headers: ['Day', 'Open', 'Close'], rows: [['Sunday to Thursday', '7:30', '16:00'], ['Saturday', '8:00', '13:00']] } },
+        { id: 'b5', type: 'Form', title: 'Report a concern', content: { formCode: 'demo-visit-request', form_data: null } },
+      ],
+      meta_description: 'How we keep our campus safe.',
     },
   ],
 
@@ -456,5 +492,45 @@ export const DEFAULT_DEMO_DATA: {
     { id: 2, title: 'Fire service', number: '102', category: 'Emergency', is_emergency: true, order: 2 },
     { id: 3, title: 'School office', number: '+1 (555) 019-2834', category: 'School', order: 3 },
     { id: 4, title: 'Child helpline', number: '1098', category: 'Support', order: 4 },
+  ],
+
+  institutionCards: [
+    { id: 1, title: 'Science labs', description: 'Physics, chemistry and biology labs for every class.', icon: 'science', order: 1 },
+    { id: 2, title: 'Library', description: 'Over 10,000 books and a quiet reading room.', icon: 'menu_book', order: 2 },
+    { id: 3, title: 'Sports', description: 'A full-size field and indoor games.', icon: 'sports_soccer', order: 3 },
+  ],
+
+  blogCategories: [
+    { id: 1, name: 'Science', slug: 'science', posts_count: 1 },
+    { id: 2, name: 'Student life', slug: 'student-life', posts_count: 1 },
+  ],
+
+  activityCategories: [{ id: 1, name: 'Clubs', slug: 'clubs', activities_count: 2 }],
+
+  eventCategories: [
+    { id: 1, name: 'Academic', slug: 'academic', events_count: 1 },
+    { id: 2, name: 'Sports', slug: 'sports', events_count: 1 },
+  ],
+
+  // Days of the week the school is closed, as JavaScript day numbers (0 = Sunday ... 6 = Saturday).
+  calendarSettings: { weekend_days: '5,6' },
+
+  forms: [
+    {
+      code: 'demo-visit-request',
+      title: 'Request a campus visit',
+      description: 'Tell us when you would like to visit, and we will confirm by email.',
+      status: 'active',
+      settings: { successMessage: 'Thank you! We will email you to confirm your visit.' },
+      elements: [
+        { id: 'name', type: 'text', label: 'Your name', required: true },
+        { id: 'email', type: 'email', label: 'Email address', required: true },
+        { id: 'phone', type: 'phone', label: 'Phone number' },
+        { id: 'date', type: 'date', label: 'Preferred date', required: true },
+        { id: 'grade', type: 'select', label: 'Grade of interest', options: [{ label: 'Primary', value: 'primary' }, { label: 'Secondary', value: 'secondary' }] },
+        { id: 'notes', type: 'textarea', label: 'Anything we should know?', helpText: 'Optional.' },
+        { id: 'document', type: 'file', label: 'Attach a document', acceptedTypes: ['.pdf', '.jpg', '.png'] },
+      ],
+    },
   ],
 };

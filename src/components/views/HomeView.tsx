@@ -6,7 +6,7 @@
  *     loadHeroSlides() in src/lib/home.ts
  *   storio.getNotices()         ->  StorioNotice[]
  *     loadNotices() in src/lib/notices.ts
- *   storio.getTestimonials()    ->  Testimonial[] (loose records, narrowed)
+ *   storio.getTestimonials()    ->  StorioTestimonial[]
  *     loadTestimonials() in src/lib/home.ts
  *   storio.getFaqs()            ->  StorioFaq[]
  *     loadFaqs() in src/lib/faqs.ts
@@ -17,20 +17,19 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, ExternalLink, Quote, Star } from 'lucide-react';
-import type { StorioFaq, StorioHeroSlide, StorioImportantLink, StorioNotice } from '@storio/template-sdk';
+import type { StorioFaq, StorioHeroSlide, StorioImportantLink, StorioNotice, StorioTestimonial } from '@storio/template-sdk';
 import { formatDate } from '@/lib/format';
 import { CmsField, CmsIcon, CmsSection } from '@/lib/storio-editor/site';
 
 import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useHomeText } from '@/components/cms/useHomeText';
-import type { Testimonial } from '@/lib/types';
 
 const PAGE = 'template-10-starter-home';
 
 export interface HomeData {
   slides: StorioHeroSlide[];
   notices: StorioNotice[];
-  testimonials: Testimonial[];
+  testimonials: StorioTestimonial[];
   faqs: StorioFaq[];
   links: StorioImportantLink[];
 }
@@ -170,7 +169,7 @@ export function HomeView({ slides, notices, testimonials, faqs, links }: HomeDat
                 {testimonials.map((t) => (
                   <figure key={t.id} className="flex flex-col rounded-2xl border border-black/10 bg-page p-6">
                     <Quote className="mb-3 h-6 w-6 text-accent" aria-hidden />
-                    <blockquote className="flex-1 opacity-90">{t.content}</blockquote>
+                    <blockquote className="flex-1 opacity-90">{t.message}</blockquote>
                     {t.rating ? (
                       <div className="mt-4 flex gap-0.5" aria-label={`${t.rating} / 5`}>
                         {Array.from({ length: 5 }, (_, i) => (
@@ -179,13 +178,15 @@ export function HomeView({ slides, notices, testimonials, faqs, links }: HomeDat
                       </div>
                     ) : null}
                     <figcaption className="mt-4 flex items-center gap-3">
-                      {t.avatar_url && (
+                      {t.photo_data?.file_url && (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={t.avatar_url} alt="" className="h-10 w-10 rounded-full object-cover" />
+                        <img src={t.photo_data.file_url} alt="" className="h-10 w-10 rounded-full object-cover" />
                       )}
                       <span>
-                        <span className="block font-semibold">{t.author_name}</span>
-                        {t.author_title && <span className="block text-sm opacity-70">{t.author_title}</span>}
+                        <span className="block font-semibold">{t.name}</span>
+                        {(t.designation || t.organization) && (
+                          <span className="block text-sm opacity-70">{[t.designation, t.organization].filter(Boolean).join(', ')}</span>
+                        )}
                       </span>
                     </figcaption>
                   </figure>

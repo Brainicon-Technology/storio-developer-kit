@@ -2,13 +2,17 @@
 
 /*
  * SDK data on this page (loaded on the server, passed in as props):
- *   storio.getActivities()  ->  StorioActivityItem[]
+ *   storio.getActivities({ category })  ->  StorioActivityItem[]
  *     loadActivities() in src/lib/activities.ts
+ *   storio.getActivityCategories()     ->  StorioActivityCategory[] (filter tabs, ?category=<slug>)
+ *     loadActivityCategories() in src/lib/activities.ts
  */
 
 import Link from 'next/link';
-import type { StorioActivityItem } from '@storio/template-sdk';
+import type { StorioActivityCategory, StorioActivityItem } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
+
+import { CategoryTabs } from '@/components/site/CategoryTabs';
 
 import { useActivitiesText } from '@/components/cms/useActivitiesText';
 import { activityImage, activityPath, activitySummary } from '@/lib/activities';
@@ -16,7 +20,7 @@ import { activityImage, activityPath, activitySummary } from '@/lib/activities';
 const PAGE = 'template-10-starter-activities';
 
 /** Activity list (getActivities). Activity texts are school data: edited on the dashboard, no pencil. */
-export function ActivitiesView({ activities }: { activities: StorioActivityItem[] }) {
+export function ActivitiesView({ activities, categories, activeCategory }: { activities: StorioActivityItem[]; categories: StorioActivityCategory[]; activeCategory?: string }) {
   const { intro } = useActivitiesText();
 
   return (
@@ -30,6 +34,13 @@ export function ActivitiesView({ activities }: { activities: StorioActivityItem[
             <CmsField path="text" label="Text">{intro.text}</CmsField>
           </p>
         </header>
+
+        <CategoryTabs
+          path="/activities"
+          categories={categories.map((c) => ({ id: c.id, name: c.name, slug: c.slug, count: c.activities_count }))}
+          active={activeCategory}
+          allLabel={<CmsField path="allText" label="All tab">{intro.allText}</CmsField>}
+        />
 
         {activities.length === 0 ? (
           <p className="rounded-xl border border-black/10 p-4 opacity-70">

@@ -1,9 +1,9 @@
 import { cache } from 'react';
-import { storio, type StorioEvent } from '@storio/template-sdk';
+import { storio, type StorioEvent, type StorioEventCategory } from '@storio/template-sdk';
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 import { safely, withDemoFallback, withDemoRecord } from './data';
-import { normalizeEvent, normalizeEvents } from './normalize';
+import { listOf, normalizeEvent, normalizeEvents } from './normalize';
 import type { TenantContext } from './tenant';
 
 /**
@@ -14,10 +14,17 @@ import type { TenantContext } from './tenant';
  * - getEvents returns a paginated object ({ count, results }), handled by normalizeEvents;
  * - getEventDetail finds an event by its id only, so event URLs use the id (/events/24).
  */
-export const loadEvents = cache(async function loadEvents(ctx: TenantContext): Promise<StorioEvent[]> {
-  const real = normalizeEvents(await safely(storio.getEvents(ctx.tenantHost)));
-  const events = withDemoFallback(real, DEFAULT_DEMO_DATA.events, ctx.isStandalone);
+export const loadEvents = cache(async function loadEvents(ctx: TenantContext, category?: StorioEventCategory): Promise<StorioEvent[]> {
+  const real = normalizeEvents(await safely(storio.getEvents(category ? { categories: category.id, tenantHost: ctx.tenantHost } : ctx.tenantHost)));
+  const demo = category ? DEFAULT_DEMO_DATA.events.filter((e) => e.categories_detail?.some((c) => c.id === category.id)) : DEFAULT_DEMO_DATA.events;
+  const events = withDemoFallback(real, demo, ctx.isStandalone);
   return [...events].sort((a, b) => (a.start_date ?? '').localeCompare(b.start_date ?? ''));
+});
+
+/** Event categories (getEventCategories, paginated in the API like getEvents) for the filter tabs. */
+export const loadEventCategories = cache(async function loadEventCategories(ctx: TenantContext): Promise<StorioEventCategory[]> {
+  const real = listOf(await safely(storio.getEventCategories(ctx.tenantHost))) as StorioEventCategory[] | null;
+  return withDemoFallback(real, DEFAULT_DEMO_DATA.eventCategories, ctx.isStandalone);
 });
 
 /** One event by id. An old slug URL still works: the slug is looked up in the list first. */

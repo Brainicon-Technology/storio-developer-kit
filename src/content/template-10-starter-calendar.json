@@ -3,12 +3,17 @@
     "title": "Academic calendar",
     "text": "Term dates, exams and holidays for the school year.",
     "allDayLabel": "All day",
-    "emptyText": "The calendar is not published yet."
+    "emptyText": "The calendar is not published yet.",
+    "weekendLabel": "Weekly holidays:"
   },
   "seo": {
     "title": "Calendar",
     "description": "Academic calendar of Storio Model Academy: term dates, exams and holidays.",
-    "keywords": ["calendar", "holidays", "exams"],
+    "keywords": [
+      "calendar",
+      "holidays",
+      "exams"
+    ],
     "ogImage": ""
   }
 }

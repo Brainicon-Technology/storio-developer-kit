@@ -2,13 +2,17 @@
 
 /*
  * SDK data on this page (loaded on the server, passed in as props):
- *   storio.getBlogs()  ->  StorioBlogPost[]
+ *   storio.getBlogs({ category })  ->  StorioBlogPost[]
  *     loadBlogs() in src/lib/blogs.ts
+ *   storio.getBlogCategories()     ->  StorioBlogCategory[] (filter tabs, ?category=<slug>)
+ *     loadBlogCategories() in src/lib/blogs.ts
  */
 
 import Link from 'next/link';
-import type { StorioBlogPost } from '@storio/template-sdk';
+import type { StorioBlogCategory, StorioBlogPost } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
+
+import { CategoryTabs } from '@/components/site/CategoryTabs';
 
 import { useBlogsText } from '@/components/cms/useBlogsText';
 import { formatDate } from '@/lib/format';
@@ -19,7 +23,7 @@ const PAGE = 'template-10-starter-blogs';
  * Blog list (getBlogs). Fixed texts are page content; each post's title is a record field
  * (collection="blog"): saving it in the editor changes the post itself.
  */
-export function BlogsView({ posts }: { posts: StorioBlogPost[] }) {
+export function BlogsView({ posts, categories, activeCategory }: { posts: StorioBlogPost[]; categories: StorioBlogCategory[]; activeCategory?: string }) {
   const { intro } = useBlogsText();
 
   return (
@@ -33,6 +37,13 @@ export function BlogsView({ posts }: { posts: StorioBlogPost[] }) {
             <CmsField path="text" label="Text">{intro.text}</CmsField>
           </p>
         </header>
+
+        <CategoryTabs
+          path="/blogs"
+          categories={categories.map((c) => ({ id: c.id, name: c.name, slug: c.slug, count: c.posts_count }))}
+          active={activeCategory}
+          allLabel={<CmsField path="allText" label="All tab">{intro.allText}</CmsField>}
+        />
 
         {posts.length === 0 ? (
           <p className="rounded-xl border border-black/10 p-4 opacity-70">

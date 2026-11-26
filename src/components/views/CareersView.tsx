@@ -2,22 +2,22 @@
 
 /*
  * SDK data on this page (loaded on the server, passed in as props):
- *   storio.getCareers()  ->  Job[] (loose records, narrowed)
+ *   storio.getCareers()  ->  StorioCareer[]
  *     loadJobs() in src/lib/careers.ts
  */
 
 import Link from 'next/link';
+import type { StorioCareer } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 
 import { useCareersText } from '@/components/cms/useCareersText';
 import { jobTypeLabel } from '@/lib/careers';
 import { formatDate } from '@/lib/format';
-import type { Job } from '@/lib/types';
 
 const PAGE = 'template-10-starter-careers';
 
-/** Job openings (getCareers, narrowed to Job in src/lib/types.ts). */
-export function CareersView({ jobs }: { jobs: Job[] }) {
+/** Job openings (getCareers). */
+export function CareersView({ jobs }: { jobs: StorioCareer[] }) {
   const { intro } = useCareersText();
 
   return (

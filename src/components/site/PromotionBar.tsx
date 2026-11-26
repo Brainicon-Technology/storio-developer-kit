@@ -1,29 +1,30 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { X } from 'lucide-react';
 import type { StorioPromotion } from '@storio/template-sdk';
 
 /**
  * The school's first active promotion (getPromotions), shown above the header on every page.
  * School data: edited on the dashboard's Promotions page, so no pencil. Visitors can dismiss it.
+ * getPromotions -> StorioPromotion[] (loadPromotions in src/lib/home.ts).
  */
 export function PromotionBar({ promotion, dismissLabel }: { promotion: StorioPromotion | undefined; dismissLabel: string }) {
   const [hidden, setHidden] = useState(false);
   if (!promotion || hidden) return null;
 
+  // The button goes through /promotions/<id> (src/app/promotions/[id]/route.ts), which counts the
+  // click with storio.trackPromotionClick and then redirects to the promotion's own link.
   const cta =
     promotion.cta_label && promotion.cta_url ? (
-      promotion.cta_is_external ? (
-        <a href={promotion.cta_url} target="_blank" rel="noreferrer" className="font-semibold underline">
-          {promotion.cta_label}
-        </a>
-      ) : (
-        <Link href={promotion.cta_url} className="font-semibold underline">
-          {promotion.cta_label}
-        </Link>
-      )
+      <a
+        href={`/promotions/${promotion.id}`}
+        target={promotion.cta_is_external ? '_blank' : undefined}
+        rel={promotion.cta_is_external ? 'noreferrer' : undefined}
+        className="font-semibold underline"
+      >
+        {promotion.cta_label}
+      </a>
     ) : null;
 
   return (

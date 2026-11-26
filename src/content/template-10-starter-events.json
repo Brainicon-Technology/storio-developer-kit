@@ -4,12 +4,16 @@
     "text": "What is coming up on campus.",
     "featuredLabel": "Featured",
     "detailsText": "Event details",
-    "emptyText": "No upcoming events."
+    "emptyText": "No upcoming events.",
+    "allText": "All"
   },
   "seo": {
     "title": "Events",
     "description": "Upcoming events at Storio Model Academy.",
-    "keywords": ["events", "calendar"],
+    "keywords": [
+      "events",
+      "calendar"
+    ],
     "ogImage": ""
   }
 }

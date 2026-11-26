@@ -20,7 +20,7 @@ import manifest from '../../public/storio.template.json';
  */
 
 /** Routes that are not editor pages ([slug] pages the editor does not support). */
-const OTHER_ROUTES = ['/activities/[slug]', '/careers/[slug]', '/page/[slug]'];
+const OTHER_ROUTES = ['/activities/[slug]', '/careers/[slug]', '/forms/[code]', '/page/[slug]'];
 
 /**
  * URLs used by an earlier Storio template (seen in real school menus) -> the page of this template

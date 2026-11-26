@@ -4,25 +4,28 @@
  * SDK data on this page (loaded on the server, passed in as props):
  *   storio.getInstitutionProfile()  ->  StorioInstitutionProfile | null
  *     loadInstitutionProfile() in src/lib/institution.ts
- *   storio.getLeadershipMessages()  ->  LeadershipMessage[] (loose records, narrowed)
+ *   storio.getInstitutionCards()    ->  StorioInstitutionCard[] (paginated in the API, unwrapped)
+ *     loadInstitutionCards() in src/lib/institution.ts
+ *   storio.getLeadershipMessages()  ->  StorioLeadershipMessage[]
  *     loadLeadershipMessages() in src/lib/people.ts
  *   storio.getTeam()                ->  StorioTeamMember[]
  *     loadTeam() in src/lib/people.ts
  */
 
-import type { StorioInstitutionProfile, StorioTeamMember } from '@storio/template-sdk';
+import type { StorioInstitutionCard, StorioInstitutionProfile, StorioLeadershipMessage, StorioTeamMember } from '@storio/template-sdk';
 import { CmsField, CmsIcon, CmsSection } from '@/lib/storio-editor/site';
 
 import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useAboutText } from '@/components/cms/useAboutText';
-import { RichText } from '@/components/site/RichText';
-import type { LeadershipMessage } from '@/lib/types';
+import { MaterialIcon } from '@/components/site/MaterialIcon';
+import { RichText, textToHtml } from '@/components/site/RichText';
 
 const PAGE = 'template-10-starter-about';
 
 export interface AboutData {
   profile: StorioInstitutionProfile | null;
-  leadership: LeadershipMessage[];
+  cards: StorioInstitutionCard[];
+  leadership: StorioLeadershipMessage[];
   /** Team members grouped by their section (governing body, committee...). */
   teamGroups: [string, StorioTeamMember[]][];
 }
@@ -33,8 +36,8 @@ export interface AboutData {
  * - getLeadershipMessages: HTML messages, rendered with <RichText>,
  * - getTeam: the governing body.
  */
-export function AboutView({ profile, leadership, teamGroups }: AboutData) {
-  const { intro, profile: labels, values, leadership: leadershipText, team } = useAboutText();
+export function AboutView({ profile, cards, leadership, teamGroups }: AboutData) {
+  const { intro, profile: labels, highlights, values, leadership: leadershipText, team } = useAboutText();
   const inEditor = useInEditor();
 
   const facts: { path: keyof typeof labels; value: string | number | undefined }[] = [
@@ -122,6 +125,31 @@ export function AboutView({ profile, leadership, teamGroups }: AboutData) {
         </CmsSection>
       )}
 
+      {(cards.length > 0 || inEditor) && (
+        <CmsSection sectionKey="highlights" title="Highlights" page={PAGE}>
+          <section className="mx-auto max-w-6xl px-6 py-16">
+            <h2 className="mb-8 text-3xl font-bold">
+              <CmsField path="title" label="Title">{highlights.title}</CmsField>
+            </h2>
+            {cards.length === 0 && <EmptyInEditor source="Institution Profile cards" />}
+            <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {cards.map((card) => (
+                <li key={card.id} className="rounded-2xl border border-black/10 bg-surface p-6">
+                  {card.image_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={card.image_url} alt="" className="mb-4 aspect-video w-full rounded-xl object-cover" />
+                  ) : (
+                    <MaterialIcon name={card.icon} className="mb-3 h-7 w-7 text-brand" />
+                  )}
+                  <h3 className="font-semibold">{card.title}</h3>
+                  {card.description && <p className="mt-1 text-sm opacity-80">{card.description}</p>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </CmsSection>
+      )}
+
       <CmsSection sectionKey="values" title="Values" page={PAGE}>
         <section className="bg-surface px-6 py-16">
           <div className="mx-auto max-w-6xl">
@@ -157,19 +185,20 @@ export function AboutView({ profile, leadership, teamGroups }: AboutData) {
             <div className="space-y-10">
               {leadership.map((m) => (
                 <article key={m.id} className="grid gap-6 md:grid-cols-[160px_1fr]">
-                  {m.photo_url && (
+                  {m.image_data?.file_url && (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={m.photo_url} alt={m.author_name} className="aspect-square w-40 rounded-2xl object-cover" />
+                    <img src={m.image_data.file_url} alt={m.image_data.alt_text || m.name} className="aspect-square w-40 rounded-2xl object-cover" />
                   )}
                   <div>
-                    {m.title && <h3 className="mb-3 text-xl font-semibold">{m.title}</h3>}
-                    <RichText html={m.content} className="space-y-3 opacity-90" />
-                    {m.signature_url && (
+                    {m.section_title && <h3 className="mb-3 text-xl font-semibold">{m.section_title}</h3>}
+                    {/* The message is plain text with line breaks: textToHtml() turns it into paragraphs. */}
+                    <RichText html={textToHtml(m.message)} className="space-y-3 opacity-90" />
+                    {m.signature_data?.file_url && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={m.signature_url} alt="" className="mt-4 h-10 w-auto" />
+                      <img src={m.signature_data.file_url} alt="" className="mt-4 h-10 w-auto" />
                     )}
-                    <p className="mt-3 font-semibold">{m.author_name}</p>
-                    {m.author_role && <p className="text-sm opacity-70">{m.author_role}</p>}
+                    <p className="mt-3 font-semibold">{m.name}</p>
+                    {(m.role || m.company) && <p className="text-sm opacity-70">{[m.role, m.company].filter(Boolean).join(', ')}</p>}
                   </div>
                 </article>
               ))}

@@ -1,16 +1,23 @@
 import { cache } from 'react';
-import { storio, type StorioActivityItem } from '@storio/template-sdk';
+import { storio, type StorioActivityCategory, type StorioActivityItem } from '@storio/template-sdk';
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 import { safely, withDemoFallback, withDemoRecord } from './data';
-import { normalizeActivities, normalizeActivity } from './normalize';
+import { normalizeActivities, normalizeActivity, type ActivityItem } from './normalize';
 import type { TenantContext } from './tenant';
 
 /** Sports, clubs and co-curricular activities (dashboard: Activities). */
-export async function loadActivities(ctx: TenantContext): Promise<StorioActivityItem[]> {
-  const real = normalizeActivities(await safely(storio.getActivities(ctx.tenantHost)));
-  return withDemoFallback(real, DEFAULT_DEMO_DATA.activities, ctx.isStandalone);
+export async function loadActivities(ctx: TenantContext, category?: StorioActivityCategory): Promise<ActivityItem[]> {
+  const real = normalizeActivities(await safely(storio.getActivities(category ? { category: category.id, tenantHost: ctx.tenantHost } : ctx.tenantHost)));
+  const demo = category ? DEFAULT_DEMO_DATA.activities.filter((a) => a.category_name === category.name) : DEFAULT_DEMO_DATA.activities;
+  return withDemoFallback(real, demo, ctx.isStandalone);
 }
+
+/** Activity categories (getActivityCategories) with their counts, for the filter tabs. */
+export const loadActivityCategories = cache(async function loadActivityCategories(ctx: TenantContext): Promise<StorioActivityCategory[]> {
+  const real = await safely(storio.getActivityCategories(ctx.tenantHost));
+  return withDemoFallback(real, DEFAULT_DEMO_DATA.activityCategories, ctx.isStandalone);
+});
 
 export const loadActivity = cache(async function loadActivity(slug: string, ctx: TenantContext): Promise<StorioActivityItem | null> {
   const real = normalizeActivity(await safely(storio.getActivityDetail(slug, ctx.tenantHost)));

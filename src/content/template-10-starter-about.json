@@ -15,12 +15,30 @@
     "typeLabel": "School type",
     "shiftLabel": "Shifts"
   },
+  "highlights": {
+    "title": "Why families choose us"
+  },
   "values": {
     "title": "Our values",
     "items": [
-      { "id": "v1", "icon": "Heart", "title": "Care", "text": "We know every student by name." },
-      { "id": "v2", "icon": "Lightbulb", "title": "Curiosity", "text": "We teach students to ask good questions." },
-      { "id": "v3", "icon": "ShieldCheck", "title": "Integrity", "text": "We do the right thing, even when no one is watching." }
+      {
+        "id": "v1",
+        "icon": "Heart",
+        "title": "Care",
+        "text": "We know every student by name."
+      },
+      {
+        "id": "v2",
+        "icon": "Lightbulb",
+        "title": "Curiosity",
+        "text": "We teach students to ask good questions."
+      },
+      {
+        "id": "v3",
+        "icon": "ShieldCheck",
+        "title": "Integrity",
+        "text": "We do the right thing, even when no one is watching."
+      }
     ]
   },
   "leadership": {
@@ -33,7 +51,10 @@
   "seo": {
     "title": "About",
     "description": "Learn about the history and values of Storio Model Academy.",
-    "keywords": ["about", "school history"],
+    "keywords": [
+      "about",
+      "school history"
+    ],
     "ogImage": ""
   }
 }

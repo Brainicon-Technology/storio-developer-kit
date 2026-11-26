@@ -52,40 +52,43 @@ src/
   lib/seo.ts                        pageMetadata(), siteMetadata()
   lib/<area>.ts                     one loader per SDK method (notices.ts, blogs.ts, academics.ts...)
   lib/normalize.ts                  maps live API records to the SDK types (see section 8.1)
-  lib/types.ts                      types + guards for the SDK methods that return loose records
   lib/routes.ts                     this template's routes; keeps menus free of 404s
   data/defaultDemoData.ts           demo data for every SDK method (Standalone Preview only)
   components/cms/                   providers, use<Page>Text helpers, ThemeField, ThemeColors, EditorOnly
   app/(site)/<route>/page.tsx       server page: metadata + school data
   components/views/<Name>View.tsx   client view: renders content with <CmsSection>/<CmsField>
-  components/site/                  Navbar, Footer, PromotionBar, RichText
+  components/site/                  Navbar, Footer, PromotionBar, RichText, CategoryTabs, CustomPageBlocks, MaterialIcon
+  app/sitemap.ts                    /sitemap.xml: editor pages + the school's custom pages (getPages)
+  app/promotions/[id]/route.ts      promotion button: counts the click, then redirects
 ```
 
 ### The sample pages
 
-Every SDK method is used by at least one sample page. Each View starts with a comment listing its SDK methods, their return types and the loader that calls them, so you can see what a page reads before you read its markup.
+Every SDK method (SDK 1.1.0) is used by at least one sample page, except `getCollection` / `getCollectionItem` (custom collections, coming) and `apiFetch` (the low-level call every method is built on; every endpoint has a named method, so use it only for an endpoint that doesn't yet). Each View starts with a comment listing its SDK methods, their return types and the loader that calls them, so you can see what a page reads before you read its markup.
 
 | Route | Page key (`<id>-...`) | SDK methods |
 | :--- | :--- | :--- |
-| every page (layout) | (Theme settings) | `getLayout` (falls back to `getSettings`, `getCustomization`, `getNavigation`), `getPromotions` |
+| every page (layout) | (Theme settings) | `getLayout` (falls back to `getSettings`, `getCustomization`, `getNavigation`), `getPromotions`; the promotion button: `getPromotionDetail`, `trackPromotionClick` |
 | `/` | `home` | `getHeroSlides`, `getNotices`, `getTestimonials`, `getFaqs`, `getImportantLinks` |
-| `/about` | `about` | `getInstitutionProfile`, `getLeadershipMessages`, `getTeam` |
+| `/about` | `about` | `getInstitutionProfile`, `getInstitutionCards`, `getLeadershipMessages`, `getTeam` |
 | `/contact` | `contact` | `getSettings`, `submitContactMessage` |
-| `/notices`, `/notices/[id]` | `notices`, `notice-detail` | `getNotices`, `getNoticeDetail`, `apiFetch` (search) |
-| `/blogs`, `/blogs/[slug]` | `blogs`, `blog-detail` | `getBlogs`, `getBlogDetail` |
-| `/events`, `/events/[id]` | `events`, `event-detail` | `getEvents`, `getEventDetail` |
-| `/activities`, `/activities/[slug]` | `activities` | `getActivities`, `getActivityDetail` |
+| `/notices`, `/notices/[id]` | `notices`, `notice-detail` | `getNotices` (and `getNotices({ search })`), `getNoticeDetail` |
+| `/blogs`, `/blogs/[slug]` | `blogs`, `blog-detail` | `getBlogs({ category })`, `getBlogCategories`, `getBlogDetail` |
+| `/events`, `/events/[id]` | `events`, `event-detail` | `getEvents({ categories })`, `getEventCategories`, `getEventDetail` |
+| `/activities`, `/activities/[slug]` | `activities` | `getActivities({ category })`, `getActivityCategories`, `getActivityDetail` |
 | `/staff` | `staff` | `getStaff` |
 | `/gallery` | `gallery` | `getGallery`, `getAlbums`, `getVideos` |
 | `/faq` | `faq` | `getFaqs` |
 | `/academics` | `academics` | `getAcademicPrograms`, `getClassRoutines`, `getSyllabuses`, `getStudentStats` |
 | `/results` | `results` | `getExamResults` |
-| `/calendar` | `calendar` | `getCalendarEvents` |
+| `/calendar` | `calendar` | `getCalendarEvents`, `getCalendarSettings` |
 | `/careers`, `/careers/[slug]` | `careers` | `getCareers`, `getJobDetail` |
 | `/board-notices` | `board-notices` | `getBoardNotices` |
 | `/admission` | `admission` | `getAdmissionFormConfig`, `sendAdmissionOTP`, `verifyAdmissionOTP`, `submitAdmissionApplication` |
 | `/citizen-charter` | `citizen-charter` | `getHotlines`, `getMpoInfo`, `getInformationService`, `getComplaintOfficer` |
-| `/page/[slug]` | (none: all school data) | `getPageBySlug` |
+| `/forms`, `/forms/[code]` | `forms` | `getForms`, `getForm`, `uploadFormFile`, `submitFormResponse` |
+| `/page/[slug]` | (none: all school data) | `getPageBySlug` (HTML or page-builder blocks) |
+| `/sitemap.xml` | (none) | `getPages` |
 
 Keep the pages your design needs, delete the rest (the route folder, its View, its `use<Page>Text` hook, its content file and its `editorPages` entry), and remove the matching modules from `features`.
 
@@ -322,7 +325,11 @@ Every other piece of school data follows one pattern. Copy it from any sample pa
 5. **HTML from the dashboard** (blog bodies, job descriptions, custom pages) goes through `<RichText>` (`src/components/site/RichText.tsx`), which removes scripts and event handlers. Never use `dangerouslySetInnerHTML` directly.
 6. **Forms that send data** (contact, admission) are Server Actions (`actions.ts` next to the page). They validate on the server and, in Standalone Preview, never contact Storio.
 
-**Live API vs. SDK types.** The live Storio API does not always match the SDK's TypeScript types (as of SDK 1.0.1): some fields have other names (a hero slide's `heading` instead of `title`, a testimonial's `message` instead of `content`), images are media objects with relative paths (`/media/uploads/x.webp`), events come paginated (`{ count, results }`), and an event's detail is found by id only. `src/lib/normalize.ts` maps each record to the SDK type before Rule 1, so Views only see the documented types. When you use a new method, check its real response (`storio link`, then look at the data) and add a normalizer if it differs. Four methods return loose records in the SDK (`getTestimonials`, `getLeadershipMessages`, `getCareers`, `getJobDetail`): `src/lib/types.ts` types them and narrows each record with a guard (Rule 2).
+**Live API vs. SDK types.** As of SDK 1.1.0 the live Storio API still differs from some of the SDK's TypeScript types: hero slides, notices, blogs, staff, gallery photos, albums, activities and board notices use other field names (a hero slide's `heading` instead of `title`, a notice's `publish_date`); media paths are relative (`/media/uploads/x.webp`) everywhere; events, event categories and institution cards come paginated (`{ count, results }`) although the SDK types them as arrays; and an event's detail is found by id only. `src/lib/normalize.ts` maps each record to its SDK type before Rule 1, so Views only see the documented types. Where the type already matches the API (testimonials, leadership messages, careers, forms), the normalizer only makes media URLs absolute. When you use a method, check its real response (`storio link`, then look at the data) and add a normalizer if it differs.
+
+**Filters and caching.** List methods take filters in their first argument, together with the tenant host: `storio.getBlogs({ category: 3, tenantHost })`, `getEvents({ categories: 2, tenantHost })`, `getNotices({ search: 'exam', tenantHost })`. The sample list pages read `?category=<slug>`, find the category's id and pass it on (`CategoryTabs`). GET requests are cached for 60 seconds by default; pass `next: { revalidate: 0 }` in the same object for data that must show right after a save (the layout, Theme settings and menu do).
+
+**Forms built in the dashboard** (Dynamic Form Builder): `/forms` lists them (`getForms`), `/forms/[code]` renders one (`getForm`) from its `elements`, and a Server Action uploads each file (`uploadFormFile`) and sends the answers keyed by element id (`submitFormResponse`). See `src/lib/forms.ts`, `src/app/(site)/forms/actions.ts` and `FormView.tsx`. Field labels are school data; the template's own texts (button, messages) are page content.
 
 ---
 

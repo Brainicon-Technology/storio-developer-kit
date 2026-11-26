@@ -2,9 +2,9 @@
 
 /*
  * SDK data on this page (loaded on the server, passed in as props):
- *   storio.getNotices()                                         ->  StorioNotice[]
+ *   storio.getNotices()             ->  StorioNotice[]
  *     loadNotices() in src/lib/notices.ts
- *   storio.apiFetch<T>("/api/v2/template/notices/?search=...")  ->  T (here StorioNotice[])
+ *   storio.getNotices({ search })   ->  StorioNotice[] (filtered on the server)
  *     searchNotices() in src/lib/notices.ts
  */
 
@@ -36,7 +36,7 @@ export function NoticesView({ notices, query }: { notices: StorioNotice[]; query
           </p>
         </section>
 
-        {/* A plain GET form: the page reads ?q= and searches with storio.apiFetch (src/lib/notices.ts). */}
+        {/* A plain GET form: the page reads ?q= and searches with getNotices({ search }) (src/lib/notices.ts). */}
         <form action="/notices" role="search" className="mb-8 flex gap-2">
           <label className="sr-only" htmlFor="notice-search">
             <CmsField path="searchLabel" label="Search label">{intro.searchLabel}</CmsField>
