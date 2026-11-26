@@ -2,6 +2,7 @@ import { storio, type StorioNavigationItem, type StorioSettingsResponse } from '
 
 import { DEFAULT_DEMO_DATA } from '@/data/defaultDemoData';
 import { safely, withDemoFallback, withDemoRecord } from './data';
+import { menuHref } from './routes';
 import type { TenantContext } from './tenant';
 import { themeFromConfig, type ThemeValues } from './theme';
 
@@ -41,8 +42,22 @@ export async function loadLayout(ctx: TenantContext): Promise<SiteLayout> {
   return {
     settings: withDemoRecord(hasSettings ? settings : null, DEFAULT_DEMO_DATA.settings, ctx.isStandalone),
     theme: themeFromConfig(customization?.config ?? {}),
-    navigation: withDemoFallback(normalizeNavigation(navigation?.items), DEFAULT_DEMO_DATA.navigation, ctx.isStandalone),
+    navigation: withDemoFallback(quickLinks(normalizeNavigation(navigation?.items)), DEFAULT_DEMO_DATA.navigation, ctx.isStandalone),
   };
+}
+
+/**
+ * Footer quick links: the dashboard menu's links that exist in this template (old URLs are mapped,
+ * see ./routes.ts), each page once.
+ */
+function quickLinks(items: StorioNavigationItem[]): StorioNavigationItem[] {
+  const seen = new Set<string>();
+  return items.flatMap((item) => {
+    const url = menuHref(item.url);
+    if (!url || seen.has(url)) return [];
+    seen.add(url);
+    return [{ ...item, url }];
+  });
 }
 
 /**

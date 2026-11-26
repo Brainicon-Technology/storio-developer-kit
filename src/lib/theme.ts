@@ -1,6 +1,7 @@
 import { storio } from '@storio/template-sdk';
 
 import manifest from '../../public/storio.template.json';
+import { cleanMenu } from './routes';
 import type { TenantContext } from './tenant';
 
 /**
@@ -71,9 +72,12 @@ export function themeColorFields(): string[] {
   return colors.map((field) => field.id);
 }
 
-/** The header menu (Theme settings > Navigation). */
+/**
+ * The header menu (Theme settings > Navigation). Links saved under another template are mapped
+ * to this template's pages, or left out (cleanMenu in ./routes.ts), so the menu never links to a 404.
+ */
 export function themeNavLinks(theme: ThemeValues): NavLink[] {
-  return cleanLinks(theme.navbarLinks);
+  return cleanMenu(cleanLinks(theme.navbarLinks));
 }
 
 function cleanLinks(value: unknown): NavLink[] {
