@@ -1,6 +1,6 @@
 # Storio Template SDK (v2) — Comprehensive Developer API & Data Reference Manual
 
-> **Last Updated:** November 26, 2026 | **SDK Version:** `@storio/template-sdk@1.0.1` | **Platform:** Storio CMS v2
+> **Last Updated:** November 26, 2026 | **SDK Version:** `@storio/template-sdk@1.1.0` | **Platform:** Storio CMS v2
 
 Welcome 3rd-party template developers!
 

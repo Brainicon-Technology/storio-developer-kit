@@ -17,7 +17,7 @@
     "check:links": "node scripts/check-links.mjs"
   },
   "dependencies": {
-    "@storio/template-sdk": "file:./packages/storio-template-sdk-1.0.1.tgz",
+    "@storio/template-sdk": "file:./packages/storio-template-sdk-1.1.0.tgz",
     "lucide-react": "^0.554.0",
     "next": "16.3.0",
     "react": "19.2.8",

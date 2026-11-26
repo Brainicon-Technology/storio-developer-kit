@@ -9,7 +9,7 @@ This is the starter kit that `npx @brainicon/create-storio-app` copies with degi
 It's a Next.js 16 app (App Router, React 19, Tailwind v4, TypeScript strict) for building themes ("templates") for Storio, a multi-tenant school CMS. School admins edit a template's content in the Storio dashboard's editor. No editor library is installed:
 
 - `src/lib/storio-editor/` is the editor kit (25 files), copied byte for byte from Storio (same as `storio-cms/packages/template-sdk/STORIO_EDITOR_TEMPLATE_PROMPT.md`, Appendix A, and the little-flowers template). It is a fixed protocol with the Storio dashboard and backend: never edit it here; change it in Storio and copy it over. ESLint ignores it.
-- `@storio/template-sdk` fetches the school's data. It's bundled as `packages/storio-template-sdk-1.0.1.tgz`. If the `.tgz` is replaced, update its `integrity` in `package-lock.json`, or `npm install` fails with EINTEGRITY.
+- `@storio/template-sdk` fetches the school's data. It's bundled as `packages/storio-template-sdk-1.1.0.tgz`. If the `.tgz` is replaced, update its `integrity` in `package-lock.json`, or `npm install` fails with EINTEGRITY.
 
 ## Commands
 
