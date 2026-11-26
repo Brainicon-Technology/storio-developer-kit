@@ -1,0 +1,33 @@
+{
+  "intro": {
+    "title": "Online admission",
+    "text": "Apply in three steps: fill in the form, confirm your email with a code, and submit.",
+    "closedText": "Online admission is closed right now. Please check back later or contact the school office."
+  },
+  "form": {
+    "applicantTitle": "Applicant details",
+    "contactTitle": "Contact details",
+    "emailLabel": "Email",
+    "phoneLabel": "Mobile number (optional)",
+    "selectPlaceholder": "Choose...",
+    "sendCodeText": "Send verification code",
+    "codeTitle": "Check your email",
+    "codeText": "We sent a verification code to your email. Enter it below to submit your application.",
+    "codeLabel": "Verification code",
+    "submitText": "Submit application",
+    "changeEmailText": "Change email",
+    "missingText": "Please fill in:",
+    "errorText": "Something went wrong. Check your details and try again."
+  },
+  "success": {
+    "title": "Application submitted",
+    "text": "Thank you. The school will contact you about the next steps.",
+    "numberLabel": "Your application number"
+  },
+  "seo": {
+    "title": "Admission",
+    "description": "Apply online to Storio Model Academy.",
+    "keywords": ["admission", "apply", "online admission"],
+    "ogImage": ""
+  }
+}

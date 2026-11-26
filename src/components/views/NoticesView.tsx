@@ -12,7 +12,7 @@ const PAGE = 'template-0-starter-notices';
  * List page of a collection. Fixed text (heading, labels) is page content; each
  * notice's title is a record field (collection="notice"): saving it changes the notice itself.
  */
-export function NoticesView({ notices }: { notices: StorioNotice[] }) {
+export function NoticesView({ notices, query }: { notices: StorioNotice[]; query: string }) {
   const { intro } = useNoticesText();
 
   return (
@@ -27,9 +27,31 @@ export function NoticesView({ notices }: { notices: StorioNotice[] }) {
           </p>
         </section>
 
+        {/* A plain GET form: the page reads ?q= and searches with storio.apiFetch (src/lib/notices.ts). */}
+        <form action="/notices" role="search" className="mb-8 flex gap-2">
+          <label className="sr-only" htmlFor="notice-search">
+            <CmsField path="searchLabel" label="Search label">{intro.searchLabel}</CmsField>
+          </label>
+          <input
+            id="notice-search"
+            name="q"
+            type="search"
+            defaultValue={query}
+            placeholder={intro.searchPlaceholder}
+            className="flex-1 rounded-lg border border-black/15 bg-page px-3 py-2"
+          />
+          <button type="submit" className="rounded-lg bg-brand px-4 py-2 font-semibold text-white">
+            <CmsField path="searchButton" label="Search button">{intro.searchButton}</CmsField>
+          </button>
+        </form>
+
         {notices.length === 0 ? (
           <p className="rounded-xl border border-black/10 p-4 opacity-70">
-            <CmsField path="emptyText" label="Empty text">{intro.emptyText}</CmsField>
+            {query ? (
+              <CmsField path="noResultsText" label="No results text">{intro.noResultsText}</CmsField>
+            ) : (
+              <CmsField path="emptyText" label="Empty text">{intro.emptyText}</CmsField>
+            )}
           </p>
         ) : (
           <ul className="space-y-4">

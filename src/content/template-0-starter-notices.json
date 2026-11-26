@@ -4,12 +4,19 @@
     "text": "Official announcements from the school office.",
     "urgentLabel": "Urgent",
     "readMoreText": "Read more",
-    "emptyText": "No public notices available."
+    "emptyText": "No public notices available.",
+    "searchLabel": "Search notices",
+    "searchPlaceholder": "Search by title or text",
+    "searchButton": "Search",
+    "noResultsText": "No notices match your search."
   },
   "seo": {
     "title": "Notices",
     "description": "Latest notices and announcements from Storio Model Academy.",
-    "keywords": ["notices", "announcements"],
+    "keywords": [
+      "notices",
+      "announcements"
+    ],
     "ogImage": ""
   }
 }

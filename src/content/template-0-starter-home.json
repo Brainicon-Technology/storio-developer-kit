@@ -4,7 +4,7 @@
     "title": "Welcome to Storio Model Academy",
     "subtitle": "A caring school where every student learns, grows and leads.",
     "primaryText": "Apply Now",
-    "primaryHref": "/contact",
+    "primaryHref": "/admission",
     "secondaryText": "Read notices",
     "secondaryHref": "/notices",
     "heroImage": "/images/hero.svg"

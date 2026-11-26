@@ -44,8 +44,13 @@ function manifestDefaults(): ThemeValues {
 
 /** The school's Theme settings values, each falling back to its manifest default. */
 export async function loadTheme(ctx: TenantContext): Promise<ThemeValues> {
-  const defaults = manifestDefaults();
   const saved = (await storio.getCustomization(ctx.tenantHost).catch(() => null))?.config ?? {};
+  return themeFromConfig(saved);
+}
+
+/** Theme settings values from a customization config (getCustomization or getLayout), with manifest defaults. */
+export function themeFromConfig(saved: Record<string, unknown>): ThemeValues {
+  const defaults = manifestDefaults();
   const values: ThemeValues = { ...defaults };
   for (const key of Object.keys(defaults)) {
     const value = saved[key];

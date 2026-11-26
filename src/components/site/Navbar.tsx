@@ -46,7 +46,7 @@ export function Navbar({ settings, theme }: { settings: StorioSettingsResponse |
             </li>
           ))}
           <li>
-            <Link href="/contact" className="rounded-lg bg-brand px-4 py-2 font-semibold text-white">
+            <Link href="/admission" className="rounded-lg bg-brand px-4 py-2 font-semibold text-white">
               <ThemeField field="header_cta_text" label="Header button">{themeText(theme, 'header_cta_text')}</ThemeField>
             </Link>
           </li>

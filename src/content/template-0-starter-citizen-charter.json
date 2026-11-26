@@ -1,0 +1,37 @@
+{
+  "intro": {
+    "title": "Citizen charter",
+    "text": "Public information about our school, how to get information and how to raise a complaint."
+  },
+  "hotlines": {
+    "title": "Emergency and helplines",
+    "emergencyLabel": "Emergency"
+  },
+  "mpo": {
+    "title": "MPO information",
+    "enlistedText": "Enlisted in the MPO",
+    "notEnlistedText": "Not enlisted in the MPO",
+    "codeLabel": "MPO code",
+    "dateLabel": "MPO date",
+    "orderLabel": "Order number",
+    "mpoTeachersLabel": "MPO teachers",
+    "nonMpoTeachersLabel": "Non-MPO teachers",
+    "documentsTitle": "Documents"
+  },
+  "info": {
+    "title": "Information desk",
+    "officeHoursLabel": "Office hours",
+    "servicesTitle": "Services"
+  },
+  "complaint": {
+    "title": "Complaints",
+    "officeHoursLabel": "Office hours",
+    "processTitle": "How a complaint is handled"
+  },
+  "seo": {
+    "title": "Citizen charter",
+    "description": "Citizen charter of Storio Model Academy: MPO information, information desk, complaint officer and helplines.",
+    "keywords": ["citizen charter", "complaint", "information service"],
+    "ogImage": ""
+  }
+}

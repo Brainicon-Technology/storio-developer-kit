@@ -50,6 +50,12 @@
         "default": "Empowering future leaders through excellence."
       },
       {
+        "id": "footer_links_title",
+        "label": "Footer quick links title",
+        "type": "text",
+        "default": "Quick links"
+      },
+      {
         "id": "footer_rights",
         "label": "Copyright text",
         "type": "text",
@@ -80,6 +86,8 @@
     "calendar_events",
     "careers",
     "custom_pages",
+    "admission",
+    "compliance",
     "mediaFile",
     "generalSettings",
     "accounts",
@@ -121,6 +129,11 @@
               "id": "2-4",
               "name": "Careers",
               "href": "/careers"
+            },
+            {
+              "id": "2-5",
+              "name": "Citizen charter",
+              "href": "/citizen-charter"
             }
           ]
         },
@@ -196,6 +209,11 @@
           "href": "/faq"
         },
         {
+          "id": "8",
+          "name": "Admission",
+          "href": "/admission"
+        },
+        {
           "id": "6",
           "name": "Contact",
           "href": "/contact"
@@ -248,7 +266,7 @@
           "title": "Welcome to Storio Model Academy",
           "subtitle": "A caring school where every student learns, grows and leads.",
           "primaryText": "Apply Now",
-          "primaryHref": "/contact",
+          "primaryHref": "/admission",
           "secondaryText": "Read notices",
           "secondaryHref": "/notices",
           "heroImage": "/images/hero.svg"
@@ -458,7 +476,11 @@
           "text": "Official announcements from the school office.",
           "urgentLabel": "Urgent",
           "readMoreText": "Read more",
-          "emptyText": "No public notices available."
+          "emptyText": "No public notices available.",
+          "searchLabel": "Search notices",
+          "searchPlaceholder": "Search by title or text",
+          "searchButton": "Search",
+          "noResultsText": "No notices match your search."
         },
         "seo": {
           "title": "Notices",
@@ -966,6 +988,138 @@
           "keywords": [
             "education board",
             "notices"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-admission",
+      "title": "Admission",
+      "route": "/admission",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Intro"
+        },
+        {
+          "key": "form",
+          "label": "Form"
+        },
+        {
+          "key": "success",
+          "label": "Success message"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Online admission",
+          "text": "Apply in three steps: fill in the form, confirm your email with a code, and submit.",
+          "closedText": "Online admission is closed right now. Please check back later or contact the school office."
+        },
+        "form": {
+          "applicantTitle": "Applicant details",
+          "contactTitle": "Contact details",
+          "emailLabel": "Email",
+          "phoneLabel": "Mobile number (optional)",
+          "selectPlaceholder": "Choose...",
+          "sendCodeText": "Send verification code",
+          "codeTitle": "Check your email",
+          "codeText": "We sent a verification code to your email. Enter it below to submit your application.",
+          "codeLabel": "Verification code",
+          "submitText": "Submit application",
+          "changeEmailText": "Change email",
+          "missingText": "Please fill in:",
+          "errorText": "Something went wrong. Check your details and try again."
+        },
+        "success": {
+          "title": "Application submitted",
+          "text": "Thank you. The school will contact you about the next steps.",
+          "numberLabel": "Your application number"
+        },
+        "seo": {
+          "title": "Admission",
+          "description": "Apply online to Storio Model Academy.",
+          "keywords": [
+            "admission",
+            "apply",
+            "online admission"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-citizen-charter",
+      "title": "Citizen charter",
+      "route": "/citizen-charter",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Intro"
+        },
+        {
+          "key": "hotlines",
+          "label": "Hotlines"
+        },
+        {
+          "key": "mpo",
+          "label": "MPO information"
+        },
+        {
+          "key": "info",
+          "label": "Information desk"
+        },
+        {
+          "key": "complaint",
+          "label": "Complaints"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Citizen charter",
+          "text": "Public information about our school, how to get information and how to raise a complaint."
+        },
+        "hotlines": {
+          "title": "Emergency and helplines",
+          "emergencyLabel": "Emergency"
+        },
+        "mpo": {
+          "title": "MPO information",
+          "enlistedText": "Enlisted in the MPO",
+          "notEnlistedText": "Not enlisted in the MPO",
+          "codeLabel": "MPO code",
+          "dateLabel": "MPO date",
+          "orderLabel": "Order number",
+          "mpoTeachersLabel": "MPO teachers",
+          "nonMpoTeachersLabel": "Non-MPO teachers",
+          "documentsTitle": "Documents"
+        },
+        "info": {
+          "title": "Information desk",
+          "officeHoursLabel": "Office hours",
+          "servicesTitle": "Services"
+        },
+        "complaint": {
+          "title": "Complaints",
+          "officeHoursLabel": "Office hours",
+          "processTitle": "How a complaint is handled"
+        },
+        "seo": {
+          "title": "Citizen charter",
+          "description": "Citizen charter of Storio Model Academy: MPO information, information desk, complaint officer and helplines.",
+          "keywords": [
+            "citizen charter",
+            "complaint",
+            "information service"
           ],
           "ogImage": ""
         }

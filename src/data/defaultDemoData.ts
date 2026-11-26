@@ -22,6 +22,12 @@ import type {
   StorioExamResult,
   StorioStudentStatsResponse,
   StorioSyllabus,
+  StorioAdmissionFormConfig,
+  StorioComplaintOfficer,
+  StorioHotline,
+  StorioInformationService,
+  StorioMpoInfo,
+  StorioNavigationItem,
 } from '@storio/template-sdk';
 
 import type { Job, LeadershipMessage, Testimonial } from '@/lib/types';
@@ -68,6 +74,12 @@ export const DEFAULT_DEMO_DATA: {
   jobs: Job[];
   boardNotices: StorioBoardNotice[];
   customPages: StorioCustomPage[];
+  navigation: StorioNavigationItem[];
+  admissionFormConfig: StorioAdmissionFormConfig;
+  mpoInfo: StorioMpoInfo;
+  informationService: StorioInformationService;
+  complaintOfficer: StorioComplaintOfficer;
+  hotlines: StorioHotline[];
 } = {
   settings: {
     site_title: 'Storio Model Academy',
@@ -373,5 +385,76 @@ export const DEFAULT_DEMO_DATA: {
       meta_title: 'Our history',
       meta_description: 'How Storio Model Academy grew since 1998.',
     },
+  ],
+
+  navigation: [
+    { id: 1, label: 'Online admission', url: '/admission' },
+    { id: 2, label: 'Exam results', url: '/results' },
+    { id: 3, label: 'Citizen charter', url: '/citizen-charter' },
+    { id: 4, label: 'Careers', url: '/careers' },
+  ],
+
+  admissionFormConfig: {
+    id: 1,
+    is_active: true,
+    fields: [
+      { id: 'student_name', label: 'Student name', type: 'text', required: true, order: 1 },
+      { id: 'date_of_birth', label: 'Date of birth', type: 'date', required: true, order: 2 },
+      { id: 'class_applying', label: 'Class applying for', type: 'select', required: true, order: 3, options: ['Class 1', 'Class 6', 'Class 9', 'Class 11'] },
+      { id: 'gender', label: 'Gender', type: 'radio', required: true, order: 4, options: ['Female', 'Male'] },
+      { id: 'guardian_name', label: 'Guardian name', type: 'text', required: true, order: 5 },
+      { id: 'previous_school', label: 'Previous school', type: 'text', order: 6 },
+      { id: 'address', label: 'Address', type: 'textarea', order: 7 },
+      { id: 'transport', label: 'Needs school transport', type: 'checkbox', order: 8 },
+    ],
+  },
+
+  mpoInfo: {
+    id: 1,
+    is_mpo_enlisted: true,
+    mpo_status: 'Enlisted',
+    mpo_code: '2601081234',
+    mpo_date: '2004-07-01',
+    mpo_order_number: 'MPO/2004/118',
+    description: 'Teachers on the government MPO list receive part of their salary from the government.',
+    total_mpo_teachers: 42,
+    total_non_mpo_teachers: 22,
+    documents: [{ title: 'MPO approval letter', file_url: '#', issue_date: '2004-07-01' }],
+  },
+
+  informationService: {
+    id: 1,
+    title: 'Information desk',
+    responsible_person: 'Tanvir Hossain',
+    designation: 'Office Manager',
+    phone: '+1 (555) 019-2835',
+    email: 'info-desk@storiomodel.edu',
+    office_hours: 'Sunday to Thursday, 9:00 to 16:00',
+    description: 'Ask for any public information about the school under the Right to Information Act.',
+    services_offered: ['Admission information', 'Certificates and transcripts', 'Fee information'],
+    photo_url: '/images/demo/avatar.svg',
+  },
+
+  complaintOfficer: {
+    id: 1,
+    name: 'Dr. Salma Khan',
+    designation: 'Complaint officer',
+    phone: '+1 (555) 019-2836',
+    email: 'complaints@storiomodel.edu',
+    office_hours: 'Sunday and Wednesday, 10:00 to 13:00',
+    description: 'Parents and students can raise any complaint in confidence.',
+    complaint_process: [
+      { step_number: 1, title: 'Submit', description: 'Write to the complaint officer or visit during office hours.' },
+      { step_number: 2, title: 'Review', description: 'The complaint is reviewed within seven working days.' },
+      { step_number: 3, title: 'Answer', description: 'You receive a written answer with the decision.' },
+    ],
+    photo_url: '/images/demo/avatar.svg',
+  },
+
+  hotlines: [
+    { id: 1, title: 'National emergency', number: '999', category: 'Emergency', is_emergency: true, order: 1 },
+    { id: 2, title: 'Fire service', number: '102', category: 'Emergency', is_emergency: true, order: 2 },
+    { id: 3, title: 'School office', number: '+1 (555) 019-2834', category: 'School', order: 3 },
+    { id: 4, title: 'Child helpline', number: '1098', category: 'Support', order: 4 },
   ],
 };
