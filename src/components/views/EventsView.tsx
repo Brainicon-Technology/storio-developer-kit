@@ -15,7 +15,7 @@ import { useEventsText } from '@/components/cms/useEventsText';
 import { eventImage, eventPath } from '@/lib/events';
 import { formatDate, formatTime } from '@/lib/format';
 
-const PAGE = 'template-0-starter-events';
+const PAGE = 'template-10-starter-events';
 
 /**
  * Event list (getEvents). An event's title, excerpt and location are record fields

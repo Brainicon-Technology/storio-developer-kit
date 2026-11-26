@@ -13,7 +13,7 @@ import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 import { useBoardNoticesText } from '@/components/cms/useBoardNoticesText';
 import { formatDate } from '@/lib/format';
 
-const PAGE = 'template-0-starter-board-notices';
+const PAGE = 'template-10-starter-board-notices';
 
 /** Notices synced from the national education boards (getBoardNotices). Links open the board's site. */
 export function BoardNoticesView({ notices }: { notices: StorioBoardNotice[] }) {

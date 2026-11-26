@@ -20,7 +20,7 @@ import type { Job } from '@/lib/types';
  * One job (getJobDetail). Like the activity page, this [slug] route is not an editor page:
  * its labels are the Careers page's "detail" section (and its "intro" labels for the facts).
  */
-const LIST_PAGE = 'template-0-starter-careers';
+const LIST_PAGE = 'template-10-starter-careers';
 
 export function JobDetailView({ job }: { job: Job }) {
   const { intro, detail } = useCareersText();

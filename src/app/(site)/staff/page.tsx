@@ -6,7 +6,7 @@ import { pageMetadata } from '@/lib/seo';
 import { resolveTenant } from '@/lib/tenant';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata('template-0-starter-staff');
+  return pageMetadata('template-10-starter-staff');
 }
 
 export default async function StaffPage() {

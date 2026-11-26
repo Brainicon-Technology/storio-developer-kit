@@ -15,7 +15,7 @@ import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 
 import { useNoticesText } from '@/components/cms/useNoticesText';
 
-const PAGE = 'template-0-starter-notices';
+const PAGE = 'template-10-starter-notices';
 
 /**
  * List page of a collection. Fixed text (heading, labels) is page content; each

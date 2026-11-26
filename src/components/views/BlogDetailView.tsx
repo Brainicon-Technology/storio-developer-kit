@@ -14,7 +14,7 @@ import { useBlogDetailText } from '@/components/cms/useBlogDetailText';
 import { RichText } from '@/components/site/RichText';
 import { formatDate } from '@/lib/format';
 
-const PAGE = 'template-0-starter-blog-detail';
+const PAGE = 'template-10-starter-blog-detail';
 
 /**
  * One blog post (getBlogDetail), an editor page with collection "blog".

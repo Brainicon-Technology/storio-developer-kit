@@ -18,7 +18,7 @@ import { useAboutText } from '@/components/cms/useAboutText';
 import { RichText } from '@/components/site/RichText';
 import type { LeadershipMessage } from '@/lib/types';
 
-const PAGE = 'template-0-starter-about';
+const PAGE = 'template-10-starter-about';
 
 export interface AboutData {
   profile: StorioInstitutionProfile | null;

@@ -15,7 +15,7 @@ import { resolveTenant } from '@/lib/tenant';
  * Independent SDK calls run in parallel with Promise.all.
  */
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata('template-0-starter-home');
+  return pageMetadata('template-10-starter-home');
 }
 
 export default async function HomePage() {

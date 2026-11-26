@@ -6,7 +6,7 @@ import { pageMetadata } from '@/lib/seo';
 import { resolveTenant } from '@/lib/tenant';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata('template-0-starter-admission');
+  return pageMetadata('template-10-starter-admission');
 }
 
 /** The form fields come from the school's form builder; sending happens in ./actions.ts. */

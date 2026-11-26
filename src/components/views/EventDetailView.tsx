@@ -15,7 +15,7 @@ import { RichText } from '@/components/site/RichText';
 import { eventImage } from '@/lib/events';
 import { formatDate, formatTime } from '@/lib/format';
 
-const PAGE = 'template-0-starter-event-detail';
+const PAGE = 'template-10-starter-event-detail';
 
 /**
  * One event (getEventDetail), an editor page with collection "event".

@@ -21,7 +21,7 @@ import { sendAdmissionCode, submitAdmission, type AdmissionResult } from '@/app/
 import { useAdmissionText } from '@/components/cms/useAdmissionText';
 import type { AdmissionValues } from '@/lib/admission';
 
-const PAGE = 'template-0-starter-admission';
+const PAGE = 'template-10-starter-admission';
 
 type Step = 'form' | 'code' | 'done';
 

@@ -12,7 +12,7 @@ import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 import { useResultsText } from '@/components/cms/useResultsText';
 import { formatRate } from '@/lib/results';
 
-const PAGE = 'template-0-starter-results';
+const PAGE = 'template-10-starter-results';
 
 /** Exam results (getExamResults) as a table. Column headings are editable. */
 export function ResultsView({ results }: { results: StorioExamResult[] }) {

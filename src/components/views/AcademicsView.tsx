@@ -21,7 +21,7 @@ import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useAcademicsText } from '@/components/cms/useAcademicsText';
 import { routineDays } from '@/lib/academics';
 
-const PAGE = 'template-0-starter-academics';
+const PAGE = 'template-10-starter-academics';
 
 export interface AcademicsData {
   programs: StorioAcademicProgram[];

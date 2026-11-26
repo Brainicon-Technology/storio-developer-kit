@@ -6,7 +6,7 @@ import { loadLayout } from '@/lib/site';
 import { resolveTenant } from '@/lib/tenant';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata('template-0-starter-contact');
+  return pageMetadata('template-10-starter-contact');
 }
 
 export default async function ContactPage() {

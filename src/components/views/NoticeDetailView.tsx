@@ -13,7 +13,7 @@ import { CmsField, CmsSection, useCollectionItem } from '@/lib/storio-editor/sit
 
 import { useNoticeDetailText } from '@/components/cms/useNoticeDetailText';
 
-const PAGE = 'template-0-starter-notice-detail';
+const PAGE = 'template-10-starter-notice-detail';
 
 /**
  * Detail page of a collection record ([id] route).

@@ -14,7 +14,7 @@ import { jobTypeLabel } from '@/lib/careers';
 import { formatDate } from '@/lib/format';
 import type { Job } from '@/lib/types';
 
-const PAGE = 'template-0-starter-careers';
+const PAGE = 'template-10-starter-careers';
 
 /** Job openings (getCareers, narrowed to Job in src/lib/types.ts). */
 export function CareersView({ jobs }: { jobs: Job[] }) {

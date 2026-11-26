@@ -25,7 +25,7 @@ import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useHomeText } from '@/components/cms/useHomeText';
 import type { Testimonial } from '@/lib/types';
 
-const PAGE = 'template-0-starter-home';
+const PAGE = 'template-10-starter-home';
 
 export interface HomeData {
   slides: StorioHeroSlide[];
@@ -37,7 +37,7 @@ export interface HomeData {
 
 /**
  * Home page. Rules shown here:
- * - one <CmsSection page={PAGE}> per top-level key of src/content/template-0-starter-home.json,
+ * - one <CmsSection page={PAGE}> per top-level key of src/content/template-10-starter-home.json,
  * - a <CmsField> around every visible value, with list positions for arrays (items.0.title),
  * - icons stored by name and drawn with <CmsIcon>,
  * - Storio records (notices) edited as records (collection="notice"), not as page content,

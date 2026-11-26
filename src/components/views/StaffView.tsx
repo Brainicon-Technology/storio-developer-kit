@@ -12,7 +12,7 @@ import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 
 import { useStaffText } from '@/components/cms/useStaffText';
 
-const PAGE = 'template-0-starter-staff';
+const PAGE = 'template-10-starter-staff';
 
 /** Staff directory (getStaff), grouped by department on the server. */
 export function StaffView({ departments }: { departments: [string, StorioStaffMember[]][] }) {

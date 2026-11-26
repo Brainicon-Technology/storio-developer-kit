@@ -18,7 +18,7 @@ import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useGalleryText } from '@/components/cms/useGalleryText';
 
-const PAGE = 'template-0-starter-gallery';
+const PAGE = 'template-10-starter-gallery';
 
 export interface GalleryData {
   photos: StorioGalleryItem[];

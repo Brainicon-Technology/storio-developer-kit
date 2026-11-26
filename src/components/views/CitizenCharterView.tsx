@@ -20,7 +20,7 @@ import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useCitizenCharterText } from '@/components/cms/useCitizenCharterText';
 import { formatDate } from '@/lib/format';
 
-const PAGE = 'template-0-starter-citizen-charter';
+const PAGE = 'template-10-starter-citizen-charter';
 
 export interface CitizenCharterData {
   mpo: StorioMpoInfo | null;

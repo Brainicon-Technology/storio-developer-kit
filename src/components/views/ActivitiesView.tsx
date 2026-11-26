@@ -13,7 +13,7 @@ import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 import { useActivitiesText } from '@/components/cms/useActivitiesText';
 import { activityImage, activityPath, activitySummary } from '@/lib/activities';
 
-const PAGE = 'template-0-starter-activities';
+const PAGE = 'template-10-starter-activities';
 
 /** Activity list (getActivities). Activity texts are school data: edited on the dashboard, no pencil. */
 export function ActivitiesView({ activities }: { activities: StorioActivityItem[] }) {

@@ -13,7 +13,7 @@ import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 import { useBlogsText } from '@/components/cms/useBlogsText';
 import { formatDate } from '@/lib/format';
 
-const PAGE = 'template-0-starter-blogs';
+const PAGE = 'template-10-starter-blogs';
 
 /**
  * Blog list (getBlogs). Fixed texts are page content; each post's title is a record field

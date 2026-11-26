@@ -1,8 +1,8 @@
 {
-  "id": "template-0-starter",
+  "id": "template-10-starter",
   "editor": "storio-elements",
   "name": "Storio Starter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "customization": {
     "colors": [
       {
@@ -242,7 +242,7 @@
   ],
   "editorPages": [
     {
-      "key": "template-0-starter-home",
+      "key": "template-10-starter-home",
       "title": "Home",
       "route": "/",
       "sections": [
@@ -347,7 +347,7 @@
       }
     },
     {
-      "key": "template-0-starter-about",
+      "key": "template-10-starter-about",
       "title": "About",
       "route": "/about",
       "sections": [
@@ -435,7 +435,7 @@
       }
     },
     {
-      "key": "template-0-starter-contact",
+      "key": "template-10-starter-contact",
       "title": "Contact",
       "route": "/contact",
       "sections": [
@@ -476,7 +476,7 @@
       }
     },
     {
-      "key": "template-0-starter-notices",
+      "key": "template-10-starter-notices",
       "title": "Notices",
       "route": "/notices",
       "sections": [
@@ -513,11 +513,11 @@
       }
     },
     {
-      "key": "template-0-starter-notice-detail",
+      "key": "template-10-starter-notice-detail",
       "title": "Notice",
       "route": "/notices/[id]",
       "collection": "notice",
-      "parent": "template-0-starter-notices",
+      "parent": "template-10-starter-notices",
       "sections": [
         {
           "key": "labels",
@@ -533,7 +533,7 @@
       }
     },
     {
-      "key": "template-0-starter-blogs",
+      "key": "template-10-starter-blogs",
       "title": "News",
       "route": "/blogs",
       "sections": [
@@ -565,11 +565,11 @@
       }
     },
     {
-      "key": "template-0-starter-blog-detail",
+      "key": "template-10-starter-blog-detail",
       "title": "News story",
       "route": "/blogs/[slug]",
       "collection": "blog",
-      "parent": "template-0-starter-blogs",
+      "parent": "template-10-starter-blogs",
       "sections": [
         {
           "key": "labels",
@@ -584,7 +584,7 @@
       }
     },
     {
-      "key": "template-0-starter-events",
+      "key": "template-10-starter-events",
       "title": "Events",
       "route": "/events",
       "sections": [
@@ -617,11 +617,11 @@
       }
     },
     {
-      "key": "template-0-starter-event-detail",
+      "key": "template-10-starter-event-detail",
       "title": "Event",
       "route": "/events/[id]",
       "collection": "event",
-      "parent": "template-0-starter-events",
+      "parent": "template-10-starter-events",
       "sections": [
         {
           "key": "labels",
@@ -637,7 +637,7 @@
       }
     },
     {
-      "key": "template-0-starter-activities",
+      "key": "template-10-starter-activities",
       "title": "Activities",
       "route": "/activities",
       "sections": [
@@ -677,7 +677,7 @@
       }
     },
     {
-      "key": "template-0-starter-staff",
+      "key": "template-10-starter-staff",
       "title": "Staff",
       "route": "/staff",
       "sections": [
@@ -709,7 +709,7 @@
       }
     },
     {
-      "key": "template-0-starter-gallery",
+      "key": "template-10-starter-gallery",
       "title": "Gallery",
       "route": "/gallery",
       "sections": [
@@ -758,7 +758,7 @@
       }
     },
     {
-      "key": "template-0-starter-faq",
+      "key": "template-10-starter-faq",
       "title": "FAQ",
       "route": "/faq",
       "sections": [
@@ -790,7 +790,7 @@
       }
     },
     {
-      "key": "template-0-starter-academics",
+      "key": "template-10-starter-academics",
       "title": "Academics",
       "route": "/academics",
       "sections": [
@@ -860,7 +860,7 @@
       }
     },
     {
-      "key": "template-0-starter-results",
+      "key": "template-10-starter-results",
       "title": "Results",
       "route": "/results",
       "sections": [
@@ -899,7 +899,7 @@
       }
     },
     {
-      "key": "template-0-starter-calendar",
+      "key": "template-10-starter-calendar",
       "title": "Calendar",
       "route": "/calendar",
       "sections": [
@@ -932,7 +932,7 @@
       }
     },
     {
-      "key": "template-0-starter-careers",
+      "key": "template-10-starter-careers",
       "title": "Careers",
       "route": "/careers",
       "sections": [
@@ -977,7 +977,7 @@
       }
     },
     {
-      "key": "template-0-starter-board-notices",
+      "key": "template-10-starter-board-notices",
       "title": "Board notices",
       "route": "/board-notices",
       "sections": [
@@ -1009,7 +1009,7 @@
       }
     },
     {
-      "key": "template-0-starter-admission",
+      "key": "template-10-starter-admission",
       "title": "Admission",
       "route": "/admission",
       "sections": [
@@ -1069,7 +1069,7 @@
       }
     },
     {
-      "key": "template-0-starter-citizen-charter",
+      "key": "template-10-starter-citizen-charter",
       "title": "Citizen charter",
       "route": "/citizen-charter",
       "sections": [

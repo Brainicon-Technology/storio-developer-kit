@@ -23,7 +23,7 @@ import { formatDate } from '@/lib/format';
  * page instead (page="...-activities", sectionKey="detail"), and admins edit them there.
  * Use the same pattern for any other detail page (careers, custom pages...).
  */
-const LIST_PAGE = 'template-0-starter-activities';
+const LIST_PAGE = 'template-10-starter-activities';
 
 export function ActivityDetailView({ activity }: { activity: StorioActivityItem }) {
   const { detail } = useActivitiesText();

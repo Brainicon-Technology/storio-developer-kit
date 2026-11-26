@@ -15,7 +15,7 @@ import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 import { sendContactMessage, type ContactFormState } from '@/app/(site)/contact/actions';
 import { useContactText } from '@/components/cms/useContactText';
 
-const PAGE = 'template-0-starter-contact';
+const PAGE = 'template-10-starter-contact';
 
 const initialState: ContactFormState = { status: 'idle' };
 

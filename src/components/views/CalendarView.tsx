@@ -12,7 +12,7 @@ import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 import { useCalendarText } from '@/components/cms/useCalendarText';
 import { formatDate } from '@/lib/format';
 
-const PAGE = 'template-0-starter-calendar';
+const PAGE = 'template-10-starter-calendar';
 
 /** Academic calendar (getCalendarEvents), grouped by month on the server. */
 export function CalendarView({ months }: { months: { title: string; events: StorioCalendarEvent[] }[] }) {

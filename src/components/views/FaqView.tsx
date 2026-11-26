@@ -12,7 +12,7 @@ import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 
 import { useFaqText } from '@/components/cms/useFaqText';
 
-const PAGE = 'template-0-starter-faq';
+const PAGE = 'template-10-starter-faq';
 
 /** All FAQs (getFaqs). Questions and answers are school data, edited on the dashboard's FAQ page. */
 export function FaqView({ faqs }: { faqs: StorioFaq[] }) {
