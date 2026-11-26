@@ -56,7 +56,7 @@ The CMS modules your template supports.
 > - `accounts` and `auth`: users and roles.
 > - `mediaFile`: the media library.
 
-The starter kit lists the base modules plus `notice`, `contact` and `socialLink`. Add the modules your pages show, and leave out the ones they don't, so admins are not shown managers for content that never appears on their site.
+The starter kit lists the base modules plus every module its sample pages use (it has a sample page for all of them). When you delete sample pages, remove their modules too, so admins are not shown managers for content that never appears on their site. Keep only the modules your pages show.
 
 **All 30 modules:**
 
