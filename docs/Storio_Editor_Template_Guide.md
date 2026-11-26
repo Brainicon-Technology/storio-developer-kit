@@ -243,9 +243,12 @@ Storio has no site-wide page in the editor. What appears on every page comes fro
 | What | From | Editable where |
 | :--- | :--- | :--- |
 | School name, logo, contact details, social links | the school's settings (`loadLayout()` in `src/lib/site.ts`: one `getLayout` call per request) | the dashboard's settings pages (no pencil) |
+| Favicon | the school's settings: `settings.favicon_url` (`""` when not set), used by `siteMetadata()` in `src/lib/seo.ts`; falls back to `public/favicon.ico` | the dashboard's settings pages (no pencil) |
 | Header menu | Theme settings > Navigation (`navigation.navbarLinks` in the manifest) | the editor's Theme settings |
 | Colours | Theme settings > Colors (`customization.colors`) | the editor's Theme settings |
 | Header and footer texts | Theme settings > Content (`customization.content`), shown with `<ThemeField>` | a pencil on every page |
+
+**Favicon.** Keep the template's own icon in `public/favicon.ico`, never as `src/app/favicon.ico`: Next.js puts a favicon file in `src/app/` ahead of metadata `icons`, so the school's favicon would never show.
 
 **Theme settings texts.** Add a field to `customization.content` in the manifest (`{ "id": "footer_tagline", "label": "Footer tagline", "type": "text", "default": "..." }`), then show it with a pencil:
 
