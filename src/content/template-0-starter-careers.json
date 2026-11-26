@@ -1,0 +1,23 @@
+{
+  "intro": {
+    "title": "Careers",
+    "text": "Join our team of teachers and staff.",
+    "locationLabel": "Location",
+    "vacancyLabel": "Vacancies",
+    "deadlineLabel": "Apply by",
+    "detailsText": "View job",
+    "emptyText": "There are no open positions right now."
+  },
+  "detail": {
+    "backText": "Back to all jobs",
+    "applyText": "Apply now",
+    "attachmentsTitle": "Documents",
+    "notFoundText": "This job could not be found."
+  },
+  "seo": {
+    "title": "Careers",
+    "description": "Job openings at Storio Model Academy.",
+    "keywords": ["careers", "jobs", "teaching jobs"],
+    "ogImage": ""
+  }
+}

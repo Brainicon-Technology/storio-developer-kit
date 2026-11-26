@@ -1,0 +1,35 @@
+{
+  "intro": {
+    "title": "Academics",
+    "text": "Our programmes, class routines, syllabuses and student numbers."
+  },
+  "programs": {
+    "title": "Programmes"
+  },
+  "routines": {
+    "title": "Class routines",
+    "sectionLabel": "Section",
+    "periodLabel": "Period",
+    "downloadText": "Download routine",
+    "emptyText": "Class routines are not published yet."
+  },
+  "syllabuses": {
+    "title": "Syllabuses",
+    "downloadText": "Download",
+    "emptyText": "Syllabuses are not published yet."
+  },
+  "stats": {
+    "title": "Student numbers",
+    "totalLabel": "Students",
+    "maleLabel": "Boys",
+    "femaleLabel": "Girls",
+    "sectionsLabel": "Sections",
+    "classLabel": "Class"
+  },
+  "seo": {
+    "title": "Academics",
+    "description": "Programmes, class routines and syllabuses at Storio Model Academy.",
+    "keywords": ["academics", "class routine", "syllabus"],
+    "ogImage": ""
+  }
+}

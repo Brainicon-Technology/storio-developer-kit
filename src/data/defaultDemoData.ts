@@ -14,9 +14,17 @@ import type {
   StorioStaffMember,
   StorioTeamMember,
   StorioVideoItem,
+  StorioAcademicProgram,
+  StorioBoardNotice,
+  StorioCalendarEvent,
+  StorioClassRoutine,
+  StorioCustomPage,
+  StorioExamResult,
+  StorioStudentStatsResponse,
+  StorioSyllabus,
 } from '@storio/template-sdk';
 
-import type { LeadershipMessage, Testimonial } from '@/lib/types';
+import type { Job, LeadershipMessage, Testimonial } from '@/lib/types';
 
 /**
  * DEFAULT_DEMO_DATA
@@ -51,6 +59,15 @@ export const DEFAULT_DEMO_DATA: {
   albums: StorioAlbum[];
   videos: StorioVideoItem[];
   faqs: StorioFaq[];
+  academicPrograms: StorioAcademicProgram[];
+  classRoutines: StorioClassRoutine[];
+  syllabuses: StorioSyllabus[];
+  studentStats: StorioStudentStatsResponse;
+  examResults: StorioExamResult[];
+  calendarEvents: StorioCalendarEvent[];
+  jobs: Job[];
+  boardNotices: StorioBoardNotice[];
+  customPages: StorioCustomPage[];
 } = {
   settings: {
     site_title: 'Storio Model Academy',
@@ -247,5 +264,114 @@ export const DEFAULT_DEMO_DATA: {
     { id: 1, question: 'When do admissions open?', answer: 'Admissions open every year in January.' },
     { id: 2, question: 'Do you offer transport?', answer: 'Yes, school buses cover most of the city.' },
     { id: 3, question: 'What are the school hours?', answer: 'Morning shift 7:30 to 12:30, day shift 12:45 to 5:30.' },
+  ],
+
+  academicPrograms: [
+    { id: 1, name: 'Primary', classes: ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'], is_custom: false },
+    { id: 2, name: 'Secondary', classes: ['Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10'], is_custom: false },
+    { id: 3, name: 'Higher secondary', classes: ['Class 11', 'Class 12'], is_custom: false },
+  ],
+
+  classRoutines: [
+    {
+      id: 1,
+      class_name: 'Class 9',
+      section: 'A',
+      shift: 'Morning',
+      academic_year: 2026,
+      schedule: [
+        {
+          day: 'Sunday',
+          periods: [
+            { period: 1, subject: 'Mathematics', teacher: 'Karim Uddin', start_time: '07:30', end_time: '08:15' },
+            { period: 2, subject: 'English', teacher: 'John Carter', start_time: '08:15', end_time: '09:00' },
+            { period: 3, subject: 'Physics', teacher: 'Farzana Akter', start_time: '09:15', end_time: '10:00' },
+          ],
+        },
+        {
+          day: 'Monday',
+          periods: [
+            { period: 1, subject: 'Bangla', teacher: 'Shirin Sultana', start_time: '07:30', end_time: '08:15' },
+            { period: 2, subject: 'Chemistry', teacher: 'Karim Uddin', start_time: '08:15', end_time: '09:00' },
+            { period: 3, subject: 'ICT', teacher: 'Tanvir Hossain', start_time: '09:15', end_time: '10:00' },
+          ],
+        },
+      ],
+    },
+  ],
+
+  syllabuses: [
+    { id: 1, title: 'Class 9 annual syllabus', class_name: 'Class 9', exam_type: 'Annual', academic_year: 2026, file_url: '#', file_size: '420 KB' },
+    { id: 2, title: 'Class 10 half-yearly syllabus', class_name: 'Class 10', exam_type: 'Half-yearly', academic_year: 2026, file_url: '#', file_size: '380 KB' },
+  ],
+
+  studentStats: {
+    academic_year: 2026,
+    grand_total_male: 640,
+    grand_total_female: 610,
+    grand_total: 1250,
+    total_sections: 30,
+    classes: [
+      { id: 1, academic_year: 2026, class_name: 'Class 6', total_male: 70, total_female: 66, total_students: 136 },
+      { id: 2, academic_year: 2026, class_name: 'Class 7', total_male: 68, total_female: 64, total_students: 132 },
+      { id: 3, academic_year: 2026, class_name: 'Class 8', total_male: 65, total_female: 63, total_students: 128 },
+      { id: 4, academic_year: 2026, class_name: 'Class 9', total_male: 62, total_female: 60, total_students: 122 },
+      { id: 5, academic_year: 2026, class_name: 'Class 10', total_male: 60, total_female: 58, total_students: 118 },
+    ],
+  },
+
+  examResults: [
+    { id: 1, exam_name: 'SSC', class_name: 'Class 10', year: 2025, total_examinees: 118, passed: 115, failed: 3, pass_rate: 97.5, exam_type: 'Public', file_url: '#' },
+    { id: 2, exam_name: 'JSC', class_name: 'Class 8', year: 2025, total_examinees: 128, passed: 126, failed: 2, pass_rate: 98.4, exam_type: 'Public' },
+    { id: 3, exam_name: 'Annual exam', class_name: 'Class 9', year: 2025, total_examinees: 122, passed: 117, failed: 5, pass_rate: 95.9, exam_type: 'Internal' },
+  ],
+
+  calendarEvents: [
+    { id: 1, title: 'New session begins', start_date: '2027-01-01', category: 'Academic', is_all_day: true },
+    { id: 2, title: 'Half-yearly exams', start_date: '2027-06-10', end_date: '2027-06-24', category: 'Exam', is_all_day: true },
+    { id: 3, title: 'Eid holidays', start_date: '2027-03-08', end_date: '2027-03-14', category: 'Holiday', is_all_day: true },
+  ],
+
+  jobs: [
+    {
+      id: 1,
+      title: 'Senior Mathematics Teacher',
+      slug: 'senior-mathematics-teacher',
+      location: 'Main campus',
+      job_type: 'full_time',
+      vacancy: 2,
+      deadline: '2027-01-31',
+      status: 'active',
+      description: '<p>We are looking for an experienced mathematics teacher for classes 9 and 10.</p><ul><li>Five years of teaching experience</li><li>A degree in mathematics</li></ul>',
+      application_link: 'mailto:jobs@storiomodel.edu',
+      attachments_data: [{ id: 1, file_name: 'job-circular.pdf', url: '#' }],
+    },
+    {
+      id: 2,
+      title: 'Librarian',
+      slug: 'librarian',
+      location: 'Main campus',
+      job_type: 'part_time',
+      vacancy: 1,
+      deadline: '2027-02-15',
+      status: 'active',
+      description: '<p>Run our library and reading programme.</p>',
+    },
+  ],
+
+  boardNotices: [
+    { id: 1, title: 'SSC exam 2027 form fill-up schedule', publish_date: '2026-11-20', board: 'Dhaka Board', url: 'https://dhakaeducationboard.gov.bd' },
+    { id: 2, title: 'Updated academic calendar for secondary schools', publish_date: '2026-11-02', board: 'Dhaka Board', url: 'https://dhakaeducationboard.gov.bd' },
+  ],
+
+  customPages: [
+    {
+      id: 1,
+      title: 'Our history',
+      slug: 'history',
+      content: '<p>Storio Model Academy opened in 1998 with 80 students and 6 teachers.</p><h2>Milestones</h2><ul><li>2005: new science building</li><li>2015: higher secondary section</li></ul>',
+      meta_title: 'Our history',
+      meta_description: 'How Storio Model Academy grew since 1998.',
+    },
   ],
 };

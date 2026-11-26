@@ -1,0 +1,21 @@
+{
+  "intro": {
+    "title": "Exam results",
+    "text": "Results of public and internal exams.",
+    "examLabel": "Exam",
+    "classLabel": "Class",
+    "yearLabel": "Year",
+    "examineesLabel": "Examinees",
+    "passedLabel": "Passed",
+    "failedLabel": "Failed",
+    "passRateLabel": "Pass rate",
+    "downloadText": "Result sheet",
+    "emptyText": "No results published yet."
+  },
+  "seo": {
+    "title": "Results",
+    "description": "Exam results of Storio Model Academy.",
+    "keywords": ["results", "exam"],
+    "ogImage": ""
+  }
+}

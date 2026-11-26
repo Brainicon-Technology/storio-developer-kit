@@ -1,0 +1,14 @@
+{
+  "intro": {
+    "title": "Education board notices",
+    "text": "The latest notices from the education boards, updated automatically.",
+    "openText": "Open notice",
+    "emptyText": "No board notices right now."
+  },
+  "seo": {
+    "title": "Board notices",
+    "description": "Latest education board notices.",
+    "keywords": ["education board", "notices"],
+    "ogImage": ""
+  }
+}

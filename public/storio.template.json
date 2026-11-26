@@ -75,6 +75,11 @@
     "gallery",
     "reels",
     "faq",
+    "academics",
+    "exam_results",
+    "calendar_events",
+    "careers",
+    "custom_pages",
     "mediaFile",
     "generalSettings",
     "accounts",
@@ -106,6 +111,38 @@
               "id": "2-2",
               "name": "Teachers and staff",
               "href": "/staff"
+            },
+            {
+              "id": "2-3",
+              "name": "Our history",
+              "href": "/page/history"
+            },
+            {
+              "id": "2-4",
+              "name": "Careers",
+              "href": "/careers"
+            }
+          ]
+        },
+        {
+          "id": "7",
+          "name": "Academics",
+          "href": "/academics",
+          "subLinks": [
+            {
+              "id": "7-1",
+              "name": "Programmes and routines",
+              "href": "/academics"
+            },
+            {
+              "id": "7-2",
+              "name": "Exam results",
+              "href": "/results"
+            },
+            {
+              "id": "7-3",
+              "name": "Academic calendar",
+              "href": "/calendar"
             }
           ]
         },
@@ -128,6 +165,11 @@
               "id": "3-3",
               "name": "Events",
               "href": "/events"
+            },
+            {
+              "id": "3-4",
+              "name": "Board notices",
+              "href": "/board-notices"
             }
           ]
         },
@@ -704,6 +746,226 @@
           "keywords": [
             "faq",
             "questions"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-academics",
+      "title": "Academics",
+      "route": "/academics",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Intro"
+        },
+        {
+          "key": "programs",
+          "label": "Programmes"
+        },
+        {
+          "key": "routines",
+          "label": "Class routines"
+        },
+        {
+          "key": "syllabuses",
+          "label": "Syllabuses"
+        },
+        {
+          "key": "stats",
+          "label": "Student numbers"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Academics",
+          "text": "Our programmes, class routines, syllabuses and student numbers."
+        },
+        "programs": {
+          "title": "Programmes"
+        },
+        "routines": {
+          "title": "Class routines",
+          "sectionLabel": "Section",
+          "periodLabel": "Period",
+          "downloadText": "Download routine",
+          "emptyText": "Class routines are not published yet."
+        },
+        "syllabuses": {
+          "title": "Syllabuses",
+          "downloadText": "Download",
+          "emptyText": "Syllabuses are not published yet."
+        },
+        "stats": {
+          "title": "Student numbers",
+          "totalLabel": "Students",
+          "maleLabel": "Boys",
+          "femaleLabel": "Girls",
+          "sectionsLabel": "Sections",
+          "classLabel": "Class"
+        },
+        "seo": {
+          "title": "Academics",
+          "description": "Programmes, class routines and syllabuses at Storio Model Academy.",
+          "keywords": [
+            "academics",
+            "class routine",
+            "syllabus"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-results",
+      "title": "Results",
+      "route": "/results",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Results"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Exam results",
+          "text": "Results of public and internal exams.",
+          "examLabel": "Exam",
+          "classLabel": "Class",
+          "yearLabel": "Year",
+          "examineesLabel": "Examinees",
+          "passedLabel": "Passed",
+          "failedLabel": "Failed",
+          "passRateLabel": "Pass rate",
+          "downloadText": "Result sheet",
+          "emptyText": "No results published yet."
+        },
+        "seo": {
+          "title": "Results",
+          "description": "Exam results of Storio Model Academy.",
+          "keywords": [
+            "results",
+            "exam"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-calendar",
+      "title": "Calendar",
+      "route": "/calendar",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Calendar"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Academic calendar",
+          "text": "Term dates, exams and holidays for the school year.",
+          "allDayLabel": "All day",
+          "emptyText": "The calendar is not published yet."
+        },
+        "seo": {
+          "title": "Calendar",
+          "description": "Academic calendar of Storio Model Academy: term dates, exams and holidays.",
+          "keywords": [
+            "calendar",
+            "holidays",
+            "exams"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-careers",
+      "title": "Careers",
+      "route": "/careers",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Careers"
+        },
+        {
+          "key": "detail",
+          "label": "Job page labels"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Careers",
+          "text": "Join our team of teachers and staff.",
+          "locationLabel": "Location",
+          "vacancyLabel": "Vacancies",
+          "deadlineLabel": "Apply by",
+          "detailsText": "View job",
+          "emptyText": "There are no open positions right now."
+        },
+        "detail": {
+          "backText": "Back to all jobs",
+          "applyText": "Apply now",
+          "attachmentsTitle": "Documents",
+          "notFoundText": "This job could not be found."
+        },
+        "seo": {
+          "title": "Careers",
+          "description": "Job openings at Storio Model Academy.",
+          "keywords": [
+            "careers",
+            "jobs",
+            "teaching jobs"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-board-notices",
+      "title": "Board notices",
+      "route": "/board-notices",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Board notices"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Education board notices",
+          "text": "The latest notices from the education boards, updated automatically.",
+          "openText": "Open notice",
+          "emptyText": "No board notices right now."
+        },
+        "seo": {
+          "title": "Board notices",
+          "description": "Latest education board notices.",
+          "keywords": [
+            "education board",
+            "notices"
           ],
           "ogImage": ""
         }
