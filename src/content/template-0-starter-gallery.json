@@ -1,0 +1,21 @@
+{
+  "intro": {
+    "title": "Gallery",
+    "text": "Moments from school life.",
+    "emptyText": "No photos yet."
+  },
+  "albums": {
+    "title": "Albums",
+    "photosLabel": "photos"
+  },
+  "videos": {
+    "title": "Videos",
+    "watchText": "Watch"
+  },
+  "seo": {
+    "title": "Gallery",
+    "description": "Photos and videos from Storio Model Academy.",
+    "keywords": ["gallery", "photos", "videos"],
+    "ogImage": ""
+  }
+}

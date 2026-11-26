@@ -9,6 +9,11 @@
     "secondaryHref": "/notices",
     "heroImage": "/images/hero.svg"
   },
+  "slides": {
+    "title": "Highlights",
+    "previousLabel": "Previous slide",
+    "nextLabel": "Next slide"
+  },
   "features": {
     "title": "Why families choose us",
     "items": [
@@ -22,12 +27,16 @@
     "linkText": "View all notices",
     "emptyText": "No public notices available."
   },
+  "testimonials": {
+    "title": "What families say",
+    "text": "Parents, students and alumni on life at our school."
+  },
   "faq": {
     "title": "Frequently asked questions",
-    "items": [
-      { "question": "When do admissions open?", "answer": "Admissions open every year in January." },
-      { "question": "Do you offer transport?", "answer": "Yes, school buses cover most of the city." }
-    ]
+    "linkText": "All questions"
+  },
+  "links": {
+    "title": "Important links"
   },
   "seo": {
     "title": "Home",

@@ -1,0 +1,14 @@
+{
+  "intro": {
+    "title": "Frequently asked questions",
+    "text": "Can not find your answer? Contact the school office.",
+    "contactText": "Contact us",
+    "emptyText": "No questions published yet."
+  },
+  "seo": {
+    "title": "FAQ",
+    "description": "Answers to common questions about Storio Model Academy.",
+    "keywords": ["faq", "questions"],
+    "ogImage": ""
+  }
+}

@@ -61,6 +61,20 @@
     "notice",
     "contact",
     "socialLink",
+    "heroSlide",
+    "promotions",
+    "testimonial",
+    "important_links",
+    "institution_profile",
+    "leadership_message",
+    "team",
+    "staff",
+    "blogs",
+    "events",
+    "activity",
+    "gallery",
+    "reels",
+    "faq",
     "mediaFile",
     "generalSettings",
     "accounts",
@@ -81,15 +95,66 @@
         {
           "id": "2",
           "name": "About",
-          "href": "/about"
+          "href": "/about",
+          "subLinks": [
+            {
+              "id": "2-1",
+              "name": "About us",
+              "href": "/about"
+            },
+            {
+              "id": "2-2",
+              "name": "Teachers and staff",
+              "href": "/staff"
+            }
+          ]
         },
         {
           "id": "3",
-          "name": "Notices",
-          "href": "/notices"
+          "name": "News",
+          "href": "/notices",
+          "subLinks": [
+            {
+              "id": "3-1",
+              "name": "Notices",
+              "href": "/notices"
+            },
+            {
+              "id": "3-2",
+              "name": "News and stories",
+              "href": "/blogs"
+            },
+            {
+              "id": "3-3",
+              "name": "Events",
+              "href": "/events"
+            }
+          ]
         },
         {
           "id": "4",
+          "name": "Campus life",
+          "href": "/activities",
+          "subLinks": [
+            {
+              "id": "4-1",
+              "name": "Activities",
+              "href": "/activities"
+            },
+            {
+              "id": "4-2",
+              "name": "Gallery",
+              "href": "/gallery"
+            }
+          ]
+        },
+        {
+          "id": "5",
+          "name": "FAQ",
+          "href": "/faq"
+        },
+        {
+          "id": "6",
           "name": "Contact",
           "href": "/contact"
         }
@@ -107,6 +172,10 @@
           "label": "Hero"
         },
         {
+          "key": "slides",
+          "label": "Highlights"
+        },
+        {
           "key": "features",
           "label": "Features"
         },
@@ -115,8 +184,16 @@
           "label": "Latest notices"
         },
         {
+          "key": "testimonials",
+          "label": "Testimonials"
+        },
+        {
           "key": "faq",
           "label": "FAQ"
+        },
+        {
+          "key": "links",
+          "label": "Important links"
         },
         {
           "key": "seo",
@@ -133,6 +210,11 @@
           "secondaryText": "Read notices",
           "secondaryHref": "/notices",
           "heroImage": "/images/hero.svg"
+        },
+        "slides": {
+          "title": "Highlights",
+          "previousLabel": "Previous slide",
+          "nextLabel": "Next slide"
         },
         "features": {
           "title": "Why families choose us",
@@ -162,18 +244,16 @@
           "linkText": "View all notices",
           "emptyText": "No public notices available."
         },
+        "testimonials": {
+          "title": "What families say",
+          "text": "Parents, students and alumni on life at our school."
+        },
         "faq": {
           "title": "Frequently asked questions",
-          "items": [
-            {
-              "question": "When do admissions open?",
-              "answer": "Admissions open every year in January."
-            },
-            {
-              "question": "Do you offer transport?",
-              "answer": "Yes, school buses cover most of the city."
-            }
-          ]
+          "linkText": "All questions"
+        },
+        "links": {
+          "title": "Important links"
         },
         "seo": {
           "title": "Home",
@@ -197,8 +277,20 @@
           "label": "Intro"
         },
         {
+          "key": "profile",
+          "label": "At a glance"
+        },
+        {
           "key": "values",
           "label": "Values"
+        },
+        {
+          "key": "leadership",
+          "label": "Leadership messages"
+        },
+        {
+          "key": "team",
+          "label": "Team"
         },
         {
           "key": "seo",
@@ -210,6 +302,17 @@
           "title": "About our school",
           "text": "Founded in 1998, Storio Model Academy has helped thousands of students reach their goals.",
           "image": "/images/about.svg"
+        },
+        "profile": {
+          "title": "At a glance",
+          "missionLabel": "Our mission",
+          "visionLabel": "Our vision",
+          "studentsLabel": "Students",
+          "teachersLabel": "Teachers",
+          "eiinLabel": "EIIN",
+          "boardLabel": "Education board",
+          "typeLabel": "School type",
+          "shiftLabel": "Shifts"
         },
         "values": {
           "title": "Our values",
@@ -233,6 +336,13 @@
               "text": "We do the right thing, even when no one is watching."
             }
           ]
+        },
+        "leadership": {
+          "title": "Messages from our leaders"
+        },
+        "team": {
+          "title": "Governing body",
+          "otherGroup": "Members"
         },
         "seo": {
           "title": "About",
@@ -337,6 +447,265 @@
           "publishedLabel": "Published",
           "attachmentText": "Download attachment",
           "notFoundText": "This notice could not be found."
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-blogs",
+      "title": "News",
+      "route": "/blogs",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "News"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "News and stories",
+          "text": "Stories from our classrooms, clubs and community.",
+          "readMoreText": "Read the story",
+          "emptyText": "No stories published yet."
+        },
+        "seo": {
+          "title": "News",
+          "description": "News and stories from Storio Model Academy.",
+          "keywords": [
+            "news",
+            "blog"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-blog-detail",
+      "title": "News story",
+      "route": "/blogs/[slug]",
+      "collection": "blog",
+      "parent": "template-0-starter-blogs",
+      "sections": [
+        {
+          "key": "labels",
+          "label": "Labels"
+        }
+      ],
+      "defaults": {
+        "labels": {
+          "backText": "Back to all stories",
+          "publishedLabel": "Published",
+          "notFoundText": "This story could not be found."
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-events",
+      "title": "Events",
+      "route": "/events",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Events"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Events",
+          "text": "What is coming up on campus.",
+          "featuredLabel": "Featured",
+          "detailsText": "Event details",
+          "emptyText": "No upcoming events."
+        },
+        "seo": {
+          "title": "Events",
+          "description": "Upcoming events at Storio Model Academy.",
+          "keywords": [
+            "events",
+            "calendar"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-event-detail",
+      "title": "Event",
+      "route": "/events/[slug]",
+      "collection": "event",
+      "parent": "template-0-starter-events",
+      "sections": [
+        {
+          "key": "labels",
+          "label": "Labels"
+        }
+      ],
+      "defaults": {
+        "labels": {
+          "backText": "Back to all events",
+          "dateLabel": "When",
+          "locationLabel": "Where",
+          "notFoundText": "This event could not be found."
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-activities",
+      "title": "Activities",
+      "route": "/activities",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Activities"
+        },
+        {
+          "key": "detail",
+          "label": "Activity page labels"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Activities",
+          "text": "Sports, clubs and everything beyond the classroom.",
+          "readMoreText": "Learn more",
+          "emptyText": "No activities listed yet."
+        },
+        "detail": {
+          "backText": "Back to all activities",
+          "notFoundText": "This activity could not be found."
+        },
+        "seo": {
+          "title": "Activities",
+          "description": "Sports, clubs and co-curricular activities at Storio Model Academy.",
+          "keywords": [
+            "activities",
+            "clubs",
+            "sports"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-staff",
+      "title": "Staff",
+      "route": "/staff",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Staff"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Our teachers and staff",
+          "text": "The people who make our school what it is.",
+          "otherDepartment": "Staff",
+          "emptyText": "The staff list is not available yet."
+        },
+        "seo": {
+          "title": "Staff",
+          "description": "Meet the teachers and staff of Storio Model Academy.",
+          "keywords": [
+            "teachers",
+            "staff"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-gallery",
+      "title": "Gallery",
+      "route": "/gallery",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "Gallery"
+        },
+        {
+          "key": "albums",
+          "label": "Albums"
+        },
+        {
+          "key": "videos",
+          "label": "Videos"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Gallery",
+          "text": "Moments from school life.",
+          "emptyText": "No photos yet."
+        },
+        "albums": {
+          "title": "Albums",
+          "photosLabel": "photos"
+        },
+        "videos": {
+          "title": "Videos",
+          "watchText": "Watch"
+        },
+        "seo": {
+          "title": "Gallery",
+          "description": "Photos and videos from Storio Model Academy.",
+          "keywords": [
+            "gallery",
+            "photos",
+            "videos"
+          ],
+          "ogImage": ""
+        }
+      }
+    },
+    {
+      "key": "template-0-starter-faq",
+      "title": "FAQ",
+      "route": "/faq",
+      "sections": [
+        {
+          "key": "intro",
+          "label": "FAQ"
+        },
+        {
+          "key": "seo",
+          "label": "SEO"
+        }
+      ],
+      "defaults": {
+        "intro": {
+          "title": "Frequently asked questions",
+          "text": "Can not find your answer? Contact the school office.",
+          "contactText": "Contact us",
+          "emptyText": "No questions published yet."
+        },
+        "seo": {
+          "title": "FAQ",
+          "description": "Answers to common questions about Storio Model Academy.",
+          "keywords": [
+            "faq",
+            "questions"
+          ],
+          "ogImage": ""
         }
       }
     }

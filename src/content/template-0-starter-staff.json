@@ -1,0 +1,14 @@
+{
+  "intro": {
+    "title": "Our teachers and staff",
+    "text": "The people who make our school what it is.",
+    "otherDepartment": "Staff",
+    "emptyText": "The staff list is not available yet."
+  },
+  "seo": {
+    "title": "Staff",
+    "description": "Meet the teachers and staff of Storio Model Academy.",
+    "keywords": ["teachers", "staff"],
+    "ogImage": ""
+  }
+}

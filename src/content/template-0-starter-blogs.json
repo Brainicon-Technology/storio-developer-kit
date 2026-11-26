@@ -1,0 +1,14 @@
+{
+  "intro": {
+    "title": "News and stories",
+    "text": "Stories from our classrooms, clubs and community.",
+    "readMoreText": "Read the story",
+    "emptyText": "No stories published yet."
+  },
+  "seo": {
+    "title": "News",
+    "description": "News and stories from Storio Model Academy.",
+    "keywords": ["news", "blog"],
+    "ogImage": ""
+  }
+}

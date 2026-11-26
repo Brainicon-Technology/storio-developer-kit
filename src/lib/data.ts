@@ -15,3 +15,13 @@ export function withDemoRecord<T>(real: T | null | undefined, demo: T | undefine
   if (real) return real;
   return isStandalone && demo ? demo : null;
 }
+
+/** An SDK call that never throws: a network or server error counts as "no data". */
+export function safely<T>(request: Promise<T>): Promise<T | null> {
+  return request.catch(() => null);
+}
+
+/** Sorts records by their dashboard "order" field (records without one go first). */
+export function byOrder<T extends { order?: number }>(items: T[]): T[] {
+  return [...items].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+}

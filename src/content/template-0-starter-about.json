@@ -4,6 +4,17 @@
     "text": "Founded in 1998, Storio Model Academy has helped thousands of students reach their goals.",
     "image": "/images/about.svg"
   },
+  "profile": {
+    "title": "At a glance",
+    "missionLabel": "Our mission",
+    "visionLabel": "Our vision",
+    "studentsLabel": "Students",
+    "teachersLabel": "Teachers",
+    "eiinLabel": "EIIN",
+    "boardLabel": "Education board",
+    "typeLabel": "School type",
+    "shiftLabel": "Shifts"
+  },
   "values": {
     "title": "Our values",
     "items": [
@@ -11,6 +22,13 @@
       { "id": "v2", "icon": "Lightbulb", "title": "Curiosity", "text": "We teach students to ask good questions." },
       { "id": "v3", "icon": "ShieldCheck", "title": "Integrity", "text": "We do the right thing, even when no one is watching." }
     ]
+  },
+  "leadership": {
+    "title": "Messages from our leaders"
+  },
+  "team": {
+    "title": "Governing body",
+    "otherGroup": "Members"
   },
   "seo": {
     "title": "About",

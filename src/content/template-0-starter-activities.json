@@ -1,0 +1,18 @@
+{
+  "intro": {
+    "title": "Activities",
+    "text": "Sports, clubs and everything beyond the classroom.",
+    "readMoreText": "Learn more",
+    "emptyText": "No activities listed yet."
+  },
+  "detail": {
+    "backText": "Back to all activities",
+    "notFoundText": "This activity could not be found."
+  },
+  "seo": {
+    "title": "Activities",
+    "description": "Sports, clubs and co-curricular activities at Storio Model Academy.",
+    "keywords": ["activities", "clubs", "sports"],
+    "ogImage": ""
+  }
+}
