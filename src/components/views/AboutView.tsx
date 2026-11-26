@@ -1,8 +1,19 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getInstitutionProfile()  ->  StorioInstitutionProfile | null
+ *     loadInstitutionProfile() in src/lib/institution.ts
+ *   storio.getLeadershipMessages()  ->  LeadershipMessage[] (loose records, narrowed)
+ *     loadLeadershipMessages() in src/lib/people.ts
+ *   storio.getTeam()                ->  StorioTeamMember[]
+ *     loadTeam() in src/lib/people.ts
+ */
+
 import type { StorioInstitutionProfile, StorioTeamMember } from '@storio/template-sdk';
 import { CmsField, CmsIcon, CmsSection } from '@/lib/storio-editor/site';
 
+import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useAboutText } from '@/components/cms/useAboutText';
 import { RichText } from '@/components/site/RichText';
 import type { LeadershipMessage } from '@/lib/types';
@@ -24,6 +35,7 @@ export interface AboutData {
  */
 export function AboutView({ profile, leadership, teamGroups }: AboutData) {
   const { intro, profile: labels, values, leadership: leadershipText, team } = useAboutText();
+  const inEditor = useInEditor();
 
   const facts: { path: keyof typeof labels; value: string | number | undefined }[] = [
     { path: 'eiinLabel', value: profile?.eiin },
@@ -53,42 +65,43 @@ export function AboutView({ profile, leadership, teamGroups }: AboutData) {
         </section>
       </CmsSection>
 
-      {profile && (
+      {(profile || inEditor) && (
         <CmsSection sectionKey="profile" title="At a glance" page={PAGE}>
           <section className="mx-auto max-w-6xl px-6 pb-16">
             <h2 className="mb-6 text-3xl font-bold">
               <CmsField path="title" label="Title">{labels.title}</CmsField>
             </h2>
+            {!profile && <EmptyInEditor source="Institution Profile" />}
             <div className="grid gap-6 md:grid-cols-2">
-              {profile.mission && (
+              {profile?.mission && (
                 <div className="rounded-2xl border border-black/10 p-6">
                   <h3 className="mb-2 font-semibold text-brand">
                     <CmsField path="missionLabel" label="Mission label">{labels.missionLabel}</CmsField>
                   </h3>
-                  <p className="opacity-80">{profile.mission}</p>
+                  <p className="opacity-80">{profile?.mission}</p>
                 </div>
               )}
-              {profile.vision && (
+              {profile?.vision && (
                 <div className="rounded-2xl border border-black/10 p-6">
                   <h3 className="mb-2 font-semibold text-brand">
                     <CmsField path="visionLabel" label="Vision label">{labels.visionLabel}</CmsField>
                   </h3>
-                  <p className="opacity-80">{profile.vision}</p>
+                  <p className="opacity-80">{profile?.vision}</p>
                 </div>
               )}
             </div>
             <dl className="mt-6 grid gap-4 sm:grid-cols-3 lg:grid-cols-6">
-              {profile.total_students !== undefined && (
+              {profile?.total_students !== undefined && (
                 <div className="rounded-2xl bg-brand p-5 text-white">
-                  <dd className="text-3xl font-extrabold">{profile.total_students}</dd>
+                  <dd className="text-3xl font-extrabold">{profile?.total_students}</dd>
                   <dt className="text-sm opacity-90">
                     <CmsField path="studentsLabel" label="Students label">{labels.studentsLabel}</CmsField>
                   </dt>
                 </div>
               )}
-              {profile.total_teachers !== undefined && (
+              {profile?.total_teachers !== undefined && (
                 <div className="rounded-2xl bg-accent p-5 text-white">
-                  <dd className="text-3xl font-extrabold">{profile.total_teachers}</dd>
+                  <dd className="text-3xl font-extrabold">{profile?.total_teachers}</dd>
                   <dt className="text-sm opacity-90">
                     <CmsField path="teachersLabel" label="Teachers label">{labels.teachersLabel}</CmsField>
                   </dt>
@@ -134,12 +147,13 @@ export function AboutView({ profile, leadership, teamGroups }: AboutData) {
         </section>
       </CmsSection>
 
-      {leadership.length > 0 && (
+      {(leadership.length > 0 || inEditor) && (
         <CmsSection sectionKey="leadership" title="Leadership messages" page={PAGE}>
           <section className="mx-auto max-w-4xl px-6 py-16">
             <h2 className="mb-8 text-3xl font-bold">
               <CmsField path="title" label="Title">{leadershipText.title}</CmsField>
             </h2>
+            {leadership.length === 0 && <EmptyInEditor source="Leadership Messages" />}
             <div className="space-y-10">
               {leadership.map((m) => (
                 <article key={m.id} className="grid gap-6 md:grid-cols-[160px_1fr]">
@@ -164,13 +178,14 @@ export function AboutView({ profile, leadership, teamGroups }: AboutData) {
         </CmsSection>
       )}
 
-      {teamGroups.length > 0 && (
+      {(teamGroups.length > 0 || inEditor) && (
         <CmsSection sectionKey="team" title="Team" page={PAGE}>
           <section className="bg-surface px-6 py-16">
             <div className="mx-auto max-w-6xl">
               <h2 className="mb-8 text-3xl font-bold">
                 <CmsField path="title" label="Title">{team.title}</CmsField>
               </h2>
+              {teamGroups.length === 0 && <EmptyInEditor source="Team" />}
               {teamGroups.map(([group, members]) => (
                 <div key={group} className="mb-10 last:mb-0">
                   {teamGroups.length > 1 && <h3 className="mb-4 text-lg font-semibold">{group || team.otherGroup}</h3>}

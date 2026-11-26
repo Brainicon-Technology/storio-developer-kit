@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getActivityDetail(slug)  ->  StorioActivityItem | null
+ *     loadActivity() in src/lib/activities.ts
+ */
+
 import Link from 'next/link';
 import type { StorioActivityItem } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';

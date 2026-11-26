@@ -1,10 +1,23 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getAcademicPrograms()     ->  StorioAcademicProgram[]
+ *     loadAcademicPrograms() in src/lib/academics.ts
+ *   storio.getClassRoutines()        ->  StorioClassRoutine[]
+ *     loadClassRoutines() in src/lib/academics.ts
+ *   storio.getSyllabuses()           ->  StorioSyllabus[]
+ *     loadSyllabuses() in src/lib/academics.ts
+ *   storio.getStudentStats(params?)  ->  StorioStudentStatsResponse | null
+ *     loadStudentStats() in src/lib/academics.ts
+ */
+
 import { useState } from 'react';
 import { Download } from 'lucide-react';
 import type { StorioAcademicProgram, StorioClassRoutine, StorioStudentStatsResponse, StorioSyllabus } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 
+import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useAcademicsText } from '@/components/cms/useAcademicsText';
 import { routineDays } from '@/lib/academics';
 
@@ -25,6 +38,7 @@ export interface AcademicsData {
  */
 export function AcademicsView({ programs, routines, syllabuses, stats }: AcademicsData) {
   const text = useAcademicsText();
+  const inEditor = useInEditor();
   const [routineIndex, setRoutineIndex] = useState(0);
   const routine = routines[routineIndex];
   const days = routine ? routineDays(routine) : [];
@@ -43,12 +57,13 @@ export function AcademicsView({ programs, routines, syllabuses, stats }: Academi
         </header>
       </CmsSection>
 
-      {programs.length > 0 && (
+      {(programs.length > 0 || inEditor) && (
         <CmsSection sectionKey="programs" title="Programmes" page={PAGE}>
           <section className="mb-16">
             <h2 className="mb-6 text-3xl font-bold">
               <CmsField path="title" label="Title">{text.programs.title}</CmsField>
             </h2>
+            {programs.length === 0 && <EmptyInEditor source="Academic Programs" />}
             <div className="grid gap-6 md:grid-cols-3">
               {programs.map((program, i) => (
                 <div key={program.id ?? `${program.name}-${i}`} className="rounded-2xl border border-black/10 p-6">
@@ -85,7 +100,12 @@ export function AcademicsView({ programs, routines, syllabuses, stats }: Academi
                     className={`rounded-full px-4 py-2 text-sm font-semibold ${i === routineIndex ? 'bg-brand text-white' : 'bg-surface'}`}
                   >
                     {r.class_name}
-                    {r.section ? ` · ${text.routines.sectionLabel} ${r.section}` : ''}
+                    {r.section && (
+                      <>
+                        {' · '}
+                        <CmsField path="sectionLabel" label="Section label">{text.routines.sectionLabel}</CmsField> {r.section}
+                      </>
+                    )}
                     {r.shift ? ` · ${r.shift}` : ''}
                   </button>
                 ))}
@@ -98,7 +118,7 @@ export function AcademicsView({ programs, routines, syllabuses, stats }: Academi
                         <th className="p-3" />
                         {Array.from({ length: periods }, (_, i) => (
                           <th key={i} className="p-3 font-semibold">
-                            {text.routines.periodLabel} {i + 1}
+                            <CmsField path="periodLabel" label="Period label">{text.routines.periodLabel}</CmsField> {i + 1}
                           </th>
                         ))}
                       </tr>
@@ -173,12 +193,16 @@ export function AcademicsView({ programs, routines, syllabuses, stats }: Academi
         </section>
       </CmsSection>
 
-      {stats && (
+      {(stats || inEditor) && (
         <CmsSection sectionKey="stats" title="Student numbers" page={PAGE}>
           <section>
             <h2 className="mb-6 text-3xl font-bold">
-              <CmsField path="title" label="Title">{text.stats.title}</CmsField> <span className="opacity-50">{stats.academic_year}</span>
+              <CmsField path="title" label="Title">{text.stats.title}</CmsField> <span className="opacity-50">{stats?.academic_year}</span>
             </h2>
+            {!stats ? (
+              <EmptyInEditor source="Student Stats" />
+            ) : (
+              <>
             <dl className="mb-6 grid gap-4 sm:grid-cols-4">
               {(
                 [
@@ -218,6 +242,8 @@ export function AcademicsView({ programs, routines, syllabuses, stats }: Academi
                 </tbody>
               </table>
             </div>
+              </>
+            )}
           </section>
         </CmsSection>
       )}

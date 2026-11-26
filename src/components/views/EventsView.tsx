@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getEvents()  ->  StorioEvent[] (the API pages it: { count, results })
+ *     loadEvents() in src/lib/events.ts
+ */
+
 import Link from 'next/link';
 import { CalendarDays, MapPin } from 'lucide-react';
 import type { StorioEvent } from '@storio/template-sdk';
@@ -37,7 +43,7 @@ export function EventsView({ events }: { events: StorioEvent[] }) {
         ) : (
           <ul className="space-y-6">
             {events.map((event) => {
-              const id = String(event.id);
+              const id = event.slug || String(event.id); // event records: keyed by slug in the editor
               const image = eventImage(event);
               return (
                 <li key={event.id} className="grid overflow-hidden rounded-2xl border border-black/10 md:grid-cols-[240px_1fr]">

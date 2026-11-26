@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getJobDetail(slug)  ->  Job | null (loose record, narrowed)
+ *     loadJob() in src/lib/careers.ts
+ */
+
 import Link from 'next/link';
 import { FileText } from 'lucide-react';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';

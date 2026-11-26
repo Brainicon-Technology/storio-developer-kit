@@ -22,32 +22,26 @@ import manifest from '../../public/storio.template.json';
 /** Routes that are not editor pages ([slug] pages the editor does not support). */
 const OTHER_ROUTES = ['/activities/[slug]', '/careers/[slug]', '/page/[slug]'];
 
-/** Common URLs of other Storio templates -> the page of this template that shows the same thing. */
+/**
+ * URLs used by an earlier Storio template (seen in real school menus) -> the page of this template
+ * that shows the same thing. Adjust it to your own routes; a link with no entry is simply left out.
+ */
 export const LEGACY_ROUTES: Record<string, string> = {
   '/notice': '/notices',
   '/blog': '/blogs',
-  '/news': '/blogs',
   '/event': '/events',
   '/career': '/careers',
-  '/activity': '/activities',
-  '/faqs': '/faq',
   '/examResults': '/results',
-  '/exam-results': '/results',
   '/results/publicExam': '/results',
   '/results/schoolExam': '/results',
   '/personnel': '/staff',
   '/personnel/teachers': '/staff',
-  '/teachers': '/staff',
   '/personnel/staff': '/about',
   '/about/institution': '/about',
   '/about/schoolInfo': '/about',
   '/about/administrator': '/about',
   '/gallery/photos': '/gallery',
   '/gallery/videos': '/gallery',
-  '/admissions': '/admission',
-  '/academic': '/academics',
-  '/class-routine': '/academics',
-  '/syllabus': '/academics',
 };
 
 const editorRoutes = ((manifest as { editorPages?: { route?: string }[] }).editorPages ?? [])

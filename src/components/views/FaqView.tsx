@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getFaqs()  ->  StorioFaq[]
+ *     loadFaqs() in src/lib/faqs.ts
+ */
+
 import Link from 'next/link';
 import type { StorioFaq } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';

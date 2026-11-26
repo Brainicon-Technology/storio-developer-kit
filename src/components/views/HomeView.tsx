@@ -1,5 +1,19 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getHeroSlides()      ->  StorioHeroSlide[]
+ *     loadHeroSlides() in src/lib/home.ts
+ *   storio.getNotices()         ->  StorioNotice[]
+ *     loadNotices() in src/lib/notices.ts
+ *   storio.getTestimonials()    ->  Testimonial[] (loose records, narrowed)
+ *     loadTestimonials() in src/lib/home.ts
+ *   storio.getFaqs()            ->  StorioFaq[]
+ *     loadFaqs() in src/lib/faqs.ts
+ *   storio.getImportantLinks()  ->  StorioImportantLink[]
+ *     loadImportantLinks() in src/lib/home.ts
+ */
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, ExternalLink, Quote, Star } from 'lucide-react';
@@ -7,6 +21,7 @@ import type { StorioFaq, StorioHeroSlide, StorioImportantLink, StorioNotice } fr
 import { formatDate } from '@/lib/format';
 import { CmsField, CmsIcon, CmsSection } from '@/lib/storio-editor/site';
 
+import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useHomeText } from '@/components/cms/useHomeText';
 import type { Testimonial } from '@/lib/types';
 
@@ -31,6 +46,7 @@ export interface HomeData {
  */
 export function HomeView({ slides, notices, testimonials, faqs, links }: HomeData) {
   const text = useHomeText();
+  const inEditor = useInEditor();
   const { hero, features, notices: noticesSection, faq } = text;
 
   return (
@@ -67,9 +83,18 @@ export function HomeView({ slides, notices, testimonials, faqs, links }: HomeDat
         </section>
       </CmsSection>
 
-      {slides.length > 0 && (
+      {(slides.length > 0 || inEditor) && (
         <CmsSection sectionKey="slides" title="Highlights" page={PAGE}>
-          <SlidesCarousel slides={slides} text={text.slides} />
+          {slides.length > 0 ? (
+            <SlidesCarousel slides={slides} text={text.slides} />
+          ) : (
+            <section className="mx-auto max-w-6xl px-6 pb-16">
+              <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand">
+                <CmsField path="title" label="Title">{text.slides.title}</CmsField>
+              </h2>
+              <EmptyInEditor source="Hero Slides" />
+            </section>
+          )}
         </CmsSection>
       )}
 
@@ -130,7 +155,7 @@ export function HomeView({ slides, notices, testimonials, faqs, links }: HomeDat
         </section>
       </CmsSection>
 
-      {testimonials.length > 0 && (
+      {(testimonials.length > 0 || inEditor) && (
         <CmsSection sectionKey="testimonials" title="Testimonials" page={PAGE}>
           <section className="bg-surface px-6 py-16">
             <div className="mx-auto max-w-6xl">
@@ -140,6 +165,7 @@ export function HomeView({ slides, notices, testimonials, faqs, links }: HomeDat
               <p className="mb-8 mt-2 opacity-80">
                 <CmsField path="text" label="Text">{text.testimonials.text}</CmsField>
               </p>
+              {testimonials.length === 0 && <EmptyInEditor source="Testimonials" />}
               <div className="grid gap-6 md:grid-cols-3">
                 {testimonials.map((t) => (
                   <figure key={t.id} className="flex flex-col rounded-2xl border border-black/10 bg-page p-6">
@@ -170,7 +196,7 @@ export function HomeView({ slides, notices, testimonials, faqs, links }: HomeDat
         </CmsSection>
       )}
 
-      {faqs.length > 0 && (
+      {(faqs.length > 0 || inEditor) && (
         <CmsSection sectionKey="faq" title="FAQ" page={PAGE}>
           <section className="mx-auto max-w-3xl px-6 py-16">
             <div className="mb-6 flex items-center justify-between">
@@ -181,6 +207,7 @@ export function HomeView({ slides, notices, testimonials, faqs, links }: HomeDat
                 <CmsField path="linkText" label="Link">{faq.linkText}</CmsField>
               </Link>
             </div>
+            {faqs.length === 0 && <EmptyInEditor source="FAQ" />}
             <div className="space-y-4">
               {faqs.map((item) => (
                 <details key={item.id} className="rounded-xl border border-black/10 p-4">
@@ -193,12 +220,13 @@ export function HomeView({ slides, notices, testimonials, faqs, links }: HomeDat
         </CmsSection>
       )}
 
-      {links.length > 0 && (
+      {(links.length > 0 || inEditor) && (
         <CmsSection sectionKey="links" title="Important links" page={PAGE}>
           <section className="mx-auto max-w-6xl px-6 pb-16">
             <h2 className="mb-4 text-xl font-bold">
               <CmsField path="title" label="Title">{text.links.title}</CmsField>
             </h2>
+            {links.length === 0 && <EmptyInEditor source="Important Links" />}
             <ul className="flex flex-wrap gap-3">
               {links.map((link) => (
                 <li key={link.id}>

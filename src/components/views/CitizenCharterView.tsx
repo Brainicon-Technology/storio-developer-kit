@@ -1,9 +1,22 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getHotlines()            ->  StorioHotline[]
+ *     loadHotlines() in src/lib/charter.ts
+ *   storio.getMpoInfo()             ->  StorioMpoInfo | null
+ *     loadMpoInfo() in src/lib/charter.ts
+ *   storio.getInformationService()  ->  StorioInformationService | null
+ *     loadInformationService() in src/lib/charter.ts
+ *   storio.getComplaintOfficer()    ->  StorioComplaintOfficer | null
+ *     loadComplaintOfficer() in src/lib/charter.ts
+ */
+
 import { FileText, Mail, Phone } from 'lucide-react';
 import type { StorioComplaintStep, StorioHotline, StorioInformationService, StorioComplaintOfficer, StorioMpoInfo } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 
+import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useCitizenCharterText } from '@/components/cms/useCitizenCharterText';
 import { formatDate } from '@/lib/format';
 
@@ -25,6 +38,7 @@ export interface CitizenCharterData {
  */
 export function CitizenCharterView({ mpo, info, services, officer, steps, hotlines }: CitizenCharterData) {
   const text = useCitizenCharterText();
+  const inEditor = useInEditor();
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-16">
@@ -39,8 +53,9 @@ export function CitizenCharterView({ mpo, info, services, officer, steps, hotlin
         </header>
       </CmsSection>
 
-      {hotlines.length > 0 && (
+      {(hotlines.length > 0 || inEditor) && (
         <CmsSection sectionKey="hotlines" title="Hotlines" page={PAGE}>
+          {hotlines.length === 0 && <EmptyInEditor source="Hotlines" />}
           <section className="mb-14">
             <h2 className="mb-5 text-2xl font-bold">
               <CmsField path="title" label="Title">{text.hotlines.title}</CmsField>
@@ -65,28 +80,29 @@ export function CitizenCharterView({ mpo, info, services, officer, steps, hotlin
         </CmsSection>
       )}
 
-      {mpo && (
+      {(mpo || inEditor) && (
         <CmsSection sectionKey="mpo" title="MPO information" page={PAGE}>
+          {!mpo && <EmptyInEditor source="MPO Info" />}
           <section className="mb-14 rounded-2xl border border-black/10 p-6">
             <h2 className="mb-1 text-2xl font-bold">
-              <CmsField path="title" label="Title">{text.mpo.title}</CmsField>
+              <CmsField path="title" label="Title">{text.mpo?.title}</CmsField>
             </h2>
-            <p className={`mb-4 font-semibold ${mpo.is_mpo_enlisted ? 'text-brand' : 'opacity-70'}`}>
-              {mpo.is_mpo_enlisted ? (
-                <CmsField path="enlistedText" label="Enlisted text">{text.mpo.enlistedText}</CmsField>
+            <p className={`mb-4 font-semibold ${mpo?.is_mpo_enlisted ? 'text-brand' : 'opacity-70'}`}>
+              {mpo?.is_mpo_enlisted ? (
+                <CmsField path="enlistedText" label="Enlisted text">{text.mpo?.enlistedText}</CmsField>
               ) : (
-                <CmsField path="notEnlistedText" label="Not enlisted text">{text.mpo.notEnlistedText}</CmsField>
+                <CmsField path="notEnlistedText" label="Not enlisted text">{text.mpo?.notEnlistedText}</CmsField>
               )}
             </p>
-            {mpo.description && <p className="mb-4 opacity-80">{mpo.description}</p>}
+            {mpo?.description && <p className="mb-4 opacity-80">{mpo?.description}</p>}
             <dl className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
               {(
                 [
-                  ['codeLabel', mpo.mpo_code],
-                  ['dateLabel', formatDate(mpo.mpo_date)],
-                  ['orderLabel', mpo.mpo_order_number],
-                  ['mpoTeachersLabel', mpo.total_mpo_teachers],
-                  ['nonMpoTeachersLabel', mpo.total_non_mpo_teachers],
+                  ['codeLabel', mpo?.mpo_code],
+                  ['dateLabel', formatDate(mpo?.mpo_date)],
+                  ['orderLabel', mpo?.mpo_order_number],
+                  ['mpoTeachersLabel', mpo?.total_mpo_teachers],
+                  ['nonMpoTeachersLabel', mpo?.total_non_mpo_teachers],
                 ] as const
               )
                 .filter(([, value]) => value !== undefined && value !== '')
@@ -99,13 +115,13 @@ export function CitizenCharterView({ mpo, info, services, officer, steps, hotlin
                   </div>
                 ))}
             </dl>
-            {mpo.documents && mpo.documents.length > 0 && (
+            {mpo?.documents && mpo?.documents.length > 0 && (
               <div className="mt-5">
                 <h3 className="mb-2 font-semibold">
-                  <CmsField path="documentsTitle" label="Documents title">{text.mpo.documentsTitle}</CmsField>
+                  <CmsField path="documentsTitle" label="Documents title">{text.mpo?.documentsTitle}</CmsField>
                 </h3>
                 <ul className="space-y-1">
-                  {mpo.documents.map((doc, i) => (
+                  {mpo?.documents.map((doc, i) => (
                     <li key={`${doc.title}-${i}`}>
                       <a href={doc.file_url} className="inline-flex items-center gap-2 text-brand">
                         <FileText className="h-4 w-4" aria-hidden />
@@ -121,26 +137,27 @@ export function CitizenCharterView({ mpo, info, services, officer, steps, hotlin
       )}
 
       <div className="grid gap-8 md:grid-cols-2">
-        {info && (
+        {(info || inEditor) && (
           <CmsSection sectionKey="info" title="Information desk" page={PAGE}>
+            {!info && <EmptyInEditor source="Information Service" />}
             <section className="h-full rounded-2xl border border-black/10 p-6">
               <h2 className="mb-4 text-2xl font-bold">
-                <CmsField path="title" label="Title">{text.info.title}</CmsField>
+                <CmsField path="title" label="Title">{text.info?.title}</CmsField>
               </h2>
-              <Person name={info.responsible_person} role={info.designation} photo={info.photo_url} phone={info.mobile || info.phone} email={info.email} />
-              {info.description && <p className="mt-4 opacity-80">{info.description}</p>}
-              {info.office_hours && (
+              <Person name={info?.responsible_person} role={info?.designation} photo={info?.photo_url} phone={info?.mobile || info?.phone} email={info?.email} />
+              {info?.description && <p className="mt-4 opacity-80">{info?.description}</p>}
+              {info?.office_hours && (
                 <p className="mt-3 text-sm">
                   <span className="opacity-60">
-                    <CmsField path="officeHoursLabel" label="Office hours label">{text.info.officeHoursLabel}</CmsField>:
+                    <CmsField path="officeHoursLabel" label="Office hours label">{text.info?.officeHoursLabel}</CmsField>:
                   </span>{' '}
-                  {info.office_hours}
+                  {info?.office_hours}
                 </p>
               )}
               {services.length > 0 && (
                 <>
                   <h3 className="mb-2 mt-4 font-semibold">
-                    <CmsField path="servicesTitle" label="Services title">{text.info.servicesTitle}</CmsField>
+                    <CmsField path="servicesTitle" label="Services title">{text.info?.servicesTitle}</CmsField>
                   </h3>
                   <ul className="list-disc space-y-1 pl-5 opacity-90">
                     {services.map((s) => (
@@ -153,20 +170,21 @@ export function CitizenCharterView({ mpo, info, services, officer, steps, hotlin
           </CmsSection>
         )}
 
-        {officer && (
+        {(officer || inEditor) && (
           <CmsSection sectionKey="complaint" title="Complaints" page={PAGE}>
+            {!officer && <EmptyInEditor source="Complaint Officer" />}
             <section className="h-full rounded-2xl border border-black/10 p-6">
               <h2 className="mb-4 text-2xl font-bold">
                 <CmsField path="title" label="Title">{text.complaint.title}</CmsField>
               </h2>
-              <Person name={officer.name} role={officer.designation} photo={officer.photo_url} phone={officer.mobile || officer.phone} email={officer.email} />
-              {officer.description && <p className="mt-4 opacity-80">{officer.description}</p>}
-              {officer.office_hours && (
+              <Person name={officer?.name} role={officer?.designation} photo={officer?.photo_url} phone={officer?.mobile || officer?.phone} email={officer?.email} />
+              {officer?.description && <p className="mt-4 opacity-80">{officer?.description}</p>}
+              {officer?.office_hours && (
                 <p className="mt-3 text-sm">
                   <span className="opacity-60">
                     <CmsField path="officeHoursLabel" label="Office hours label">{text.complaint.officeHoursLabel}</CmsField>:
                   </span>{' '}
-                  {officer.office_hours}
+                  {officer?.office_hours}
                 </p>
               )}
               {steps.length > 0 && (

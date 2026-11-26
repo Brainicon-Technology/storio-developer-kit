@@ -46,15 +46,48 @@ src/
   lib/cms-icons.generated.ts        icons from "editorIcons" (generated, never edit)
   lib/cms-server-storage.ts         reads the request school's saved content on the server
   lib/theme.ts                      Theme settings values (customization + navigation)
-  lib/site.ts                       the school's settings (name, logo, contact) with the SDK
+  lib/site.ts                       getLayout: settings, Theme settings and menu in one call
   lib/tenant.ts                     resolveTenant(): Standalone Preview or tenant
-  lib/data.ts                       withDemoFallback(): Rule 1
+  lib/data.ts                       withDemoFallback(), withDemoRecord(), safely(): Rule 1
   lib/seo.ts                        pageMetadata(), siteMetadata()
-  components/cms/                   providers, use<Page>Text helpers, ThemeField, ThemeColors
+  lib/<area>.ts                     one loader per SDK method (notices.ts, blogs.ts, academics.ts...)
+  lib/normalize.ts                  maps live API records to the SDK types (see section 8.1)
+  lib/types.ts                      types + guards for the SDK methods that return loose records
+  lib/routes.ts                     this template's routes; keeps menus free of 404s
+  data/defaultDemoData.ts           demo data for every SDK method (Standalone Preview only)
+  components/cms/                   providers, use<Page>Text helpers, ThemeField, ThemeColors, EditorOnly
   app/(site)/<route>/page.tsx       server page: metadata + school data
   components/views/<Name>View.tsx   client view: renders content with <CmsSection>/<CmsField>
-  components/site/                  Navbar and Footer
+  components/site/                  Navbar, Footer, PromotionBar, RichText
 ```
+
+### The sample pages
+
+Every SDK method is used by at least one sample page. Each View starts with a comment listing its SDK methods, their return types and the loader that calls them, so you can see what a page reads before you read its markup.
+
+| Route | Page key (`<id>-...`) | SDK methods |
+| :--- | :--- | :--- |
+| every page (layout) | (Theme settings) | `getLayout` (falls back to `getSettings`, `getCustomization`, `getNavigation`), `getPromotions` |
+| `/` | `home` | `getHeroSlides`, `getNotices`, `getTestimonials`, `getFaqs`, `getImportantLinks` |
+| `/about` | `about` | `getInstitutionProfile`, `getLeadershipMessages`, `getTeam` |
+| `/contact` | `contact` | `getSettings`, `submitContactMessage` |
+| `/notices`, `/notices/[id]` | `notices`, `notice-detail` | `getNotices`, `getNoticeDetail`, `apiFetch` (search) |
+| `/blogs`, `/blogs/[slug]` | `blogs`, `blog-detail` | `getBlogs`, `getBlogDetail` |
+| `/events`, `/events/[id]` | `events`, `event-detail` | `getEvents`, `getEventDetail` |
+| `/activities`, `/activities/[slug]` | `activities` | `getActivities`, `getActivityDetail` |
+| `/staff` | `staff` | `getStaff` |
+| `/gallery` | `gallery` | `getGallery`, `getAlbums`, `getVideos` |
+| `/faq` | `faq` | `getFaqs` |
+| `/academics` | `academics` | `getAcademicPrograms`, `getClassRoutines`, `getSyllabuses`, `getStudentStats` |
+| `/results` | `results` | `getExamResults` |
+| `/calendar` | `calendar` | `getCalendarEvents` |
+| `/careers`, `/careers/[slug]` | `careers` | `getCareers`, `getJobDetail` |
+| `/board-notices` | `board-notices` | `getBoardNotices` |
+| `/admission` | `admission` | `getAdmissionFormConfig`, `sendAdmissionOTP`, `verifyAdmissionOTP`, `submitAdmissionApplication` |
+| `/citizen-charter` | `citizen-charter` | `getHotlines`, `getMpoInfo`, `getInformationService`, `getComplaintOfficer` |
+| `/page/[slug]` | (none: all school data) | `getPageBySlug` |
+
+Keep the pages your design needs, delete the rest (the route folder, its View, its `use<Page>Text` hook, its content file and its `editorPages` entry), and remove the matching modules from `features`.
 
 ---
 
@@ -236,6 +269,8 @@ Use these classes instead of fixed colours (`bg-green-700`), or Theme settings w
 
 **SEO.** The title template and default description come from the school's settings (`siteMetadata()`); each page adds its own from its `seo` section (`pageMetadata()`).
 
+**Menu links never 404.** A school keeps its menus when it switches templates, so its saved header menu and dashboard navigation may still point to the previous template's URLs (`/notice`, `/blog`...). `src/lib/routes.ts` maps each menu link to a page of this template (`LEGACY_ROUTES`) or leaves it out, and `next.config.ts` redirects those old URLs. When you add a page, list it in `editorPages` (or in `OTHER_ROUTES` in `routes.ts` if it is not an editor page), or menu links to it are dropped.
+
 ---
 
 ## 8. Records (notices, blogs, events)
@@ -258,6 +293,31 @@ Notices, blogs and events are the school's own records, loaded with the SDK. The
 
 - A detail page (`/notices/[id]`) is listed in `editorPages` with `"collection": "notice"` and `"parent": "<id>-notices"` (its list page). It may have sections for its fixed labels. It uses `useCollectionItem` so the unsaved title shows in the preview (see `NoticeDetailView.tsx`), and builds its metadata from the record.
 - Never wrap record bodies (rich text), dates, images or slugs.
+- **Detail pages of other data** (activities, jobs): the editor allows a `[slug]`/`[id]` editor page only for `notice`, `blog` and `event`. Such a route is not in `editorPages`; its fixed labels live in a `detail` section of its list page (`<CmsSection page="<id>-activities" sectionKey="detail">`), which admins edit from that list page. See `ActivityDetailView.tsx`.
+
+---
+
+## 8.1 School data on a page (the SDK)
+
+Every other piece of school data follows one pattern. Copy it from any sample page.
+
+1. **A loader in `src/lib/<area>.ts`** calls one SDK method and applies Rule 1:
+   ```ts
+   export async function loadStaff(ctx: TenantContext): Promise<StorioStaffMember[]> {
+     const real = normalizeStaff(await safely(storio.getStaff(ctx.tenantHost)));
+     return withDemoFallback(real, DEFAULT_DEMO_DATA.staff, ctx.isStandalone);
+   }
+   ```
+   - `safely()` turns a network or server error into "no data", so a failing endpoint never breaks the page.
+   - `withDemoFallback()` / `withDemoRecord()` show demo data in Standalone Preview only; a real school gets its own data or an empty state.
+   - Add demo data for the method in `src/data/defaultDemoData.ts`.
+2. **The server page** calls the loaders (in parallel with `Promise.all`) and passes the results to its View as props.
+3. **The View** shows the data as is: school data is edited on the dashboard, so it gets no `<CmsField>`. Only the texts around it (headings, labels, empty texts) are page content.
+4. **Empty data:** on the site, a section with no data is hidden, or shows its editable empty text. Inside the editor it must stay visible, or the admin cannot reach its pencils: use `useInEditor()` and `<EmptyInEditor>` from `src/components/cms/EditorOnly.tsx` (pattern in that file, used in `HomeView`, `AboutView`...).
+5. **HTML from the dashboard** (blog bodies, job descriptions, custom pages) goes through `<RichText>` (`src/components/site/RichText.tsx`), which removes scripts and event handlers. Never use `dangerouslySetInnerHTML` directly.
+6. **Forms that send data** (contact, admission) are Server Actions (`actions.ts` next to the page). They validate on the server and, in Standalone Preview, never contact Storio.
+
+**Live API vs. SDK types.** The live Storio API does not always match the SDK's TypeScript types (as of SDK 1.0.1): some fields have other names (a hero slide's `heading` instead of `title`, a testimonial's `message` instead of `content`), images are media objects with relative paths (`/media/uploads/x.webp`), events come paginated (`{ count, results }`), and an event's detail is found by id only. `src/lib/normalize.ts` maps each record to the SDK type before Rule 1, so Views only see the documented types. When you use a new method, check its real response (`storio link`, then look at the data) and add a normalizer if it differs. Four methods return loose records in the SDK (`getTestimonials`, `getLeadershipMessages`, `getCareers`, `getJobDetail`): `src/lib/types.ts` types them and narrows each record with a guard (Rule 2).
 
 ---
 

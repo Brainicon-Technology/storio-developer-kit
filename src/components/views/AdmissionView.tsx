@@ -1,5 +1,17 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getAdmissionFormConfig()                ->  StorioAdmissionFormConfig | null
+ *     loadAdmissionFormConfig() in src/lib/admission.ts
+ *   storio.sendAdmissionOTP(email, phone?)         ->  StorioAdmissionOTPResponse | null
+ *     sendAdmissionCode() in src/app/(site)/admission/actions.ts
+ *   storio.verifyAdmissionOTP(email, code)         ->  StorioAdmissionOTPResponse | null
+ *     submitAdmission() in src/app/(site)/admission/actions.ts
+ *   storio.submitAdmissionApplication(data, code)  ->  StorioAdmissionApplicationResponse | null
+ *     submitAdmission() in src/app/(site)/admission/actions.ts
+ */
+
 import { useState, useTransition } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import type { StorioAdmissionField } from '@storio/template-sdk';

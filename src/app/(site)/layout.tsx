@@ -4,7 +4,7 @@ import { PromotionBar } from '@/components/site/PromotionBar';
 import { ThemeColors } from '@/components/cms/ThemeColors';
 import { loadPromotions } from '@/lib/home';
 import { loadLayout } from '@/lib/site';
-import { themeColorFields } from '@/lib/theme';
+import { themeColorFields, themeText } from '@/lib/theme';
 import { resolveTenant } from '@/lib/tenant';
 
 /**
@@ -20,7 +20,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   return (
     <>
       <ThemeColors colors={colors} />
-      <PromotionBar promotion={promotions[0]} />
+      <PromotionBar promotion={promotions[0]} dismissLabel={themeText(theme, 'promotion_dismiss_label')} />
       <Navbar settings={settings} theme={theme} />
       <div className="flex-1">{children}</div>
       <Footer settings={settings} theme={theme} quickLinks={navigation} />

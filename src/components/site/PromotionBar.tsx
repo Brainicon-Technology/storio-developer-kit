@@ -9,7 +9,7 @@ import type { StorioPromotion } from '@storio/template-sdk';
  * The school's first active promotion (getPromotions), shown above the header on every page.
  * School data: edited on the dashboard's Promotions page, so no pencil. Visitors can dismiss it.
  */
-export function PromotionBar({ promotion }: { promotion: StorioPromotion | undefined }) {
+export function PromotionBar({ promotion, dismissLabel }: { promotion: StorioPromotion | undefined; dismissLabel: string }) {
   const [hidden, setHidden] = useState(false);
   if (!promotion || hidden) return null;
 
@@ -34,7 +34,7 @@ export function PromotionBar({ promotion }: { promotion: StorioPromotion | undef
           <span className="font-semibold">{promotion.title}</span>
           {promotion.description && <span className="opacity-90"> {promotion.description}</span>} {cta}
         </p>
-        <button type="button" onClick={() => setHidden(true)} aria-label="Dismiss" className="rounded p-1 hover:bg-white/10">
+        <button type="button" onClick={() => setHidden(true)} aria-label={dismissLabel} className="rounded p-1 hover:bg-white/10">
           <X className="h-4 w-4" aria-hidden />
         </button>
       </div>

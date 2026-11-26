@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getBlogs()  ->  StorioBlogPost[]
+ *     loadBlogs() in src/lib/blogs.ts
+ */
+
 import Link from 'next/link';
 import type { StorioBlogPost } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
@@ -45,11 +51,15 @@ export function BlogsView({ posts }: { posts: StorioBlogPost[] }) {
                     {[post.category_name, formatDate(post.published_at)].filter(Boolean).join(' · ')}
                   </p>
                   <h2 className="text-lg font-semibold">
-                    <CmsField collection="blog" item={String(post.id)} path="title" label="Post title">
+                    <CmsField collection="blog" item={post.slug} path="title" label="Post title">
                       {post.title}
                     </CmsField>
                   </h2>
-                  {post.summary && <p className="flex-1 text-sm opacity-80">{post.summary}</p>}
+                  {post.summary && (
+                    <p className="flex-1 text-sm opacity-80">
+                      <CmsField collection="blog" item={post.slug} path="excerpt" label="Excerpt">{post.summary}</CmsField>
+                    </p>
+                  )}
                   <Link href={`/blogs/${encodeURIComponent(post.slug)}`} className="mt-2 text-sm font-semibold text-brand">
                     <CmsField path="readMoreText" label="Read more">{intro.readMoreText}</CmsField>
                   </Link>

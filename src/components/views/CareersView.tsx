@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getCareers()  ->  Job[] (loose records, narrowed)
+ *     loadJobs() in src/lib/careers.ts
+ */
+
 import Link from 'next/link';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 

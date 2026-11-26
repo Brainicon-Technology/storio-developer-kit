@@ -1,5 +1,13 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getNotices()                                         ->  StorioNotice[]
+ *     loadNotices() in src/lib/notices.ts
+ *   storio.apiFetch<T>("/api/v2/template/notices/?search=...")  ->  T (here StorioNotice[])
+ *     searchNotices() in src/lib/notices.ts
+ */
+
 import Link from 'next/link';
 import type { StorioNotice } from '@storio/template-sdk';
 import { formatDate } from '@/lib/format';

@@ -1,5 +1,13 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getSettings()                   ->  StorioSettingsResponse | null (contact details)
+ *     loadSettings() in src/lib/site.ts
+ *   storio.submitContactMessage(formData)  ->  StorioContactFormResponse | null
+ *     sendContactMessage() in src/app/(site)/contact/actions.ts
+ */
+
 import { useActionState } from 'react';
 import type { StorioSettingsResponse } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';

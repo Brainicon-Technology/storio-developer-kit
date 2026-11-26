@@ -60,6 +60,12 @@
         "label": "Copyright text",
         "type": "text",
         "default": "All rights reserved."
+      },
+      {
+        "id": "promotion_dismiss_label",
+        "label": "Promotion bar close button (screen readers)",
+        "type": "text",
+        "default": "Dismiss"
       }
     ]
   },
@@ -714,7 +720,8 @@
         "intro": {
           "title": "Gallery",
           "text": "Moments from school life.",
-          "emptyText": "No photos yet."
+          "emptyText": "No photos yet.",
+          "closeLabel": "Close"
         },
         "albums": {
           "title": "Albums",

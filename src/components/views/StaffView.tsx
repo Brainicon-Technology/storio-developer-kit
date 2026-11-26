@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getStaff()  ->  StorioStaffMember[]
+ *     loadStaff() in src/lib/people.ts
+ */
+
 import { Mail, Phone } from 'lucide-react';
 import type { StorioStaffMember } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';

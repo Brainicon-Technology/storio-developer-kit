@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getCalendarEvents()  ->  StorioCalendarEvent[]
+ *     loadCalendarEvents() in src/lib/calendar.ts
+ */
+
 import type { StorioCalendarEvent } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 

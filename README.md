@@ -6,7 +6,7 @@ It comes ready to use:
 
 - **School data connected** with `@storio/template-sdk`: settings, notices, blogs, staff, events and more.
 - **Editable from the Storio dashboard** with the Storio editor kit (`src/lib/storio-editor/`, no library to install): every static text, image and icon, page SEO, theme colours, the menu and the header/footer texts.
-- **Sample pages** that already follow every rule: Home, About, Contact, Notices and a notice detail page. Copy their pattern for your own pages.
+- **Sample pages for all 44 SDK methods** that already follow every rule: Home, About, Contact, Notices, News, Events, Activities, Staff, Gallery, FAQ, Academics, Results, Calendar, Careers, Board notices, Admission, Citizen charter and custom pages. Each page starts with a comment listing the SDK methods it uses and what they return. Keep the pages your design needs, delete the rest ([Editor Template Guide](./docs/Storio_Editor_Template_Guide.md#the-sample-pages)).
 
 > Looking for the old starter kit (without the editor)? `npx degit Brainicon-Technology/storio-developer-kit#v1-legacy my-template`
 
@@ -58,6 +58,7 @@ Read them in this order:
 3. **Editable by default.** Every visible static text, image and icon on a public page is editable (`<CmsSection>` / `<CmsField>`).
 4. **Manifest in sync.** Run `npm run editor:sync` after changing `src/content/*.json`, `editorPages` or `editorIcons`. `npm run build` checks it.
 5. **Never edit the editor kit** (`src/lib/storio-editor/`). Storio provides the editor, its API and logins: don't add an admin page or an `/api/cms` route.
+6. **School data through loaders.** Call each SDK method in a loader in `src/lib/` (Rule 1, error-safe, normalized to the SDK type), never straight from a View. See the Editor Template Guide, section 8.1.
 
 ---
 

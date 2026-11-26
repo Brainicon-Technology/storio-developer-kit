@@ -1,10 +1,21 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getGallery()  ->  StorioGalleryItem[]
+ *     loadGallery() in src/lib/media.ts
+ *   storio.getAlbums()   ->  StorioAlbum[]
+ *     loadAlbums() in src/lib/media.ts
+ *   storio.getVideos()   ->  StorioVideoItem[]
+ *     loadVideos() in src/lib/media.ts
+ */
+
 import { useState } from 'react';
 import { Play, X } from 'lucide-react';
 import type { StorioAlbum, StorioGalleryItem, StorioVideoItem } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';
 
+import { EmptyInEditor, useInEditor } from '@/components/cms/EditorOnly';
 import { useGalleryText } from '@/components/cms/useGalleryText';
 
 const PAGE = 'template-0-starter-gallery';
@@ -21,6 +32,7 @@ export interface GalleryData {
  */
 export function GalleryView({ photos, albums, videos }: GalleryData) {
   const { intro, albums: albumsText, videos: videosText } = useGalleryText();
+  const inEditor = useInEditor();
   const [open, setOpen] = useState<StorioGalleryItem[] | null>(null);
 
   return (
@@ -52,12 +64,13 @@ export function GalleryView({ photos, albums, videos }: GalleryData) {
         )}
       </CmsSection>
 
-      {albums.length > 0 && (
+      {(albums.length > 0 || inEditor) && (
         <CmsSection sectionKey="albums" title="Albums" page={PAGE}>
           <section className="mt-16">
             <h2 className="mb-6 text-3xl font-bold">
               <CmsField path="title" label="Title">{albumsText.title}</CmsField>
             </h2>
+            {albums.length === 0 && <EmptyInEditor source="Gallery albums" />}
             <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {albums.map((album) => (
                 <li key={album.id}>
@@ -84,12 +97,13 @@ export function GalleryView({ photos, albums, videos }: GalleryData) {
         </CmsSection>
       )}
 
-      {videos.length > 0 && (
+      {(videos.length > 0 || inEditor) && (
         <CmsSection sectionKey="videos" title="Videos" page={PAGE}>
           <section className="mt-16">
             <h2 className="mb-6 text-3xl font-bold">
               <CmsField path="title" label="Title">{videosText.title}</CmsField>
             </h2>
+            {videos.length === 0 && <EmptyInEditor source="Reels" />}
             <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {videos.map((video) => (
                 <li key={video.id} className="overflow-hidden rounded-2xl border border-black/10">
@@ -118,7 +132,7 @@ export function GalleryView({ photos, albums, videos }: GalleryData) {
 
       {open && (
         <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 overflow-y-auto bg-black/85 p-6" onClick={() => setOpen(null)}>
-          <button type="button" aria-label="Close" className="fixed right-4 top-4 rounded-full bg-white/10 p-2 text-white">
+          <button type="button" aria-label={intro.closeLabel} className="fixed right-4 top-4 rounded-full bg-white/10 p-2 text-white">
             <X className="h-6 w-6" aria-hidden />
           </button>
           <div className="mx-auto grid max-w-5xl gap-4">

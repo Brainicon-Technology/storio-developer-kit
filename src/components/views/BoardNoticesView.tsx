@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getBoardNotices()  ->  StorioBoardNotice[]
+ *     loadBoardNotices() in src/lib/results.ts
+ */
+
 import { ExternalLink } from 'lucide-react';
 import type { StorioBoardNotice } from '@storio/template-sdk';
 import { CmsField, CmsSection } from '@/lib/storio-editor/site';

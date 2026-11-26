@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getBlogDetail(slug)  ->  StorioBlogPost | null
+ *     loadBlog() in src/lib/blogs.ts
+ */
+
 import Link from 'next/link';
 import type { StorioBlogPost } from '@storio/template-sdk';
 import { CmsField, CmsSection, useCollectionItem } from '@/lib/storio-editor/site';
@@ -17,7 +23,8 @@ const PAGE = 'template-0-starter-blog-detail';
  */
 export function BlogDetailView({ post }: { post: StorioBlogPost | null }) {
   const { labels } = useBlogDetailText();
-  const id = post ? String(post.id) : '';
+  // Blog records are identified by their slug in the editor (see the Editor Template Guide, Records).
+  const id = post?.slug ?? '';
   const values = useCollectionItem('blog', id, { title: post?.title ?? '' });
 
   return (

@@ -1,5 +1,11 @@
 'use client';
 
+/*
+ * SDK data on this page (loaded on the server, passed in as props):
+ *   storio.getEventDetail(id)  ->  StorioEvent | null
+ *     loadEvent() in src/lib/events.ts
+ */
+
 import Link from 'next/link';
 import type { StorioEvent } from '@storio/template-sdk';
 import { CmsField, CmsSection, useCollectionItem } from '@/lib/storio-editor/site';
@@ -17,7 +23,8 @@ const PAGE = 'template-0-starter-event-detail';
  */
 export function EventDetailView({ event }: { event: StorioEvent | null }) {
   const { labels } = useEventDetailText();
-  const id = event ? String(event.id) : '';
+  // Event records are identified by their slug in the editor (see the Editor Template Guide, Records).
+  const id = event ? event.slug || String(event.id) : '';
   const values = useCollectionItem('event', id, {
     title: event?.title ?? '',
     excerpt: event?.excerpt ?? '',
